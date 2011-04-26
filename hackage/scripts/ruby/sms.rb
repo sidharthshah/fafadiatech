@@ -1,6 +1,11 @@
 require 'rubygems'
 require 'celerity'
 
+#sms.rb - command line utility to send sms via 160by2.com using celerity as headless browser
+#author: Colin Thomas 
+#email: colin at fafadiatech dot com
+#date: 27-04-2011
+#useage: $jruby sms.rb <mobile> "<message>"
 
 browser = Celerity::Browser.new
 $username = "phone_number_here"
