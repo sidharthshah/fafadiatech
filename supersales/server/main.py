@@ -4,6 +4,8 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 from models import *
 
+import datetime 
+
 class MainPage(webapp.RequestHandler):
 	def get(self):
 		self.response.headers['Content-Type'] = 'text/plain'
@@ -48,7 +50,29 @@ class AuthUser(webapp.RequestHandler):
 			self.response.headers['Content-Type'] = 'text/plain'
 			self.response.out.write("-1")			
 
-application = webapp.WSGIApplication([('/',MainPage),('/users/add',AddUser),('/users/auth',AuthUser),],debug=True)
+class AddLead(webapp.RequestHandler):
+	def post(self):
+		try:
+			uts = datetime.datetime.now()
+			uname = self.request.get('name')
+			ucontactperson = self.request.get('contactperson')
+			ucontactnumber = self.request.get('contactnumber')
+			uarea = self.request.get('area')
+			uemail = self.request.get('email')
+			ustatus = self.request.get('status')
+			uuser = self.request.get('user')
+	
+			lead = Lead(ts=uts,name=uname,contactperson=ucontactperson,contactnumber=ucontactnumber,area=uarea,email=uemail,status=ustatus,user=uuser)
+			lead.put()
+
+			self.response.headers['Content-Type'] = 'text/plain'
+			self.response.out.write("1")
+
+		except:
+			self.response.headers['Content-Type'] = 'text/plain'
+			self.response.out.write("-1")			
+			
+application = webapp.WSGIApplication([('/',MainPage),('/users/add',AddUser),('/users/auth',AuthUser),('/leads/add',AddLead),],debug=True)
 
 def main():
 	run_wsgi_app(application)
