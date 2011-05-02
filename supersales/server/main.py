@@ -78,25 +78,25 @@ class AddLead(webapp.RequestHandler):
 
 class GetLeads(webapp.RequestHandler):
 	def post(self):
-#		try:
-		uuser = self.request.get('user')
-		q = "WHERE user = '%s'" % uuser
-		result = Lead.gql(q)
+		try:
+			uuser = self.request.get('user')
+			q = "WHERE user = '%s'" % uuser
+			result = Lead.gql(q)	
 
-		if(result.count() > 0):
-			self.response.headers['Content-Type'] = 'text/xml'
-			template_values = {'leads':result}
+			if(result.count() > 0):
+				self.response.headers['Content-Type'] = 'text/xml'
+				template_values = {'leads':result}
 				
-			path = os.path.join(os.path.dirname(__file__),'templates', 'getleads.xml')
-			self.response.out.write(template.render(path, template_values))
+				path = os.path.join(os.path.dirname(__file__),'templates', 'getleads.xml')
+				self.response.out.write(template.render(path, template_values))
 				
-		else:
+			else:
+				self.response.headers['Content-Type'] = 'text/plain'
+				self.response.out.write("0")
+
+		except:
 			self.response.headers['Content-Type'] = 'text/plain'
-			self.response.out.write("0")
-			
-#		except:
-#			self.response.headers['Content-Type'] = 'text/plain'
-#			self.response.out.write("-1")						
+			self.response.out.write("-1")						
 			
 application = webapp.WSGIApplication([('/',MainPage),('/users/add',AddUser),('/users/auth',AuthUser),('/leads/add',AddLead),('/leads/update',AddLead),('/leads/get',GetLeads)],debug=True)
 
