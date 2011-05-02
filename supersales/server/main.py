@@ -61,8 +61,10 @@ class AddLead(webapp.RequestHandler):
 			uemail = self.request.get('email')
 			ustatus = self.request.get('status')
 			uuser = self.request.get('user')
+			ulat = self.request.get('lat')
+			ulng = self.request.get('lng')
 	
-			lead = Lead(ts=uts,name=uname,contactperson=ucontactperson,contactnumber=ucontactnumber,area=uarea,email=uemail,status=ustatus,user=uuser)
+			lead = Lead(ts=uts,name=uname,contactperson=ucontactperson,contactnumber=ucontactnumber,area=uarea,email=uemail,status=ustatus,user=uuser,lat=ulat,lng=ulng)
 			lead.put()
 
 			self.response.headers['Content-Type'] = 'text/plain'

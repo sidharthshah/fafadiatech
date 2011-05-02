@@ -14,3 +14,5 @@ class Lead(db.Model):
 	email = db.EmailProperty()
 	status = db.StringProperty()
 	user = db.EmailProperty()
+	lat = db.StringProperty()
+	lng = db.StringProperty()
