@@ -1,9 +1,11 @@
 from google.appengine.ext import db 
 from google.appengine.ext import webapp 
+from google.appengine.ext.webapp import template
 from google.appengine.ext.webapp.util import run_wsgi_app 
 
 from models import *
 
+import os
 import datetime 
 
 class MainPage(webapp.RequestHandler):
@@ -72,50 +74,31 @@ class AddLead(webapp.RequestHandler):
 
 		except:
 			self.response.headers['Content-Type'] = 'text/plain'
-			self.response.out.write("-1")	
+			self.response.out.write("-1")
 
-class UpdateLead(webapp.RequestHandler):
+class GetLeads(webapp.RequestHandler):
 	def post(self):
-		try:
-			uts = datetime.datetime.now()
-			uname = self.request.get('name')
-			ucontactperson = self.request.get('contactperson')
-			ucontactnumber = self.request.get('contactnumber')
-			uarea = self.request.get('area')
-			uemail = self.request.get('email')
-			ustatus = self.request.get('status')
-			uuser = self.request.get('user')
-			ulat = self.request.get('lat')
-			ulng = self.request.get('lng')
-			
-			q = "WHERE name = '%s'" % uname
-	
-			lead = Lead.gql(q)
-			status = ""			
+#		try:
+		uuser = self.request.get('user')
+		q = "WHERE user = '%s'" % uuser
+		result = Lead.gql(q)
 
-			if(result.count == 1):
-				lead.ts = ts; 
-				lead.name = uname
-				lead.contactperson = ucontactperson 
-				lead.contactnumber = ucontactnumber 
-				lead.area = uarea
-				lead.email = uemail
-				lead.status = ustatus
-				lead.user = uuser
-				lead.lat = ulat
-				lead.lng = ulng
-				lead.put()
-				status = "1"
-			else:
-				status = "0"
-
+		if(result.count() > 0):
+			self.response.headers['Content-Type'] = 'text/xml'
+			template_values = {'leads':result}
+				
+			path = os.path.join(os.path.dirname(__file__),'templates', 'getleads.xml')
+			self.response.out.write(template.render(path, template_values))
+				
+		else:
 			self.response.headers['Content-Type'] = 'text/plain'
-			self.response.out.write(status)
-		except:
-			self.response.headers['Content-Type'] = 'text/plain'
-			self.response.out.write("-1")			
+			self.response.out.write("0")
 			
-application = webapp.WSGIApplication([('/',MainPage),('/users/add',AddUser),('/users/auth',AuthUser),('/leads/add',AddLead),('/leads/update',AddLead)],debug=True)
+#		except:
+#			self.response.headers['Content-Type'] = 'text/plain'
+#			self.response.out.write("-1")						
+			
+application = webapp.WSGIApplication([('/',MainPage),('/users/add',AddUser),('/users/auth',AuthUser),('/leads/add',AddLead),('/leads/update',AddLead),('/leads/get',GetLeads)],debug=True)
 
 def main():
 	run_wsgi_app(application)

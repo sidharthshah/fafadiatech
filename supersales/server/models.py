@@ -6,11 +6,11 @@ class UserProfile(db.Model):
 	passwd = db.StringProperty(required=True)
 
 class Lead(db.Model):
-	ts = db.DateTimeProperty(required=True)
+	ts = db.DateTimeProperty()
 	name = db.StringProperty(required=True)
-	contactperson = db.StringProperty(required=True)
-	contactnumber = db.StringProperty(required=True)
-	area = db.StringProperty(required=True)
+	contactperson = db.StringProperty()
+	contactnumber = db.StringProperty()
+	area = db.StringProperty()
 	email = db.EmailProperty()
 	status = db.StringProperty()
 	user = db.EmailProperty()
