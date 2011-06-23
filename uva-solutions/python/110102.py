@@ -19,25 +19,26 @@ def update_count(x,y,r,c):
 	"""
 	Update the count while checking for overflow and underflow
 	"""
-	if((x-1) > 0 and (y+1) < c):
-			result[x-1][y+1] += 1
+	if((x-1) >= 0 and (y+1) < c):
+		result[x-1][y+1] += 1
 			
-	if((x-1) > 0):
-			result[x-1][y] += 1
-
-	if((x-1) > 0 and (y-1) > 0):
-			result[x-1][y-1] += 1
+	if((x-1) >= 0):
+		result[x-1][y] += 1
+	
+	
+	if((x-1) >= 0 and (y-1) >= 0):
+		result[x-1][y-1] += 1
 	
 	if((x+1) < r and (y+1) < c):
-			result[x+1][y+1] += 1
+		result[x+1][y+1] += 1
 	
 	if((x+1) < r):
-			result[x+1][y] += 1
+		result[x+1][y] += 1
 
-	if((x+1) < r and (y-1) > 0):
-			result[x+1][y-1] += 1
+	if((x+1) < r and (y-1) >= 0):
+		result[x+1][y-1] += 1
 	
-	if((y -1) > 0):
+	if((y -1) >= 0):
 		result[x][y-1] += 1
 	
 	if((y + 1) < c):
