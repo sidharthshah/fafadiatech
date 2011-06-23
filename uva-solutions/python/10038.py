@@ -5,7 +5,7 @@
 
 def jolly(input):
     """
-    Return True is sequence is jolly
+    Return True if the sequence is jolly
     """
     nums = []
     uniq = [] 
