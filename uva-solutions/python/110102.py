@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#Solution to Jolly Jumper 
+#Solution to Minesweeper
 #URL: http://www.programming-challenges.com/pg.php?page=downloadproblem&probid=110102&format=html
 #Author: Sidharth Shah
 
