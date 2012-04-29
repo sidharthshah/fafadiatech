@@ -1,0 +1,110 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf360
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Menlo-Regular;\f2\fnil\fcharset0 Menlo-Bold;
+}
+{\colortbl;\red255\green255\blue255;\red0\green116\blue0;\red170\green13\blue145;\red92\green38\blue153;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11620\viewh17120\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+
+\f0\b\fs24 \cf0 							BROWSER CRAWLER\
+
+\b0 \
+\
+
+\b ================================================================================\
+DESCRIPTION:
+\b0 \
+\
+A simple application to fetch your browsing history from the Chrome, Firefox, Safari, and then\
+display the most visited websites along with the visit count, Ping Latency, Web Page Size.\
+\
+\
+
+\b ================================================================================\
+BUILD REQUIREMENTS:
+\b0 \
+\
+XCode 4.0 or above\
+\
+\
+
+\b ================================================================================\
+RUNTIME REQUIREMENTS:
+\b0 \
+\
+Mac OS 10.6\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+
+\b \cf0 ================================================================================\
+EXTERNAL FRAMEWORKS USED :
+\b0 \
+\
+FMDB			- 	To carry out the database read/write function.\
+					http://groups.google.com/group/fmdb?pli=1\
+					https://github.com/ccgus/fmdb
+\b \
+
+\b0 \
+ASIHTTPRequest	-	To get the content size of the webpages.\
+					http://allseeing-i.com/ASIHTTPRequest/\
+					https://github.com/pokeb/asi-http-request/tree\
+			\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+\cf0 \
+\
+
+\b ================================================================================\
+PACKAGING LIST:
+\b0 \
+\
+AppController.h\
+AppController.m\
+\
+The AppController class encapsulates all the function to read the database from all the browsers.\
+\
+\
+\pard\tx560\pardeftab560\ql\qnatural\pardirnatural
+
+\f1\fs23 \cf2 \CocoaLigature0 // Creating App's database to store the history from the browsers.\cf0 \
+- (\cf3 void\cf0 )createAppDb;\
+\
+\cf2 // To get all the browser's database paths.\cf0 \
+- (\cf3 void\cf0 )getBrowserDbPath;\
+\
+\cf2 // To get the total number of rows in chrome database.\cf0 \
+- (\cf3 void\cf0 )getChromeDataCount;\
+\
+\cf2 // To get all the urls and visit count from chrome database.\cf0 \
+- (\cf3 void\cf0 )getChromeData;\
+\
+\cf2 // To get the total number of rows in firefox database.\cf0 \
+- (\cf3 void\cf0 )getFirefoxDataCount;\
+\
+\cf2 // To get all the urls and visit count from firefox database.\cf0 \
+- (\cf3 void\cf0 )getFirefoxData;\
+\
+\cf2 // To get the total number of rows in safari plist.\cf0 \
+- (\cf3 void\cf0 )getSafariDataCount;\
+\
+\cf2 // To get all the urls and visit count from safari history plist.\cf0 \
+- (\cf3 void\cf0 )getSafariData;\
+\
+\cf2 // To save the contents (url, visit_count) to the apps db.\cf0 \
+- (\cf3 void\cf0 )saveContentToAppDb:(NSString *)url withVisit:(NSInteger)count;\
+\
+\cf2 // To get urls with visit count from the application database.\cf0 \
+- (\cf3 void\cf0 )getHistoryFromAppDb;\
+\
+\cf2 // To ping the website and get its avg ping latency.\cf0 \
+- (\cf4 NSString\cf0  *)pingSource:(\cf4 NSString\cf0  *)url;\
+\
+\cf2 // To calculate the website page content size.\cf0 \
+- (\cf4 NSString\cf0  *)contentSize:(\cf4 NSString\cf0  *)url;\
+\
+\
+
+\f2\b ================================================================================\
+Copyright (C) 2012 Fafadia Tech. All rights reserved.
+\f1\b0 \
+}
