@@ -1,0 +1,125 @@
+
+blockquote, q {
+	quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+/* remember to define focus styles! */
+:focus {
+	outline: 0;
+	-moz-outline: none;
+
+
+}
+
+/* remember to highlight inserts somehow! */
+ins {
+	text-decoration: none;
+}
+del {
+	text-decoration: line-through;
+}
+
+/*---popup styles starts here ----- */
+	.popupGrayBg {
+		position:fixed; 
+		width:100%; 
+		height:100%; 
+		background:black; 
+		z-index:1001; 
+		left:0; 
+		top:0; 
+		opacity:.5;
+		filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+		}
+	.QTPopupCntnr {
+		width:487px; 
+		position:fixed; 
+		z-index:1200; 
+		background:gray; 
+		left:50%; 
+		top:50%; 
+		margin-left:-244px; 
+		margin-top:-276px;
+		}
+	.gpBdrLeftTop {
+		width:6px;
+		height:6px;
+		background:url(../images/greenPopupBdr.png) left top no-repeat;
+		float:left;
+		}
+	.gpBdrRightTop {
+		width:6px;
+		height:6px;
+		background:url(../images/greenPopupBdr.png) right top no-repeat;
+		float:right;
+		}
+	.gpBdrTop {
+		height:3px;
+		background:#a9b6e1;
+		border-top:3px solid #3b4f91;
+		margin-left:6px;
+		margin-right:6px;
+		}
+	.gpBdrLeft {
+		border-left:3px solid #3b4f91;
+		background:#fff;
+		}
+	.gpBdrRight {
+		border-right:3px solid #3b4f91;
+		background:#fff;
+		position:relative;
+	}
+	.gpBdrLeftBottom {
+		width:6px;
+		height:6px;
+		background:url(../images/greenPopupBdr.png) left bottom no-repeat;
+		float:left;
+		}
+	.gpBdrRightBottom {
+		width:6px;
+		height:6px;
+		background:url(../images/greenPopupBdr.png) right bottom no-repeat;
+		float:right;
+		}
+	.gpBdrBottom {
+		height:3px;
+		background:#fff;
+		border-bottom:3px solid #3b4f91;
+		margin-left:6px;
+		margin-right:6px;
+		}
+	.gpBdrRight .caption {
+		background:#a9b6e1;
+		line-height:38px;
+		padding-left:10px;
+		font-family:Arial, Helvetica, sans-serif;
+		font-size:15px;
+		font-weight:bold;
+		color:#3b4f91;
+		}
+	.gpBdrRight .closeBtn {
+		background:red;
+		width:31px;
+		height:31px;
+		position:absolute;
+		right:-15px;
+		top:-15px;
+		background:url(../images/grn_pp_cls_btn_normal.png) no-repeat;
+		
+		}
+	.gpBdrRight .closeBtn:hover {
+		background:url(../images/grn_pp_cls_btn_over.png) no-repeat;
+		}
+		
+	.gpBdrRight .content {
+		padding:25px;
+		font-weight:normal;
+		}
+	
+/*---popup styles ends here ----- */
