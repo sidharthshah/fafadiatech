@@ -1,0 +1,61 @@
+<%inherit file="base_admin.html" />
+<script type="text/javascript">
+function modifyuser(){
+	var id = $("#id").val();
+	var uid = $("#usrid").val();
+	var type = $("#type").val();
+	var department = $("#department").val();
+	var username = $("#username").val();
+	var password = $("#password").val();
+
+	$.post("/user/modify",{"id":id,"usrid":uid,"type":type,"department":department,"username":username,"password":password},function(data)
+	{
+		if(data=="1")
+		{
+			alert("User modified Successfully.");
+			
+		}
+		else if(data == "0")
+		{
+			alert("Team member already exist");
+			
+		}
+		else
+		{
+			alert("Please enter all values");
+		}
+	});
+}
+</script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+<div id="user" class="span10">
+	<form name="edituser" id="edituser" method="post" action="" style="margin-left:20px;">
+		<div style="float:left;">
+		<label>Id:</label><br/><br/>
+		<input type="text" class="large" name="id" id="id" value="${user[0]}"><br/><br/>
+		</div>
+		<div style="float:left;">
+		<label>User Id:</label><br/><br/>
+		<input type="text" class="large" name="usrid" id="usrid" value="${user[2]}"><br/><br/>
+		</div>
+		<div style="float:right;">
+		<label>Type:</label><br/><br/>
+		<input type="text" class="large" name="type" id="type" value="${user[3]}"><br/><br/>
+		</div>
+		<div style="float:left;">
+		<label>Department:</label><br/><br/>
+		<input type="text" class="large" name="department" id="department" value="${user[4]}"><br/><br/>
+		</div>
+		<div style="float:right;">
+		<label>Username:</label><br/><br/>
+		<input type="text" class="large" name="username" id="username" value="${user[5]}"><br/><br/>
+		</div>
+		<div style="float:left;">
+		<label>Password:</label><br/><br/>
+		<input type="password" class="large" name="password" id="password" value="${user[6]}"><br/><br/><br/>
+		<input type="button" name="modify" id="modify" value="Modify" onclick="javascript:modifyuser();">
+		<input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="javascript:history.go(-1)"><br/><br/>
+		</div>
+	</form>
+</div>

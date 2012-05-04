@@ -1,0 +1,62 @@
+<%inherit file="base_admin.html" />
+<script type="text/javascript">
+function addTicket()
+{
+	var ticket_status = $("#ticket_status").val();
+	$.post("/ticketstatus/add",{"ticket_status": ticket_status},function(data){
+	if(data == "1"){
+		alert("New Ticket Status is added");
+		window.location.href="/ticketstatus/add";
+		}
+	else if(data == "0"){
+		alert("Please Fill all Fields.");
+	}
+	else{
+		alert("Ticket Status is already Exist");
+
+	}
+	});
+}
+function deletestatus(id){
+	//var issue_type = $("#issue_type").val();
+	var remove = confirm("Are you sure, you want to remove the Ticket Status Data?")
+	if (remove){
+	$.post("/ticketstatus/delete",{"statusId":id},function (data){
+		if(data=="1")
+		{
+			window.location.href="/ticketstatus/add";
+		}
+		else if(data=="-1")
+		{
+			alert("	Invalid operation");
+		}
+	});	
+	}
+}
+</script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+<form name="ticketstatusmaster" id="ticketstatusmaster" method="post" action="" style="margin-left:20px;">
+	<label>Ticket Status:</label><br/><br/>
+	<input type="text" class="large" name="ticket_status" id="ticket_status"><br/><br/>
+	<input type="button" name="save" id="save" value="Submit" onclick="javascript:addTicket()"><br/><br/>
+
+	<table>
+	<tr>
+	<th>Name</th>
+	<th>Action</th>
+	</tr>
+	%for i in ticket:
+		
+		<tr>
+			<td>${i[1]}</td>
+			%if i[1] != "Open" and i[1] != "Closed": 
+			<td><a id="${i[0]}" href="/ticketstatus/modify?statusId=${i[0]}" >Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="${i[0]}" onclick="javascript:deletestatus(id);">Delete</a></td>
+			%else:
+				<td>-</td>
+			%endif
+		</tr>
+		
+	%endfor
+	</table>
+</form>

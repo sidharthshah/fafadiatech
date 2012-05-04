@@ -1,0 +1,90 @@
+<%inherit file="base_login.html" />
+<script language="javascript" type="text/javascript">
+function imposeMaxLength(Object, MaxLen)
+{
+  return (Object.value.length <= MaxLen);
+}
+</script>
+<script type="text/javascript">
+function addfeedback()
+{
+	var customer = $("#customer").val();
+	var ticketid = $("#ticketid").val();
+	var dept = $("#dept").val();
+	var val1of1 = $('input:radio[name=val1of1]:checked').val();
+	var val2of2 = $('input:radio[name=val2of2]:checked').val();
+	var val3of3 = $('input:radio[name=val3of3]:checked').val();
+	var val4of4 = $('input:radio[name=val4of4]:checked').val();
+	var val5of5 = $('input:radio[name=val5of5]:checked').val();
+	var surveydetail = $("#surveydetail").val();
+
+	$.post("/feedback",{customer:customer,ticketid:ticketid,dept:dept,val1of1:val1of1,val2of2:val2of2,val3of3:val3of3,val4of4:val4of4,val5of5:val5of5,surveydetail:surveydetail},function(data){
+		if(data == "1"){
+			
+			alert("Thank you for your Feedback");
+			window.location.href="/";
+		}
+		else{
+			alert("Feedback already taken");
+			}
+	});
+}
+</script>
+
+<div id="body" style="margin:0 auto;"><br/><br/>
+	<form name="feadback" enctype="application/x-www-form-urlencoded" class="form-stacked" id="feadback">
+		
+		<label>Hello <input type="hidden" name="customer" id="customer" value="${ticket[2]}">${ticket[2]},</label><br/>
+		<label>Ticket Id: <input type="hidden" name="ticketid" id="ticketid" value="${ticket[1]}">${ticket[1]}</label>
+		<label>Issue Type: <input type="hidden" name="dept" id="dept" value="${dept[0]}">${dept[1]}</label><br/>
+		<p>We hope the information and suggested resolution provided by the Support has solved your support case satisfactorily. We request that you confirm closure this case by logging into Support Desk and closing the Support Case. A few minutes of your valued time would help us understand and improve the quality of support extended.</p>
+		<table class="bordered-table" style="">
+			<tr>
+				<th>Support Desk</th>
+				<th>Very Satisfied</th>
+				<th>Satisfied</th>
+				<th>Neutral</th>
+				<th>Dissatisfied</th>
+				<th>Very Dissatisfied</th>
+			</tr>
+			<tr>
+				<td>1. Timely response/resolution to your requests/issues</td>
+				<td><input type="radio" name="val1of1" id="val1of1" value="Very Satisfied"></td>
+				<td><input type="radio" name="val1of1" id="val1of2" value="Satisfied"></td>
+				<td><input type="radio" name="val1of1" id="val1of3" value="Neutral"></td>
+				<td><input type="radio" name="val1of1" id="val1of4" value="Dissatisfied"></td>
+				<td><input type="radio" name="val1of1" id="val1of5" value="Very Dissatisfied"></td>
+			</tr>
+			<tr>
+				<td>2. Effectiveness of Answer/Solution provided</td>
+				<td><input type="radio" name="val2of2" id="val2of1" value="Very Satisfied"></td>
+				<td><input type="radio" name="val2of2" id="val2of2" value="Satisfied"></td>
+				<td><input type="radio" name="val2of2" id="val2of3" value="Neutral"></td>
+				<td><input type="radio" name="val2of2" id="val2of4" value="Dissatisfied"></td>
+				<td><input type="radio" name="val2of2" id="val2of5" value="Very Dissatisfied"></td>
+			</tr>
+			<tr>
+				<td>3. Technical ability/competence of the Support Engineer</td>
+				<td><input type="radio" name="val3of3" id="val3of1" value="Very Satisfied"></td>
+				<td><input type="radio" name="val3of3" id="val3of2" value="Satisfied"></td>
+				<td><input type="radio" name="val3of3" id="val3of3" value="Neutral"></td>
+				<td><input type="radio" name="val3of3" id="val3of4" value="Dissatisfied"></td>
+				<td><input type="radio" name="val3of3" id="val3of5" value="Very Dissatisfied"></td>
+			</tr>
+			<tr>
+				<td>4. Overall how satisfied are you with the quality of Pentagon Support?</td>
+				<td><input type="radio" name="val4of4" id="val4of1" value="Very Satisfied"></td>
+				<td><input type="radio" name="val4of4" id="val4of2" value="Satisfied"></td>
+				<td><input type="radio" name="val4of4" id="val4of3" value="Neutral"></td>
+				<td><input type="radio" name="val4of4" id="val4of4" value="Dissatisfied"></td>
+				<td><input type="radio" name="val4of4" id="val4of5" value="Very Dissatisfied"></td>
+			</tr>
+			<tr>
+				<td>5. What, if anything, could we do to improve your support experience? We value your feedback and kindly request you to give us any other suggestions you may have which would help us provide you with excellent service</td>
+				<td colspan="5"><textarea name="surveydetail" id="surveydetail" style="resize:vertical; max-height:60px; min-height:60px; max-width:400px; min-width:400px;" onkeypress="return imposeMaxLength(this, 139);"></textarea></td>
+			</tr>
+		</table>
+		<input type="button" name="submit" id="submit" value="Submit" onclick="addfeedback();">
+		<input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="javascript:history.go(-1)"><br/><br/>
+	</form>
+</div>

@@ -1,0 +1,136 @@
+<%inherit file="baseteam_admin.html" />
+<script language="javascript" type="text/javascript">
+function imposeMaxLength(Object, MaxLen)
+{
+  return (Object.value.length <= MaxLen);
+}
+</script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+function addProduct(id){
+	var customer = $("#customer").val();
+	try{
+	var mySelect = document.getElementById("customer");
+	var customername = mySelect.options[mySelect.selectedIndex].text;
+	}
+	catch(err)
+	{
+		customer = null
+	}
+	var customer = $("#customer").val();
+	var company_name = $("#company_name").val();
+	var email = $("#email").val();
+	var alternateemail = $("#alternateemail").val();
+	var mobile = $("#mobile").val();
+	var alternatemobile = $("#alternatemobile").val();
+	var location = $("#location").val();
+	var landline = $("#landline").val();
+	var issue_type = $("#issue_type").val();
+	var make_type = $("#make_type").val();
+	var system_id = $("#system_id").val();
+	var problem = $("#problem").val();
+	$.post("/ticket/create",{customer:customer,customername:customername,company_name:company_name, email:email, alternateemail:alternateemail, mobile:mobile, alternatemobile:alternatemobile, location:location, landline:landline, issue_type:issue_type, make_type:make_type, system_id:system_id, problem:problem},function(data){
+		if(data == "1"){
+				alert("Ticket Create successfully.")
+				$("save").attr("disabled", "disabled");
+				window.location.href="/issue"
+		
+			}
+			else if(data == "0"){
+				alert("Please Enter data")
+			}
+			else if(data == "-1") {
+				alert("Data added but sms and email not send")
+			}
+		
+		  	});
+}
+
+function displaycustdetails()
+{
+var customerid = $("#customer").val();
+var customername = $("#customer :selected").text();
+$.post("/customer/displaydata",{customerid:customerid},function(data)
+{
+	$("#company_name").val(data["data"][1]);
+	$("#email").val(data["data"][6]);
+	$("#alternateemail").val("");
+	$("#mobile").val(data["data"][5]);
+	$("#alternatemobile").val("");
+	$("#location").val(data["data"][3]);
+	$("#landline").val(data["data"][4]);
+},"json");
+
+
+}
+</script>
+
+<div id="ticketcreate" class="span10">
+	<form name="newcustomer" id="newcustomer" method="post" action="/ticket/create" style="margin-left:20px;"  enctype="multipart/form-data; charset=utf-8">
+		<h4 style="color: #0064CD; text-decoration:underline;">General Information</h4>
+			<div style="float:left;">
+			<label>Customer Name:</label><br/><br/>
+			<select name="customer" id="customer" readonly onchange="displaycustdetails()">
+			<option value="select">Select</option>
+			%for i in customerdata:
+				<option value="${i[0]}">${i[2]}</option>
+			%endfor
+			</select><br/><br/>
+			</div>
+			<div style="float:right;">
+			<label>Company Name:</label><br/><br/>
+			<input type="text" class="large" name="company_name" id="company_name" value="" readonly><br/><br/>
+			</div>
+			<div style="float:left;">
+			<label>Email Id:</label><br/><br/>
+			<input type="text" class="large" name="email" id="email" value="" readonly><br/><br/>
+			</div>
+			<div style="float:right;">
+			<label style="color:red;">Alternate Email Id:</label><br/><br/>
+			<input type="text" class="large" name="alternateemail" id="alternateemail"><br/><br/>
+			</div>
+			<div style="float:left;">
+			<label>Mobile No.:</label><br/><br/>
+			<input type="text" class="large" name="mobile" id="mobile" value="" readonly><br/><br/>
+			</div>
+			<div style="float:right;">
+			<label style="color:red;">Alternate Mobile No.:</label><br/><br/>
+			<input type="text" class="large" name="alternatemobile" id="alternatemobile"><br/><br/>
+			</div>
+			<div style="float:left; margin-bottom:7.5%;">
+			<label>Land Line No.:</label><br/><br/>
+			<input type="text" class="large" name="landline" id="landline" value="" readonly><br/><br/>
+			</div>
+			<div style="float:right;">
+			<label>Location:</label><br/><br/>
+			<textarea name="location" id="location" style="resize:vertical; max-height:60px; min-height:60px;" readonly ></textarea><br/><br/>
+			</div>
+			<div style="float:left;">
+			<h4 style="color: #0064CD; text-decoration:underline;">Product Information</h4>
+			<label>Issue Type:</label><br/><br/>
+			<select name="issue_type" id="issue_type" style="width:220px;">
+				%for i in issue:
+				<option value="${i[0]}">${i[1]}</option>
+				%endfor
+			</select>
+			</div>
+			<div style="float:right;"><br/><br style="margin-top:7px;">
+			<label>System Id:</label><br/><br/>
+			<input type="text" class="large" name="system_id" id="system_id"><br/><br/>
+			</div>
+			<!--div style="float:right;"-->
+			<div style="float:left;">
+			<label>Problem Description:</label><br/><br/>
+			<textarea name="problem" id="problem" style="resize:vertical; max-height:60px; min-height:60px; width:550px;" onkeypress="return imposeMaxLength(this, 139);"></textarea><br/><br/>
+			</div>
+			<div style="float:left;">
+			<label>Attach File</label><br/><br/>
+
+			<input name="files"  id="files" type="file" multiple/>
+<br/><br/>
+		<input type="button" value="Submit" id="${usertype}" name="save" onclick="javascript:addProduct(id);">
+		<input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="window.location.href='/customer/dashboard'">
+		</div>
+	</form>
+</div>

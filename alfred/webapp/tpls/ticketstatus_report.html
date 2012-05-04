@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <title>Google Charts Tutorial</title>
+
+        <style type="text/css">
+            #eventsExample {
+                position: relative;
+            }
+            #details0, #details1, #details2, #details3 {
+                visibility:hidden;
+                background: #FFFF7F;
+                border: solid 1px;
+                width: 350px;
+                padding: 5px;
+                font-size:smaller;
+                position:absolute;
+                top: 250px;
+            }
+        </style>
+
+
+        <!-- load Google AJAX API -->
+        <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+		
+
+        <script type="text/javascript">
+            //load the Google Visualization API and the chart
+            google.load('visualization', '1', {'packages':['columnchart','piechart']});
+
+            //set callback
+            google.setOnLoadCallback (createChart);
+
+            //callback function
+            function createChart() {
+
+                //create data table object
+                var dataTable = new google.visualization.DataTable();
+			dataTable.addColumn('string','Quarters 2009');
+                	dataTable.addColumn('number', 'Earnings');
+			dataTable.addColumn('number','avc');
+                	dataTable.addColumn('number', 'sds');
+			dataTable.addRows(${weekdata});
+			var chart = new google.visualization.ColumnChart (document.getElementById('Chart'));
+			var options = {width: 600, height: 500, is2D: true, title: 'Weekly Ticket data'};
+			chart.draw(dataTable, options);
+		}
+        </script>
+
+    </head>
+ <body>
+         <!--Div for our chart -->
+        <div id="Chart"></div>
+       
+</div>
+
+    </body>
+</html>

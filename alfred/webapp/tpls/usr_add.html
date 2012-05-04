@@ -1,0 +1,115 @@
+<%inherit file="base_admin.html" />
+<script type="text/javascript">
+function addUser(){
+	var usrid = $("#custId").val();
+	var type = $("#type").val();
+	var custname = $("#custname").val();
+	var custemail = $("#custemail").val();
+	var department = $("#department").val();
+	var usrname = $("#usrname").val();
+	var password = $("#password").val();
+	
+	if(type == "customer")
+	{
+	$.post("/user/newuser",{"usrid":usrid,"custname":custname, "custemail":custemail, "type":type, "department":department, "usrname":usrname, "password":password},function(data){
+	if(data == "1"){
+		$("#custId").val("");
+		$("#custname").val("");
+		$("#usrname").val("");
+		$("#password").val("");
+		alert("User is added");
+		window.location.href="/customer/summary";
+		}
+	else if(data == "2"){
+		alert("Please Fill all Fields.");
+	}
+	else if(data == "-2"){
+		alert("Email not send");
+	}
+	else if(data == "-3"){
+		alert("Username and password already exists");
+		$("#usrname").val("");
+		$("#password").val("");
+	}
+	else{
+		$("#usrname").val("");
+		$("#password").val("");
+		alert("User is already Exist");
+	}
+	});
+	}
+	else{
+	$.post("/user/newuser",{"usrid":usrid,"custname":custname, "custemail":custemail, "type":type, "department":department, "usrname":usrname, "password":password},function(data){
+	if(data == "1"){
+		$("#custId").val("");
+		$("#custname").val("");
+		$("#usrname").val("");
+		$("#password").val("");
+		alert("User is added");
+		window.location.href="/team/summary";
+		}
+	else if(data == "2"){
+		alert("Please Fill all Fields.");
+	}
+	else if(data == "-2"){
+		alert("Email not send");
+	}
+	else if(data == "-3"){
+		alert("Username and password already exists");
+		$("#usrname").val("");
+		$("#password").val("");
+	}
+	else{
+		$("#usrname").val("");
+		$("#password").val("");
+		alert("User is already Exist");
+	}
+	});
+		
+
+	}
+}
+</script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
+<div id="user" class="span10">
+	<h4 style="color: #0064CD; text-decoration:underline;">User Information</h4>
+	<form name="adduser" id="adduser" method="post" action="" style="margin-left:20px;">
+		<label>Id:</label><br/><br/>
+		<input type="text" class="large" name="custId" id="custId" value="${data[0]}" readonly><br/><br/>
+		<label>Name:</label><br/><br/>
+		%if type=="customer":
+			<input type="text" class="large" name="custname" id="custname" value="${data[2]}" readonly><br/><br/>
+			<label>Email:</label><br/><br/>
+			<input type="text" class="large" name="custemail" id="custemail" value="${data[6]}" readonly><br/><br/>
+		%elif type=="team":
+			<input type="text" class="large" name="custname" id="custname" value="${data[1]}" readonly><br/><br/>
+			<label>Email:</label><br/><br/>
+			<input type="text" class="large" name="custemail" id="custemail" value="${data[5]}" readonly><br/><br/>
+		%else:
+			<input type="text" value="${type}" readonly>
+		%endif
+		<label>Role:</label><br/><br/>
+		%if type=="customer":
+			<input type="text" class="large" name="type" id="type" value="customer" readonly><br/><br/>
+		%else:
+			<select name="type" id="type">
+				<option value="admin">Admin</option>
+				<option value="team">Employee</option>
+			</select><br/><br/>
+			<label>Department:</label><br/><br/>
+			<select name="department" id="department">
+			%for i in issue:
+				<option value="${i[0]}">${i[1]}</option>
+			%endfor
+			</select><br/><br/>
+		%endif
+
+		<label>Username:</label><br/><br/>
+		<input type="text" class="large" name="usrname" id="usrname"><br/><br/>
+		<label>Password:</label><br/><br/>
+		<input type="password" class="large" name="password" id="password"><br/><br/><br/>
+		<input type="button" name="submit" id="submit" value="Submit" onclick="javascript:addUser();">
+		<input type="button" name="Cancel" id="Cancel" value="Cancel" onclick="javascript:history.go(-1)">
+	</form>
+</div>

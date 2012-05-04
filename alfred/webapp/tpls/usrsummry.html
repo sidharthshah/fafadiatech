@@ -1,0 +1,28 @@
+<%inherit file="base_admin.html" />
+<script type="text/javascript">
+	function userOperation(id,op){
+		var addForm = document.getElementById("usersummery");
+		addForm.action="/user/"+op+"?uid="+id;
+		addForm.method="POST";
+		addForm.submit();
+		}		
+</script>
+<form name="usersummery" id="usersummery" action="" method="">
+<table>
+<tr>
+	<th>Type</th>
+	<th>Department</th>
+	<th>Username</th>
+	<th>Action</th>
+</tr>
+%for i in User:
+<tr>
+	<td>${i[3]}</td>
+	<td>${i[4]}</td>
+	<td>${i[5]}</td>
+	<td style="cursor:pointer;"><a href="#" id="${i[0]}" onclick="javascript:userOperation(id,'edit')">Edit</a>&nbsp;&nbsp;
+	<a href="#" id="${i[0]}" onclick="javascript:userOperation(id,'delete')">Delete</a></td>
+</tr>
+%endfor
+</table>
+</form>

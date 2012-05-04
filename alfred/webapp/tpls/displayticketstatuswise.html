@@ -1,0 +1,97 @@
+<%inherit file="customer_base.html" />
+<script type="text/javascript">
+function displayCustinfo(id)
+{
+	//$("#customer_name").val("")
+	//$("#email").val("")
+	//$("#location").val("")
+	var ticketId = $("#ticketId").val();
+	$.post("/ticket/display",{ticketId:ticketId},function(data){
+	$("#name").val(data["ticket"][0]);
+	$("#company").val(data["ticket"][1]);
+	$("#email").val(data["ticket"][2]);	
+	$("#location").val(data["ticket"][3]);
+	$("#sysId").val(data["ticket"][4]);
+	setSelectedIndex("ticketassign.asssigneTo",data["ticket"][5]);
+	setSelectedIndex("ticketassign.priority",data["ticket"][6]);
+	},"json");
+}
+
+function assignmemeber(id,obj)
+{
+var asssigneTo = obj.options[obj.selectedIndex].value;
+$.post("/ticket/assign",{ticketId:id, asssigneTo:asssigneTo},function(data){
+alert("Ticket is Assigned");
+});
+}
+
+function setpriority(id,obj)
+{
+var priority = obj.options[obj.selectedIndex].value;
+$.post("/ticket/priority",{ticketId:id, priority:priority},function(data){
+alert("Priority is changed");
+});
+}
+function Changetstatus(id,obj)
+{
+var status = obj.options[obj.selectedIndex].value;
+$.post("/ticket/assignstatus",{ticketId:id, status:status},function(data){
+alert("Status Assignd");
+});
+}
+function editTicket(id)
+{
+var addForm = document.getElementById("ticketassign");
+addForm.action="/admin/ticket/assign/edit?tkId="+id;
+addForm.method="POST";
+addForm.submit();
+}
+
+function displaytickethistory(id)
+{
+var addForm = document.getElementById("ticketassign");
+addForm.action="/ticket/dispayadminactivity?tkId="+id;
+addForm.method="POST";
+addForm.submit();
+}
+
+function displayTicketDetails(id)
+{
+		var addForm = document.getElementById("customerstatuswise");
+		addForm.action="/ticket/displyinfo?id="+id;
+		addForm.method="POST";
+		addForm.submit();
+}
+
+function displaytickethistory(id)
+{
+var addForm = document.getElementById("customerstatuswise");
+addForm.action="/ticket/dispaycustomerticketactivity?tkId="+id;
+addForm.method="POST";
+addForm.submit();
+}
+</script>
+<form name="customerstatuswise" class="customerstatuswise" id="customerstatuswise" method="post" action="" style="margin:0 auto; width:99%;" onsubmit='formValidator()' >
+<table>
+<tr>
+	<th>Ticket Id</th>
+	<th>Department</th>
+	<th>Assigned To</th>
+	<th>Action</th>
+</tr>
+%if ticket != []:
+	%for i in ticket:
+	<tr>
+		<td><a href="#" id="${i[0]}" onclick="javascript:displaytickethistory(id)">${i[0]}</a></td>
+		<td>${i[4]}</td>
+		<td>${i[3]}</td>
+		<td><a href="#" id="${i[0]}" onclick="javascript:displayTicketDetails(id)"">Details</a></td>	
+	</tr>
+	%endfor
+%else:
+	<tr>
+		<td colspan="4" style="padding-top:5%;"><h2 style="color:#0069D6;"><center>Data Not Found</center></h2></td>
+	</tr>
+%endif
+</table>
+</form>

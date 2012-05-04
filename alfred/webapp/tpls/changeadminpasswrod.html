@@ -1,0 +1,36 @@
+<%inherit file="base_admin.html" />
+<script type="text/javascript">
+function changePassword(){
+	var currentpasswd = $("#currentpasswd").val();
+	var password = $("#password").val();
+	var cpassword = $("#cpassword").val();
+	$.post("/admin/changepassword",{currentpasswd:currentpasswd,password:password,cpassword:cpassword},function(data){
+	if(data == "1"){
+		alert("Your password is changed");
+		$("#password").val("");
+		$("#cpassword").val("");
+		window.location.href="/";
+		}
+	else if(data=="-1"){
+		alert("Password not match");
+		}
+	else if(data=="-2"){
+		alert("Invalid Operation")
+		}
+	else{
+		alert("Invalid Operation")
+	}
+	});
+}
+</script>
+<div id="body" style="margin:0 auto; width:50%;"><br/><br/>
+	<form name="changepwd" method="post" action="/" enctype="application/x-www-form-urlencoded" class="form-stacked" id="changepwd">
+		Current Password:<span style="margin-left:7%"></span><input type="password" name="currentpasswd" id="currentpasswd" value=""><br/><br/>
+		New Password : <span style="margin-left:10%"></span><input type="password" name="password" id="password"><br/><br/>
+		Confirm Password:<span style="margin-left:0%"></span> <input type="password" name="cpassword" id="cpassword"><br/><br/>
+		<input type="button" id="changepwd" name="changepwd" value="Submit" onclick="javascript:changePassword()">
+		<input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="javascript:history.go(-1)">
+	</form>
+</div>
+
+

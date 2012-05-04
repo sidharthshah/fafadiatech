@@ -1,0 +1,56 @@
+<%inherit file="base_login.html" />
+<script type="text/javascript">
+function checkusername()
+{
+	var username = changepwd.username.value;
+
+	if (username == "")
+	alert(username);
+	{
+		alert("Please enter your name");
+		return false;
+	}
+}
+function checkpassword()
+{
+	var password = changepwd.password.value;
+	if (password == "" )
+	{
+		alert("Please enter your password");
+		return false;
+	}
+}
+</script>
+<div id="body" style="margin:0 auto; width:50%;"><br/><br/>
+	<div class="shell" style="border:1px solid #DDDDDD;">
+		<br/>
+		<form name="changepwd" method="post" action="/" enctype="application/x-www-form-urlencoded" class="form-stacked" id="changepwd" autocomplete="on">
+			<label>Username:</label>
+			%if username != "":
+				<input type="text" name="username" id="username" size="15" value="${uname}">&nbsp;
+			%else:
+				<input type="text" name="username" id="username" size="15" onkeypress="window.location.href='/'">&nbsp;
+			%endif
+			% if unamemsg != "":
+				<h6>${unamemsg}</h6>
+			 %endif
+			<br/><br/>
+			<label>Password:</label>
+			%if password != "":
+				<input type="password" name="password" size="12" id="password" value="${password}"><br/>
+			%else:
+				<input type="password" name="password" size="12" id="password" value="${password}"><br/>
+			%endif
+			<label style="display: block; padding-left: 15px; text-indent: -15px; font-weight:normal; color:#0069D6;"><input type="checkbox" name="remember" id="remember" style="vertical-align: bottom;position: relative;top: 1px;"> Remember Me</label>
+			%if pmsg != "":
+				<h6>${pmsg}</h6>
+			 %endif
+			<br/><br/>
+			%if msg !="":
+				<h6>${msg}</h6>
+			%endif
+			<input type="submit" id="login" name="login" value="Login"> 
+			| <a href="#" id="forgotpswd" onClick="window.location='/password/recovery';">Forgot Password</a>
+		</form>
+	</div><br/><br/>
+</div>

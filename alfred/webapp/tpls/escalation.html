@@ -1,0 +1,37 @@
+<%inherit file="base_admin.html" />
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+function addEscalation()
+{
+	var dept = $("#dept").val();
+	var esc1 = $("#esc1").val();
+	var esc2 = $("#esc2").val();
+
+	$.post("/escalation/add",{"dept":dept,"esc1":esc1,"esc2":esc2},function(data){
+	if(data == "1"){
+		alert("New Escalation is added");
+		window.location.href="/escalation/add";
+		}
+	else if(data == "2"){
+		alert("Please Fill all Fields.");
+	}
+	else{
+		alert("Escalation is already Exist");
+
+	}
+	});
+}
+</script>
+
+<form name="escalation_master" id="Slatype" method="post" action="" style="margin-left:20px;">
+	<label>Department:</label><br/><br/>
+	<input type="text" class="large" name="dept" id="dept"><br/><br/>
+
+	<label>Escalation 1:</label><br/><br/>
+	<input type="text" class="large" name="esc1" id="esc1"><br/><br/>
+
+	<label>Escalation 2:</label><br/><br/>
+	<input type="text" class="large" name="esc2" id="esc2"><br/><br/>
+
+	<input type="button" name="submit" id="submit" value="Submit" onclick="javascript:addEscalation()">
+</form>

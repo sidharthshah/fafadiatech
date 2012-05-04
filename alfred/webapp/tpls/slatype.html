@@ -1,0 +1,50 @@
+<%inherit file="base_admin.html" />
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+function addSla(){
+	var sla_type = $("#sla_type").val();
+	$.post("/sla/add",{"sla_type":sla_type},function (data){
+	if(data == "1"){
+		alert("SLA is added.");
+		window.location.href="/sla/add";
+		}
+	else if(data == "0"){
+		alert("Please Fill all Fields.");
+	}
+	else{
+		alert("SLA is already Exist.");
+
+	}
+	});
+}
+function deletesla(id){
+	//var issue_type = $("#issue_type").val();
+	var remove = confirm("Are you sure, you want to remove the Make Data?")
+	if (remove){
+	$.post("/sla/delete",{"slaid":id},function (data){
+		if(data=="1"){
+			window.location.href="/sla/add";
+			}
+		});
+	}
+}
+</script>
+
+<form name="Slatype" id="Slatype" method="post" action="" style="margin-left:20px;">
+	<label>SLA Type:</label><br/><br/>
+	<input type="text" class="large" name="sla_type" id="sla_type"><br/><br/>
+	<input type="button" name="addsla" id="addsla" value="Submit" onclick="javascript:addSla()"><br/><br/>
+
+	<table>
+		<tr>
+		<th>Name</th>
+		<th>Action</th>
+		</tr>
+		%for i in sla:
+		<tr>
+		<td>${i[1]}</td>
+		<td><a href="/sla/modify?slaid=${i[0]}" id="${i[0]}">Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="${i[0]}" onclick="javascript:deletesla(id);">Delete</a></td>
+		</tr>
+		%endfor
+	</table>
+</form>

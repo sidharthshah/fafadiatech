@@ -1,0 +1,104 @@
+<%inherit file="base_admin.html" />
+<script type="text/javascript">
+function DisplayTicketData(){
+		document.getElementById('mytable').innerHTML = "";
+
+		var status = $("#status").val();
+		$.post("/report/otherticket",{status:status},function(data){
+		var tbl= document.createElement('table');
+		var tbo=document.createElement('tbody');
+		
+			
+	    var row, cell;
+		var newTR0 = document.createElement("tr");
+		var newName0 = document.createElement("th");
+	    newName0.innerHTML = "Ticket_Id"
+		newTR0.appendChild(newName0);
+
+
+		var newName4 = document.createElement("th");
+	    newName4.innerHTML = "Company Name"
+		newTR0.appendChild(newName4);
+
+
+	 	var newName01 = document.createElement("th");
+		newName01.innerHTML =  "Email"
+		newTR0.appendChild(newName01);
+
+	 	var newName02 = document.createElement("th");
+		newName02.innerHTML =  "Mobile No"
+		newTR0.appendChild(newName02);
+
+		var newName03 = document.createElement("th");
+	    newName03.innerHTML = "Status"
+		newTR0.appendChild(newName03);
+
+	 	//var newName04 = document.createElement("td");
+		//newName04.innerHTML =  "Unit "
+		//newTR0.appendChild(newName04);
+
+	          	
+		tbl.appendChild(newTR0);
+		 		//alert(data["Ticket"]);
+		for(i=0;i<data["Ticket"].length;i++)
+		{
+			
+			var newTR0 = document.createElement("tr");
+			var newName0 = document.createElement("td");
+			newName0.innerHTML = data["Ticket"][i][1]
+			newTR0.appendChild(newName0);
+
+			var newName04 = document.createElement("td");
+			newName04.innerHTML = data["Ticket"][i][3]
+			newTR0.appendChild(newName04);
+
+		 	var newName01 = document.createElement("td");
+			newName01.innerHTML =  data["Ticket"][i][2]
+			newTR0.appendChild(newName01);
+
+		 	var newName02 = document.createElement("td");
+			newName02.innerHTML =  data["Ticket"][i][3]
+			newTR0.appendChild(newName02);
+
+			var iddata=data["Ticket"][i][1]
+			var newName03 = document.createElement("td");
+			
+			anchorTag = document.createElement("a");
+			anchorTag.appendChild(document.createTextNode('Details'));
+			anchorTag.setAttribute('href','#');
+			
+			anchorTag.setAttribute('id', iddata);
+			anchorTag.setAttribute('onclick','displayTkDetails(this)')
+
+			newName03.appendChild(anchorTag)
+
+			newTR0.appendChild(newName03);
+		
+			//document.getElementById('myAnchor').onclick=addEventListener('click', function() {
+				//alert("okkkkkkkk");
+			//}, false);
+
+		 	//var newName07 = document.createElement("td");
+			//newName07.innerHTML =  data.stock[i][7]
+			//0.appendChild(newName07);
+			      	
+			tbl.appendChild(newTR0);
+
+			}
+		document.getElementById('mytable').appendChild(tbl);
+
+		},"json");
+		}
+</script>
+<form name="closeticket" class="ticketassign" id="closeticket" method="post" action="/ticket/assign" style="margin:0 auto; width:99%;" onsubmit='formValidator()' >
+<div>
+<select id="status" name="status" onchange="javascript:DisplayTicketData()">
+%for i in issue:
+	<option value="${i[0]}">${i[1]}</option>
+%endfor
+</select>
+</div>
+<div id="mytable">
+</div>
+
+</form>

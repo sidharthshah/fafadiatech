@@ -1,0 +1,56 @@
+<%inherit file="base_admin.html" />
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+function addIssue(){
+	var issue_type = $("#issue_type").val();
+	$.post("/issue/add",{"issue_type":issue_type},function (data){
+		if(data == "1"){
+		alert("New Issue Type is added.");
+		window.location.href="/issue/add";
+		}
+	else if(data == "0"){
+		alert("Please Fill all Fields.");
+	}
+	else{
+		alert("Issue type is already Exist.");
+
+	}
+	});
+}
+
+
+function deleteissue(id){
+	//var issue_type = $("#issue_type").val();
+	var remove = confirm("Are you sure, you want to remove the DSK Data?")
+	if (remove){
+		$.post("/issue/delete",{"issueid":id},function (data){
+			if(data=="1"){
+				window.location.href="/issue/add";
+			}
+			else if(data=="-1")
+			{
+			alert("Invalid Operation");
+			}
+		});
+	}	
+}
+</script>
+<form name="issuemaster" id="issuemaster" method="post" action="" style="margin-left:20px;">
+	<label>Add Issue Type:</label><br/><br/>
+	<input type="text" class="large" name="issue_type" id="issue_type"><br/><br/>
+	<input type="button" name="addissue" id="addissue" value="Submit" onclick="javascript:addIssue()"><br/><br/>
+
+	<table>
+		<tr>
+		<th>Name</th>
+		<th>Action</th>
+		</tr>
+		%for i in issue:
+			<tr>
+			<td>${i[1]}</td>
+			<td><a href="/issue/modify?issueid=${i[0]}" id="${i[0]}">Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="${i[0]}" onclick="javascript:deleteissue(id);">Delete</a></td>
+		%endfor
+		</tr>
+
+	</table>
+</form>

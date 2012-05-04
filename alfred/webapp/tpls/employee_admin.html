@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Alfred - Ticketing Management System</title> 
+	<link href="/css/bootstrap.css" rel="stylesheet">
+	<link href="/css/accodian.css" rel="stylesheet">
+	<!-- simple popup box css-->
+	<link href="/css/popup.css" rel="stylesheet" media="screen"  />
+	<script src="http://code.jquery.com/jquery-1.7.min.js"></script>
+ 	<script type="text/javascript" src="/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript" src="/js/jquery.js"></script>
+	<!-- simple popup box js-->
+	<script type="text/javascript" src="/js/js/jquery.js" ></script>
+	<script type="text/javascript" src="/js/accodian/jquery-1.2.1.min.js" ></script>
+	<script type="text/javascript" src="/js/accodian/menu.js" ></script>
+	<script type="text/javascript" src="/js/accodian/menu-collapsed.js" ></script>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements --> 
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+	<script type="text/javascript">
+		function setSelectedIndex(obj_id, v) {
+		        object = document.obj_id;
+		        for ( var i = 0; i < object.options.length; i++ ) {
+		                if ( object.options[i].value == v ) {
+		                        object.options[i].selected = true;
+		                        return;
+		                }
+		        }
+		}
+	</script>
+	<script type="text/javascript">
+	function displayreportdata(id)
+	{
+			var addForm = document.getElementById("frmstatus");
+			addForm.action="/ticket/team/status?status="+id;
+			addForm.method="post";
+			addForm.submit();
+		
+	}
+	</script>
+    <style type="text/css"> 
+      /* Override some defaults */
+      html, body {
+        background-color: #eee;
+      }
+      body {
+        padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+      }
+      .container > footer p {
+        text-align: center; /* center align it with the container */
+      }
+      .container {
+        width: 940px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
+      }
+ 
+      /* The white background content wrapper */
+      .content {
+        background-color: #fff;
+        padding: 20px;
+        margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+        -webkit-border-radius: 0 0 6px 6px;
+           -moz-border-radius: 0 0 6px 6px;
+                border-radius: 0 0 6px 6px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+                box-shadow: 0 1px 2px rgba(0,0,0,.15);
+      }
+ 
+      /* Page header tweaks */
+      .page-header {
+        background:url("/images/psspl 4.png");
+        padding: 10px 120px 0px;
+        margin: -20px -20px 20px;
+      }
+ 
+      /* Styles you shouldn't keep as they are for displaying this base example only */
+      .content .span10,
+      .content .span4 {
+        min-height: 500px;
+      }
+      /* Give a quick and non-cross-browser friendly divider */
+      .content .span4 {
+        margin-left: 0;
+        padding-left: 19px;
+        border-left: 1px solid #eee;
+      }
+ 
+      .topbar .btn {
+        border: 0;
+      }
+ 
+    </style> 
+ 
+    <!-- Le fav and touch icons --> 
+    <link rel="shortcut icon" href="images/favicon.ico"> 
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png"> 
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png"> 
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png"> 
+  </head> 
+ 
+  <body> 
+<div class="topbar" data-dropdown="dropdown" > 
+	<div class="topbar-inner"> 
+		<div class="container"> 
+			<ul class="nav">
+				<li><a href="/team/admin">Dashboard</a></li>
+				<li class="dropdown"> 
+					<a href="#" class="dropdown-toggle">Tickets</a> 
+					<ul class="dropdown-menu">
+						<li><a href="/ticket/create">Create Ticket</a></li>
+						<form name="frmstatus" id="frmstatus" style="float:none;margin:0px;">
+						%for i in tkStatus:
+							<li><a href="#" id="${i[0]}" onclick="javascript:displayreportdata(id)">${i[1]}</a></li>
+						%endfor
+						</form>
+					</ul>
+				</li>
+				<li><a href="/team/allticket">All Tickets</a></li>
+			</ul>
+			<h5 style="float:right;color:#FFFFFF;cursor:pointer;">Hello ${userName} | <a href="/logout" style="text-decoration:none" id="logout">Logout</a></h5>
+		</div>
+	</div><!-- /topbar-inner -->
+</div><!-- /topbar -->
+
+<div class="container"> 
+	<div class="content"> 
+		<div class="page-header">
+			<h1 style="">PENTAGON<p>System and Service PVT. Ltd.</p></h1>
+		</div>
+		<div class="row" style="margin-left:0px;"> 
+			${self.body()}
+		</div>
+	</div>
+      <!--footer> 
+        <p>&copy; <a href="http://fafadiatech.com">Fafadia Tech</a> 2012.</p> 
+      </footer-->
+    </div> <!-- /container --> 
+    <script src="/js/jquery-1.5.2.min.js"></script>
+    <script src="/js/bootstrap-dropdown.js"></script>
+  </body> 
+</html> 
+

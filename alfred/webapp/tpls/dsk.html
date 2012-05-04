@@ -1,0 +1,51 @@
+<%inherit file="base_admin.html" />
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+function adddsk(){
+	var dsk_type = $("#dsk_type").val();
+	$.post("/dsk/add",{"dsk_type":dsk_type},function (data){
+	if(data == "1"){
+		alert("dsk is added.");
+		window.location.href="/dsk/add";
+		}
+	else if(data == "0"){
+		alert("Please Enter all Fields.");
+	}
+	else{
+		alert("Dsk is already Exist.");
+	}
+	});
+}
+
+function deletedsk(id){
+	//var issue_type = $("#issue_type").val();
+	var remove = confirm("Are you sure, you want to remove the DSK Data?")
+	if (remove){
+		$.post("/dsk/delete",{"dskid":id},function (data){
+			if(data=="1"){
+				alert("DSK Data successfully deleted");
+				window.location.href="/dsk/add";
+			}
+		});
+	}
+}
+</script>
+
+<form name="dsktype" id="dsktype" method="post" action="" style="margin-left:20px;">
+	<label>Dsk:</label><br/><br/>
+	<input type="text" class="large" name="dsk_type" id="dsk_type"><br/><br/>
+	<input type="button" name="dsk" id="dsk" value="Submit" onclick="javascript:adddsk()"><br/><br/>
+
+	<table>
+		<tr>
+		<th>Name</th>
+		<th>Action</th>
+		</tr>
+		%for i in dsk:
+		<tr>
+		<td>${i[1]}</td>
+		<td><a href="/dsk/modify?dskid=${i[0]}" id="${i[0]}">Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="${i[0]}" onclick="javascript:deletedsk(id);">Delete</a></td>
+		</tr>
+		%endfor
+	</table>
+</form>

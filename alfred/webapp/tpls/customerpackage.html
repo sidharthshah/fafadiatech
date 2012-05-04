@@ -1,0 +1,51 @@
+<%inherit file="base_admin.html" />
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+function addCustPackage()
+{
+	var customer_package = $("#customer_package").val();
+	$.post("/package/add",{"customer_package":customer_package},function(data){
+	if(data == "1"){
+		alert("New Package is added.");
+		window.location.href="/package/add";
+		}
+	else if(data == "0"){
+		alert("Please Fill all Fields.");
+	}
+	else{
+		alert("Package is already Exist.");
+
+	}
+	});
+}
+
+function deletecustomerpackage(id){
+	//var issue_type = $("#issue_type").val();
+	var remove = confirm("Are you sure, you want to remove the Package Data?")
+	if (remove){
+	$.post("/package/delete",{"packageid":id},function (data){
+		if(data=="1"){
+			window.location.href="/package/add";
+			}
+		});
+	}
+}
+</script>
+<form name="customerpackage" id="customerpackage" style="margin-left:20px;">
+	<label style="width:auto;">Add Customer Package:</label><br/><br/>
+	<input type="text" class="large" name="customer_package" id="customer_package"><br/><br/>
+	<input type="button" name="addcustpackage" id="addcustpackage" value="Submit" onclick="javascript:addCustPackage()"><br/><br/>
+
+	<table>
+		<tr>
+		<th>Name</th>
+		<th>Action</th>
+		</tr>
+		%for i in customer:
+		<tr>
+		<td>${i[1]}</td>
+		<td><a href="/package/modify?packageid=${i[0]}" id="${i[0]}" onclick="javascript:editcustomerpackage(id);">Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="${i[0]}" onclick="javascript:deletecustomerpackage(id);">Delete</a></td>
+		</tr>
+		%endfor
+	</table>
+</form>
