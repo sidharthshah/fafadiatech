@@ -17,11 +17,11 @@
 </tr>
 %for i in User:
 <tr>
-	<td>${i[3]}</td>
-	<td>${i[4]}</td>
-	<td>${i[5]}</td>
-	<td style="cursor:pointer;"><a href="#" id="${i[0]}" onclick="javascript:userOperation(id,'edit')">Edit</a>&nbsp;&nbsp;
-	<a href="#" id="${i[0]}" onclick="javascript:userOperation(id,'delete')">Delete</a></td>
+	<td>${i.usertype}</td>
+	<td>${i}</td>
+	<td>${i.username}</td>
+	<td style="cursor:pointer;"><a href="#" id="${i.id}" onclick="javascript:userOperation(id,'edit')">Edit</a>&nbsp;&nbsp;
+	<a href="#" id="${i.id}" onclick="javascript:userOperation(id,'delete')">Delete</a></td>
 </tr>
 %endfor
 </table>

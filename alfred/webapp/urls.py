@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import patterns, include, url
-
+from alfredapp.views import *
 from django.contrib import admin
+
 admin.autodiscover()
 import os
 STATIC_ROOT = os.path.join(os.path.dirname(os.path.realpath(__file__)),"static")
@@ -10,8 +11,9 @@ FILE_ROOT = FILE_ROOT[1:]+'/(?P<path>.*)$'
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'webapp.views.home', name='home'),
-    # url(r'^webapp/', include('webapp.foo.urls')),
+    url(r'^user/dashboard', 'alfredapp.views.userdashboard'),
+    
     url(FILE_ROOT, 'django.views.static.serve',{'document_root': DOC_ROOT, 'show_indexes': True}),
     url(r'^admin/', include(admin.site.urls)),
+    
 )
