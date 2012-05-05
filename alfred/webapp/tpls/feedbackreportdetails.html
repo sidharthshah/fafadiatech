@@ -1,0 +1,15 @@
+<%inherit file="base_admin.html" />
+
+<form name="report" id="report" action="" method="post">
+<h3>Ticket Id: ${feedback[3]}</h3><br/>
+
+<h4><u>Feedback Details:</u></h4><br/>
+<ol>
+<li>Timely response/resolution to your requests/issues:<span style="padding-left:24.4%;">${feedback[5]}</span></li><br/><br/>
+<li>Effectiveness of Answer/Solution provided:<span style="padding-left:30.2%;">${feedback[6]}</span></li><br/><br/>
+<li>Technical ability/competence of the Support Engineer:<span style="padding-left:22.6%;">${feedback[7]}</span></li><br/><br/>
+<li>Overall how satisfied are you with the quality of Logix Support?:<span style="padding-left:16%;">${feedback[8]}</span></li><br/><br/>
+<li>What, if anything, could we do to improve your support experience?<br/> We value your feedback and kindly request you to give us any other <br/>suggestions you may have which would help us provide you with excellent service:<span style="padding-left:3%;">${feedback[9]}</span></li><br/><br/>
+</ol>
+<INPUT TYPE="button" VALUE="Back" onClick="history.go(-1);return true;">
+</form>

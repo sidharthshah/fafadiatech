@@ -1,0 +1,146 @@
+<%inherit file="base_admin.html" />
+<script language="javascript" type="text/javascript">
+function imposeMaxLength(Object, MaxLen)
+{
+  return (Object.value.length <= MaxLen);
+}
+</script>
+<script type='text/javascript'>
+
+function formValidator(){
+	// Make quick references to our fields
+	var name = document.getElementById('name');
+	var mobile = document.getElementById('mobile');
+	var landline = document.getElementById('landline');
+	var email = document.getElementById('email');
+	
+	// Check each input in the order that it appears in the form!
+	if(isAlphabet_s(name, "Please enter only letters for your name")){
+		if(isNumeric(mobile, "Please enter a valid mobile no")){
+			if(isNumeric(landline, "Please enter only numbers for Number")){
+				if(emailValidator(email, "Please enter a valid email address")){
+					return true;
+				}
+			}
+		}
+	}	
+	return false;
+}
+
+function notEmpty(elem, helperMsg){
+	if(elem.value.length == 0){
+		alert(helperMsg);
+		elem.focus(); // set the focus to this input
+		return false;
+	}
+	return true;
+}
+
+function isNumeric(elem, helperMsg){
+	var numericExpression = /^[0-9]+$/;
+	if(elem.value.match(numericExpression)){
+		return true;
+	}else{
+		alert(helperMsg);
+		elem.focus();
+		return false;
+	}
+}
+
+function isAlphabet_s(elem, helperMsg){
+	var alphaExp = /^[a-zA-Z ]+$/;
+	if(elem.value.match(alphaExp)){
+		return true;
+	}else{
+		alert(helperMsg);
+		elem.focus();
+		return false;
+	}
+}
+
+function isAlphanumeric(elem, helperMsg){
+	var alphaExp = /^[0-9a-zA-Z ]+$/;
+	if(elem.value.match(alphaExp)){
+		return true;
+	}else{
+		alert(helperMsg);
+		elem.focus();
+		return false;
+	}
+}
+
+function lengthRestriction(elem, min, max){
+	var uInput = elem.value;
+	if(uInput.length >= min && uInput.length <= max){
+		return true;
+	}else{
+		alert("Please enter between " +min+ " and " +max+ " characters");
+		elem.focus();
+		return false;
+	}
+}
+
+function madeSelection(elem, helperMsg){
+	if(elem.value == "Please Choose"){
+		alert(helperMsg);
+		elem.focus();
+		return false;
+	}else{
+		return true;
+	}
+}
+
+function emailValidator(elem, helperMsg){
+	var emailExp = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
+	if(elem.value.match(emailExp)){
+		return true;
+	}else{
+		alert(helperMsg);
+		elem.focus();
+		return false;
+	}
+}
+
+function addteam(){
+	if (formValidator()){
+	var name = $("#name").val();
+	var address = $("#teamaddress").val();
+	var landline = $("#landline").val();
+	var mobile = $("#mobile").val();
+	var email = $("#email").val();
+	var password = $("#password").val();
+
+	$.post("/team/add",{name:name,address:address,landline:landline,mobile:mobile,email:email},function(data)
+	{
+		if(data=="1")
+		{
+			alert("Team member Added Successfully.");
+			window.location.href="/team/summary";
+		}
+		else if(data == "0")
+		{
+			alert("Email_Id already exist");
+		}
+		else
+		{
+			alert("Email Id already exist");
+		}
+	});
+	}
+}
+</script>
+<form name="team" id="team" method="post" style="margin:0 auto; width:80%;">
+<h4 style="color: #0064CD; text-decoration:underline;">General Information</h4>
+<label>Employee Name</label><br/><br/>
+<input type="text" class="large" name="name" id="name" maxlength="100"><br/><br/>
+<label>Email Id:</label><br/><br/>
+<input type="text" class="large" name="email" id="email"><br/><br/>
+<label>Location:</label><br/><br/>
+<textarea name="teamaddress" id="teamaddress" style="resize:vertical; max-height:60px; min-height:60px;" onkeypress="return imposeMaxLength(this, 139);"></textarea><br/><br/>
+<label>Mobile No.:</label><br/><br/>
+<input type="text" class="large" name="mobile" id="mobile" maxlength="15"><br/><br/>
+<label>Land Line No.:</label><br/><br/>
+<input type="text" class="large" name="landline" id="landline" maxlength="20"><br/><br/>
+<input type="button" value="Submit" id="save" onclick="addteam()">
+<input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="window.location.href='/team/summary'"><br/><br/>
+</form>

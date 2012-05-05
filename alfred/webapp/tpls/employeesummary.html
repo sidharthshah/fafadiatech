@@ -1,0 +1,68 @@
+<%inherit file="employee_admin.html" />
+<script type="text/javascript">
+function addTicketDetails(id,type){
+	var addForm = document.getElementById("employeedashboard");
+	if(type=="user"){
+		addForm.action="/team/getallticketbyassign?id="+id;
+	}
+	addForm.method="POST";
+	addForm.submit();	
+}
+
+function displaytickethistory(id)
+{
+var addForm = document.getElementById("employeedashboard");
+addForm.action="/ticket/displayteamactivity?tkId="+id;
+addForm.method="POST";
+addForm.submit();
+}
+
+function pagination(type,first,last)
+{
+var addForm = document.getElementById("employeedashboard");
+if(type=="previous"){
+	addForm.action="/teamdashboardbackpage?first="+first+"&last="+last;
+}
+else if(type=="next")
+{
+	addForm.action="/teamdashboardnextpage?first="+first+"&last="+last;
+	
+}
+	addForm.method="POST";
+	addForm.submit();
+}
+</script>
+<form name="employeedashboard" id="employeedashboard" method="post" action="">
+<table>
+<ul class="pager">
+	%if not first < 20:
+    <li>
+	  	<a href="#" onclick="javascript:pagination('previous',${first},${last})">Previous</a>
+    </li>
+	%endif
+	<% dcount = count %>
+	%if	dcount > last:
+    	<li>
+    		<a href="#" onclick="javascript:pagination('next',${first},${last})">Next</a>
+    	</li>
+	%endif
+    </ul>
+
+<tr>
+	<th>Ticket Id</th>
+	<th>About Ticket Id</th>
+</tr>
+%if ticket != []:
+	%for i in ticket:
+	<tr>
+		<td><a href="#" id="${i[1]}" onclick="javascript:displaytickethistory(id)">${i[1]}</a></td>
+		<td><a href="#" id="${i[1]}" onclick="javascript:addTicketDetails(id,'user')">Details</a></td>
+	</tr>
+	%endfor
+%else:
+	<tr>
+		<td colspan="2" style="padding-top:5%;"><h2 style="color:#0069D6;"><center>Data Not Found</center></h2></td>
+	</tr>
+%endif
+</table>
+</form>

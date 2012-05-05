@@ -1,0 +1,49 @@
+<%inherit file="base_admin.html" />
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+function addmake(){
+	var make_type = $("#make_type").val();
+	$.post("/make/add",{"make_type":make_type},function (data){
+	if(data == "1"){
+		alert("Make is added.");
+		window.location.href="/make/add";
+		}
+	else if(data == "0"){
+		alert("Please Fill all Fields.");
+	}
+	else{
+		alert("Make is already Exist.");
+	}
+	});
+}
+function deletemake(id){
+	//var issue_type = $("#issue_type").val();
+	var remove = confirm("Are you sure, you want to remove the Make Data?")
+	if (remove){
+	$.post("/make/delete",{"makeid":id},function (data){
+		if(data=="1"){
+			window.location.href="/make/add";
+		}
+	});
+	}
+}
+</script>
+
+<form name="maketype" id="maketype" method="post" action="" style="margin-left:20px;">
+	<label>Make:</label><br/><br/>
+	<input type="text" class="large" name="make_type" id="make_type"><br/><br/>
+	<input type="button" name="make" id="make" value="Submit" onclick="javascript:addmake()"><br/><br/>
+
+	<table>
+		<tr>
+		<th>Name</th>
+		<th>Action</th>
+		</tr>
+		%for i in make:
+		<tr>
+		<td>${i[1]}</td>
+		<td><a href="/make/modify?makeid=${i[0]}" id="${i[0]}">Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="${i[0]}" onclick="javascript:deletemake(id);">Delete</a></td>
+		</tr>
+		%endfor
+	</table>
+</form>

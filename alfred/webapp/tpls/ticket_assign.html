@@ -1,0 +1,143 @@
+<%inherit file="base_admin.html" />
+<!-- popup box jquery -->
+<script  type="text/javascript" language="javascript">
+$(document).ready(function(){
+	$(".QTPopup").css('display','none')
+	$(".lnchPopop").click(function(){
+		$(".QTPopup").animate({width: 'show'}, 'slow');})
+		$(".closeBtn").click(function(){			
+			$(".QTPopup").css('display', 'none');
+		})
+})
+
+$(document).ready(function(){
+	$(".QTPopup1").css('display','none')
+	$(".lnchPopop1").click(function(){
+		$(".QTPopup1").animate({width: 'show'}, 'slow');})
+		$(".closeBtn").click(function(){			
+			$(".QTPopup1").css('display', 'none');
+		})
+})
+
+</script>
+
+<script type="text/javascript">
+function displayCustinfo(id)
+{
+	//$("#customer_name").val("")
+	//$("#email").val("")
+	//$("#location").val("")
+	var ticketId = $("#ticketId").val();
+	$.post("/ticket/display",{ticketId:ticketId},function(data){
+	$("#name").val(data["ticket"][0]);
+	$("#company").val(data["ticket"][1]);
+	$("#email").val(data["ticket"][2]);	
+	$("#location").val(data["ticket"][3]);
+	$("#sysId").val(data["ticket"][4]);
+	setSelectedIndex("ticketassign.asssigneTo",data["ticket"][5]);
+	setSelectedIndex("ticketassign.priority",data["ticket"][6]);
+	},"json");
+}
+
+function assignmemeber(id,obj)
+{
+var asssigneTo = obj.options[obj.selectedIndex].value;
+$.post("/ticket/assign",{ticketId:id, asssigneTo:asssigneTo},function(data){
+alert("Ticket is Assigned");
+});
+}
+
+function setpriority(id,obj)
+{
+var priority = obj.options[obj.selectedIndex].value;
+$.post("/ticket/priority",{ticketId:id, priority:priority},function(data){
+alert("Priority is changed");
+});
+}
+function Changetstatus(id,obj)
+{
+var status = obj.options[obj.selectedIndex].value;
+$.post("/ticket/assignstatus",{ticketId:id, status:status},function(data){
+alert("Status Assignd");
+});
+}
+function editTicket(id)
+{
+var addForm = document.getElementById("ticketassign");
+addForm.action="/ticket/assign/edit?tkId="+id;
+addForm.method="POST";
+addForm.submit();
+}
+function displaytickethistory(id)
+{
+var addForm = document.getElementById("ticketassign");
+addForm.action="/ticket/dispayactivity?tkId="+id;
+addForm.method="POST";
+addForm.submit();
+}
+
+function pagination(type,first,last)
+{
+var addForm = document.getElementById("ticketassign");
+if(type=="previous"){
+	addForm.action="/sadmindashboardbackpage?first="+first+"&last="+last;
+}
+else if(type=="next")
+{
+	addForm.action="/sadmindashboardnextpage?first="+first+"&last="+last;
+	
+}
+	addForm.method="POST";
+	addForm.submit();
+}
+</script>
+<form name="ticketassign" class="ticketassign" id="ticketassign" method="post" action="/ticket/assign" style="margin:0 auto; width:99%;" onsubmit='formValidator()' >
+<table>
+<ul class="pager">
+	%if not first < 20:
+    <li>
+	  	<a href="#" onclick="javascript:pagination('previous',${first},${last})">Previous</a>
+    </li>
+	%endif
+	<% dcount = count %>
+	%if	dcount > last:
+    	<li>
+    		<a href="#" onclick="javascript:pagination('next',${first},${last})">Next</a>
+    	</li>
+	%endif
+    </ul>
+<tr>
+	<th>Ticket Id</th>
+	<th>Name</th>
+	<th>Company</th>
+	<!--th>Email</th>
+	<th>Location</th>
+	<th>System Id</th-->
+	<th>Department</th>
+	<th>Assigned To</th>
+	<th>Status</th>
+	<th>Action</th>
+	<!--th>Send To</th-->
+</tr>
+%if ticket != []:
+	%for i in ticket:
+	<tr>
+		<td><a href="#" id="${i[0]}" onclick="javascript:displaytickethistory(id)">${i[0]}</a></td>
+		<td>${i[1]}</td>
+		<td>${i[2]}</td>
+		<td>${i[3]}</td>
+		<td>${i[4]}</td>
+		<td>${i[5]}</td>
+	
+		<td><a href="#" id="${i[0]}" onclick="javascript:editTicket(id)"><img src="/images/edit.png" title="Edit"></a></td>
+		<!--td><a href="#" class="lnchPopop" ><img src="/images/mail.jpeg"></a>&nbsp;|&nbsp;<a href="#" class="lnchPopop1"><img  src="/images/mobile.jpeg"></a>&nbsp;&nbsp;</td-->
+	</tr>
+	%endfor
+%else:
+	<tr>
+		<td colspan="7" style="padding-top:5%;"><h2 style="color:#0069D6;"><center>Data Not Found</center></h2></td>
+	</tr>
+%endif
+</table>
+</form>
+

@@ -1,0 +1,186 @@
+<%inherit file="base_admin.html" />
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="http://code.jquery.com/jquery-1.7.min.js"></script>
+<script src="/js/datepicker.js"></script>
+<script>
+      /* Update datepicker plugin so that MM/DD/YYYY format is used. */
+      $.extend($.fn.datepicker.defaults, {
+        parse: function (string) {
+          var matches;
+          if ((matches = string.match(/^(\d{2,2})\/(\d{2,2})\/(\d{4,4})$/))) {
+            return new Date(matches[3], matches[1] - 1, matches[2]);
+          } else {
+            return null;
+          }
+        },
+        format: function (date) {
+          var
+            month = (date.getMonth() + 1).toString(),
+            dom = date.getDate().toString();
+          if (month.length === 1) {
+            month = "0" + month;
+          }
+          if (dom.length === 1) {
+            dom = "0" + dom;
+          }
+          return date.getFullYear() + "/" + month + "/" + dom;
+        }
+      });  
+    </script>
+<script type="text/javascript">
+	function displayTkDetails(obj)
+	{
+		var addForm = document.getElementById("reportdata");
+		addForm.action="/report/feedback/details?id="+obj.id;
+		addForm.method="post";
+		addForm.submit();
+	}
+	
+	function exportFile(filetype){
+		var startdate = $("#startdate").val();
+		var enddate = $("#enddate").val();
+	        var issue = $("#issueType").val();
+
+		var addForm = document.getElementById("reportdata");
+		addForm.action="/exportFeedbackReport?startdate="+startdate+"&enddate="+enddate+"&issueType="+issue+"&filetype="+filetype;
+
+		addForm.method="post";
+		addForm.submit();
+	}
+
+	function DisplayAllTicket(){
+		document.getElementById('mytable').innerHTML = "";
+
+		var startdate = $("#startdate").val();
+		var enddate = $("#enddate").val();
+	    var issue = $("#issueType").val();
+		if(startdate=="" || enddate=="" || issue=="")
+		{
+		$("h4").hide();
+		$("#exportexcel").hide();
+		$("#exportpdf").hide();
+		document.getElementById('mytable').innerHTML = "<h2 style='color:#0069D6;'><center>Invalid Input</center></h2>";		
+		}
+		else if(startdate > enddate)
+		{
+		$("h4").hide();
+		$("#exportexcel").hide();
+		$("#exportpdf").hide();
+		document.getElementById('mytable').innerHTML = "<h2 style='color:#0069D6;'><center>Enter date properly</center></h2>";	
+		}
+		else{
+		$.post("/report/feedback",{startdate:startdate,enddate:enddate,issue:issue},function(data){
+		if (data["feedback"]==""){
+			$("h4").hide();
+			$("#exportexcel").hide();
+			$("#exportpdf").hide();
+			document.getElementById('mytable').innerHTML = "<h2 style='color:#0069D6;'><center>Data Not Found</center></h2>";	
+		}
+		else{
+			$("h4").show();
+			$("#exportexcel").show();
+			$("#exportpdf").show();
+			var tbl= document.createElement('table');
+			var tbo=document.createElement('tbody');
+		
+			
+			var row, cell;
+			var newTR0 = document.createElement("tr");
+			var newName0 = document.createElement("th");
+			newName0.innerHTML = "Date"
+			newTR0.appendChild(newName0);
+
+		 	var newName01 = document.createElement("th");
+			newName01.innerHTML =  "Ticket_Id"
+			newTR0.appendChild(newName01);
+
+		 	var newName02 = document.createElement("th");
+			newName02.innerHTML =  "Customer Name"
+			newTR0.appendChild(newName02);
+
+			var newName03 = document.createElement("th");
+			newName03.innerHTML = "Department"
+			newTR0.appendChild(newName03);
+
+			var newName4 = document.createElement("th");
+			newName4.innerHTML = "Action"
+			newTR0.appendChild(newName4);
+			      	
+			tbl.appendChild(newTR0);
+		
+			
+			for(i=0;i<data["feedback"].length;i++)
+			{
+			
+				var newTR0 = document.createElement("tr");
+				var newName0 = document.createElement("td");
+				newName0.innerHTML = data["feedback"][i][0]
+				newTR0.appendChild(newName0);
+
+				var newName04 = document.createElement("td");
+				newName04.innerHTML = data["feedback"][i][1]
+				newTR0.appendChild(newName04);
+
+			 	var newName01 = document.createElement("td");
+				newName01.innerHTML =  data["feedback"][i][2]
+				newTR0.appendChild(newName01);
+
+			 	var newName02 = document.createElement("td");
+				newName02.innerHTML =  data["feedback"][i][3]
+				newTR0.appendChild(newName02);
+
+				var iddata=data["feedback"][i][3]
+				var newName03 = document.createElement("td");
+			
+				anchorTag = document.createElement("a");
+				anchorTag.appendChild(document.createTextNode('Details'));
+				anchorTag.setAttribute('href','#');
+			
+				anchorTag.setAttribute('id', data["feedback"][i][1]);
+				anchorTag.setAttribute('onclick','displayTkDetails(this)')
+
+				newName03.appendChild(anchorTag)
+
+				newTR0.appendChild(newName03);
+
+				tbl.appendChild(newTR0);
+				}
+			}
+		document.getElementById('mytable').appendChild(tbl);
+
+		},"json");
+		}
+		}
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$("h4").hide();
+	$("#exportexcel").hide();
+	$("#exportpdf").hide();
+
+});
+</script>
+
+<form name="reportdata" id="reportdata" method="post" action="" style="margin-left:20px;">
+	<h5>Feedback Tickets Reports</h5><br/>
+	From:&nbsp;<input data-datepicker="datepicker" type="text" class="small" name="startdate" id="startdate"/>&nbsp;&nbsp;
+	To:&nbsp;<input data-datepicker="datepicker" type="text" class="small" name="enddate" id="enddate" />&nbsp;&nbsp;Select Issue Type:&nbsp;
+		<select id="issueType" name="issueType">
+			<option value="All">All</option>
+			%for issue in issueType:
+			<option value="${issue[0]}">${issue[1]}</option>
+			%endfor
+		</select>
+
+	<input type="button" name="Find" id="Find" value="Submit" onclick="javascript:DisplayAllTicket()">
+	<br/><br/><br/>
+	<div class="span15">
+		<h4 style="color: #0064CD; text-decoration:underline;">List of Tickets
+		<a id="exportexcel" style="float:right;" href="javascript:exportFile('excel')"><img src="/images/excel.jpeg" title="Export To EXCEL" style="margin-left:5px;"></a>
+		<a id="exportpdf" style="float:right;" href="javascript:exportFile('pdf')"><img src="/images/index.jpeg" title="Export To PDF"></a>
+	</div><br/>
+	<div id="mytable">
+	</div>
+
+</form>
