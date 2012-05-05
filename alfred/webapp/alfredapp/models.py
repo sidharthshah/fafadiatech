@@ -13,13 +13,7 @@ class Deparment(models.Model):
 class Alfreduser(User):
     USER_TYPE_CHOICES =  (('superadmin','superadmin'),('departmentadmin','departmentadmin'),('customer','customer'),('employee','employee'),)
     usertype = models.CharField(max_length=30,choices=USER_TYPE_CHOICES)
-    def total_department(self):
-        departmemt = []
-        for eachdept in Deparment.objects.all():
-            departmemt.append(eachdept)
-        return departmemt
-    
-    total_department.short_description = "department"
+    deparment = models.ForeignKey(Deparment)
     objects = UserManager()
 
     def __unicode__(self):
