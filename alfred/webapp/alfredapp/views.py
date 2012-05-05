@@ -13,12 +13,32 @@ def userdashboard(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("usrsummry.html")
     user = Alfreduser.objects.all()
-    #status = TicketStatus.objects.all()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=[],User=user,userName='Smita'))
+    status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
 
-def adduser(request):
-    pass
+def adduserform(request):
+    c = request.COOKIES.get('csrftoken','')
+    tpl = tpl_lookup.get_template("usr_add.html")
+    user = Alfreduser.objects.all()
+    status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
 
+def useradd(request):
+    ts = datetime.datetime.now()
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    usertype = request.POST.get('usertype')
+    userobj = Alfreduser(Username=username,Password=password,Datejoined=ts,Usertype=usertype)
+    userobj.save()
+
+def usereditform(request):
+    c = request.COOKIES.get('csrftoken','')
+    tpl = tpl_lookup.get_template("edituser.html")
+    user = Alfreduser.objects.all()
+    status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
+   
+    
 def modifyuser(request):
     pass 
 

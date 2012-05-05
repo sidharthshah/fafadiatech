@@ -105,7 +105,7 @@
 						<li><a href="/ticket/assign">Tickets Summary</a></li>
 						<form name="frmstatus" id="frmstatus" style="float:none;margin:0px;">
 						%for i in status:
-							<li><a href="#" id="${i[0]}" onclick="javascript:displayreport(id)">${i[1]}</a></li>
+							<li><a href="#" id="${i.id}" onclick="javascript:displayreport(id)">${i.statustype}</a></li>
 						%endfor
 						</form>
 					</ul>
