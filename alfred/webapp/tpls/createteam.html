@@ -108,18 +108,14 @@ function addteam(){
 	var landline = $("#landline").val();
 	var mobile = $("#mobile").val();
 	var email = $("#email").val();
-	var password = $("#password").val();
-
+	alert("landline"+landline);
 	$.post("/team/add",{name:name,address:address,landline:landline,mobile:mobile,email:email},function(data)
 	{
+		alert(data);
 		if(data=="1")
 		{
 			alert("Team member Added Successfully.");
 			window.location.href="/team/summary";
-		}
-		else if(data == "0")
-		{
-			alert("Email_Id already exist");
 		}
 		else
 		{
@@ -130,6 +126,7 @@ function addteam(){
 }
 </script>
 <form name="team" id="team" method="post" style="margin:0 auto; width:80%;">
+<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 <h4 style="color: #0064CD; text-decoration:underline;">General Information</h4>
 <label>Employee Name</label><br/><br/>
 <input type="text" class="large" name="name" id="name" maxlength="100"><br/><br/>

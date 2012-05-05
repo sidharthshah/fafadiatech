@@ -100,12 +100,12 @@ function emailValidator(elem, helperMsg){
 
 function modifyissue()
 {
-	var modifydata = $("#modifydata").val();
-	var issueid = $("#issueid").val();
-	$.post("/issue/modify",{modifydata:modifydata,issueid:issueid},function(data){
+	var dept = $("#dept").val();
+	var deptid = $("#issueid").val();
+	$.post("/department/modify",{dept:dept,deptid:deptid},function(data){
 		if(data == "1"){
 			alert("Issue Type Data successfully modified");
-			window.location.href="/issue/add";
+			window.location.href="/department/dashbard";
 		}
 		else{
 			alert("Please enter all values");
@@ -115,9 +115,9 @@ function modifyissue()
 
 </script>
 <form name="editissuemaster" id="editissuemaster" method="post" action="" style="margin:0 auto; width:80%;">
-<input type="hidden" id="issueid" value="${issue[0]}" readonly><br/><br/>
+<input type="hidden" id="issueid" value="${dept.id}" readonly><br/><br/>
 <label>Issue Type:</label><br/><br/>
-<input type="text" class="large" id="modifydata" value="${issue[1]}" maxlength="20"><br/><br/>
+<input type="text" class="large" id="dept" value="${dept.department}" maxlength="20"><br/><br/>
 <input type="button" value="Modify" onclick="javascript:modifyissue();">
 <input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="javascript:history.go(-1)"><br/><br/>
 </form>

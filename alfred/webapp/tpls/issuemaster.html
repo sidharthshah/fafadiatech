@@ -2,11 +2,11 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript">
 function addIssue(){
-	var issue_type = $("#issue_type").val();
-	$.post("/issue/add",{"issue_type":issue_type},function (data){
+	var dept_type = $("#dept_type").val();
+	$.post("/department/add",{"department":dept_type},function (data){
 		if(data == "1"){
-		alert("New Issue Type is added.");
-		window.location.href="/issue/add";
+		alert("New Department Type is added.");
+		window.location.href="/department/dashbard";
 		}
 	else if(data == "0"){
 		alert("Please Fill all Fields.");
@@ -20,12 +20,11 @@ function addIssue(){
 
 
 function deleteissue(id){
-	//var issue_type = $("#issue_type").val();
-	var remove = confirm("Are you sure, you want to remove the DSK Data?")
+	var remove = confirm("Are you sure, you want to remove the department Data?")
 	if (remove){
-		$.post("/issue/delete",{"issueid":id},function (data){
+		$.post("/department/delete",{"deptid":id},function (data){
 			if(data=="1"){
-				window.location.href="/issue/add";
+				window.location.href="/department/dashbard";
 			}
 			else if(data=="-1")
 			{
@@ -36,8 +35,9 @@ function deleteissue(id){
 }
 </script>
 <form name="issuemaster" id="issuemaster" method="post" action="" style="margin-left:20px;">
+	<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 	<label>Add Issue Type:</label><br/><br/>
-	<input type="text" class="large" name="issue_type" id="issue_type"><br/><br/>
+	<input type="text" class="large" name="dept_type" id="dept_type"><br/><br/>
 	<input type="button" name="addissue" id="addissue" value="Submit" onclick="javascript:addIssue()"><br/><br/>
 
 	<table>
@@ -45,10 +45,10 @@ function deleteissue(id){
 		<th>Name</th>
 		<th>Action</th>
 		</tr>
-		%for i in issue:
+		%for i in deparment:
 			<tr>
-			<td>${i[1]}</td>
-			<td><a href="/issue/modify?issueid=${i[0]}" id="${i[0]}">Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="${i[0]}" onclick="javascript:deleteissue(id);">Delete</a></td>
+			<td>${i}</td>
+			<td><a href="/department/edit?deptid=${i.id}" id="${i.id}">Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="${i.id}" onclick="javascript:deleteissue(id);">Delete</a></td>
 		%endfor
 		</tr>
 

@@ -37,25 +37,13 @@
 %if team != []:
 	%for i in team:
 	<tr>
-		<td>${i[0]}</td>
-		<td>${i[1]}</td>
+		<td>${i.id}</td>
+		<td>${i.name}</td>
 		
-		<td>${i[4]}</td>
-		<td>${i[5]}</td>
-		%if i[6]:
-			<td>${i[6][0]}</td>
-			<td>${i[6][1]}</td>
-		%else:
-			<td>Not Assigned</td>
-			<td>Not Assigned</td>
-		%endif
-		<td style="cursor:pointer;"><a href="/team/modify?memberid=${i[0]}" id="${i[0]}" onclick="javascript:editTeam(id)"><img src="/images/edit.png" title="Edit"></a>&nbsp;&nbsp;
-		<a href="#" id="${i[0]}" onclick="javascript:deleteTeam(id)"><img src="/images/delete.png" title="Delete"></a></td>
-		%if i[7]:
-			<td><center>${i[7]}<center></td>
-		%else:
-			<td><center><a href="#" id="${i[0]}" onclick="javascript:addUserteamdata(id)"><img src="/images/add.jpeg" title="Create User"></a></center></td>
-		%endif
+		<td>${i.mobileno}</td>
+		<td>${i.email}</td>
+		<td style="cursor:pointer;"><a href="/team/modify?memberid=${i.id}" id="${i.id}" onclick="javascript:editTeam(id)"><img src="/images/edit.png" title="Edit"></a>&nbsp;&nbsp;
+		<a href="#" id="${i.id}" onclick="javascript:deleteTeam(id)"><img src="/images/delete.png" title="Delete"></a></td>
 	</tr>
 	%endfor
 %else:
