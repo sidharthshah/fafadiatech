@@ -12,6 +12,7 @@ FILE_ROOT = FILE_ROOT[1:]+'/(?P<path>.*)$'
 urlpatterns = patterns('',
     # Examples:
     url(r'^user/dashboard', 'alfredapp.views.userdashboard'),
+    url(r'^customer/summary', 'alfredapp.views.customersummary'),
     url(r'^user/add', 'alfredapp.views.useradd'),
     url(r'^user/edit','alfredapp.views.usereditform'),
     url(r'^user/modify','alfredapp.views.modifyuser'),
