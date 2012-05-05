@@ -8,8 +8,9 @@ class Deparment(models.Model):
     department = models.CharField(max_length=30)
 
 class Alfreduser(User):
-     USER_TYPE_CHOICES =  (('superadmin','superadmin'),('departmentadmin','departmentadmin'),('customer','customer'),('employee','employee'),)
+     USER_TYPE_CHOICES =  (('superadmin','superadmin'),('admin','admin'),('customer','customer'),('employee','employee'),)
      usertype = models.CharField(max_length=30,choices=USER_TYPE_CHOICES)
+     
      def total_department(self):
          departmemt = []
          for eachdept in Deparment.objects.all():
@@ -17,6 +18,7 @@ class Alfreduser(User):
          return departmemt
      
      total_department.short_description = "department"
+     
      objects = UserManager()
      
      
