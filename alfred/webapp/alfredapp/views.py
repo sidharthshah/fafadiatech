@@ -26,3 +26,7 @@ def deleteuser(request):
     pass
 
 
+def customersummary(request):
+    c = request.COOKIES.get('csrftoken','')
+    tpl = tpl_lookup.get_template("customersummary.html")
+

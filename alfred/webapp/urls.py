@@ -12,6 +12,7 @@ FILE_ROOT = FILE_ROOT[1:]+'/(?P<path>.*)$'
 urlpatterns = patterns('',
     # Examples:
     url(r'^user/dashboard', 'alfredapp.views.userdashboard'),
+    url(r'^customer/summary', 'alfredapp.views.customersummary'),
     
     url(FILE_ROOT, 'django.views.static.serve',{'document_root': DOC_ROOT, 'show_indexes': True}),
     url(r'^admin/', include(admin.site.urls)),
