@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^user/edit','alfredapp.views.usereditform'),
     url(r'^user/modify','alfredapp.views.modifyuser'),
     url(r'^user/delete','alfredapp.views.deleteuser'),
+    url(r'^team/dashboard','alfredapp.views.teamdashboard')
     url(FILE_ROOT, 'django.views.static.serve',{'document_root': DOC_ROOT, 'show_indexes': True}),
     url(r'^admin/', include(admin.site.urls)),
     
