@@ -37,6 +37,8 @@ urlpatterns = patterns('',
     url(r'^customerpackage/edit','alfredapp.views.customerpackageedit'),
     url(r'^customerpackage/modify','alfredapp.views.customerpackagemodify'),
     url(r'^customerpackage/delete','alfredapp.views.customerpackagedelete'),
+    url(r'^ticket/create','alfredapp.views.createticket'),
+    url(r'^customer/displaydata','alfredapp.views.dispcustomerdata'),
     url(FILE_ROOT, 'django.views.static.serve',{'document_root': DOC_ROOT, 'show_indexes': True}),
     url(r'^admin/', include(admin.site.urls)),
     

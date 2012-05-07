@@ -108,14 +108,12 @@ function addteam(){
 	var landline = $("#landline").val();
 	var mobile = $("#mobile").val();
 	var email = $("#email").val();
-	alert("landline"+landline);
 	$.post("/team/add",{name:name,address:address,landline:landline,mobile:mobile,email:email},function(data)
 	{
-		alert(data);
 		if(data=="1")
 		{
 			alert("Team member Added Successfully.");
-			window.location.href="/team/summary";
+			window.location.href="/team/dashboard";
 		}
 		else
 		{

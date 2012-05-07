@@ -74,8 +74,8 @@ $.post("/customer/displaydata",{customerid:customerid},function(data)
 			<label>Customer Name:</label><br/><br/>
 			<select name="customer" id="customer" readonly onchange="displaycustdetails()">
 			<option value="select">Select</option>
-			%for i in customerdata:
-				<option value="${i[0]}">${i[2]}</option>
+			%for i in customer:
+				<option value="${i.id}">${i.name}</option>
 			%endfor
 			</select><br/><br/>
 			</div>
@@ -111,9 +111,7 @@ $.post("/customer/displaydata",{customerid:customerid},function(data)
 			<h4 style="color: #0064CD; text-decoration:underline;">Product Information</h4>
 			<label>Issue Type:</label><br/><br/>
 			<select name="issue_type" id="issue_type" style="width:220px;">
-				%for i in issue:
-				<option value="${i[0]}">${i[1]}</option>
-				%endfor
+				<option value="{i[0]}">{i[1]}</option>
 			</select>
 			</div>
 			<div style="float:right;"><br/><br style="margin-top:7px;">
@@ -130,7 +128,7 @@ $.post("/customer/displaydata",{customerid:customerid},function(data)
 
 			<input name="files"  id="files" type="file" multiple/>
 <br/><br/>
-		<input type="button" value="Submit" id="${usertype}" name="save" onclick="javascript:addProduct(id);">
+		<input type="button" value="Submit" id="{usertype}" name="save" onclick="javascript:addProduct(id);">
 		<input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="window.location.href='/customer/dashboard'">
 		</div>
 	</form>

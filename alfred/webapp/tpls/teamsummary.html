@@ -39,11 +39,13 @@
 	<tr>
 		<td>${i.id}</td>
 		<td>${i.name}</td>
-		
 		<td>${i.mobileno}</td>
 		<td>${i.email}</td>
-		<td style="cursor:pointer;"><a href="/team/modify?memberid=${i.id}" id="${i.id}" onclick="javascript:editTeam(id)"><img src="/images/edit.png" title="Edit"></a>&nbsp;&nbsp;
-		<a href="#" id="${i.id}" onclick="javascript:deleteTeam(id)"><img src="/images/delete.png" title="Delete"></a></td>
+		<td></td>
+		<td></td>
+		<td style="cursor:pointer;"><a href="/team/modify?memberid=${i.id}" id="${i.id}" onclick="javascript:editTeam(id)"><img src="/static/img/edit.png" title="Edit"></a>&nbsp;&nbsp;
+		<a href="#" id="${i.id}" onclick="javascript:deleteTeam(id)"><img src="/static/img/delete.png" title="Delete"></a></td>
+		<td></td>
 	</tr>
 	%endfor
 %else:

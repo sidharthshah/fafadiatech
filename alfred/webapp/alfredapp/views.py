@@ -53,7 +53,6 @@ def teamdashboard(request):
     status = TicketStatus.objects.all()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,team=team,userName='Smita'))
 
-
 def addteamform(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("createteam.html")
@@ -68,7 +67,7 @@ def teamadd(request):
     landline = request.POST.get('landline')
     mobile = request.POST.get('mobile')
     email = request.POST.get('email')
-    try:    
+    try:
         teamobj = Team(name=name,address=address,landlineno=landline,mobileno=mobile,email=email)
         teamobj.save()
         return HttpResponse(str(1))   
@@ -212,7 +211,11 @@ def customerpackagedelete(request):
 def customersummary(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("customersummary.html")
-    
+    customer = Customer.objects.all()
+    user = Alfreduser.objects.all()
+    status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,User=user,userName='Smita'))
+
 @csrf_exempt
 def modifydepartment(request):
     c = request.COOKIES.get('csrftoken','')
@@ -264,7 +267,6 @@ def customeraddpost(request):
 
 def customeredit(request):
     custId = request.GET.get('custId')
-    print "custId==",custId
     customer = Customer.objects.filter(id=custId)[0]
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("editcustomer.html")
@@ -311,3 +313,18 @@ def deletecustomer(request):
     custId = request.POST.get('custId')
     obj = Customer.objects.filter(id=custId).delete()
     return HttpResponse(str(1))
+
+def customercreateticket():
+    c = request.COOKIES.get('csrftoken','')
+    tpl = tpl_lookup.get_template("ticket.html")
+    user = Alfreduser.objects.all()
+    status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
+
+def createticket(request):
+    c = request.COOKIES.get('csrftoken','')
+    tpl = tpl_lookup.get_template("sadmin_create_ticket.html")
+    customer = Customer.objects.all()
+    user = Alfreduser.objects.all()
+    status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,User=user,userName='Smita'))
