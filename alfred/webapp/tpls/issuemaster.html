@@ -19,6 +19,15 @@ function addIssue(){
 }
 
 
+function editIssue(id){
+	var addForm = document.getElementById("issuemaster");
+	addForm.action="/department/edit?deptid="+id;
+	addForm.method="POST";
+	addForm.submit();
+	
+
+}
+
 function deleteissue(id){
 	var remove = confirm("Are you sure, you want to remove the department Data?")
 	if (remove){
@@ -48,7 +57,7 @@ function deleteissue(id){
 		%for i in deparment:
 			<tr>
 			<td>${i}</td>
-			<td><a href="/department/edit?deptid=${i.id}" id="${i.id}">Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="${i.id}" onclick="javascript:deleteissue(id);">Delete</a></td>
+			<td><a href="#" id="${i.id}" onclick="javascript:editIssue(id)">Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="${i.id}" onclick="javascript:deleteissue(id);">Delete</a></td>
 		%endfor
 		</tr>
 

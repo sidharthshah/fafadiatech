@@ -100,12 +100,12 @@ function emailValidator(elem, helperMsg){
 
 function modifypackage()
 {
-	var modifypackagedata = $("#modifypackagedata").val();
+	var packagetype = $("#packagetype").val();
 	var packageid = $("#packageid").val();
-	$.post("/package/modify",{modifypackagedata:modifypackagedata,packageid:packageid},function(data){
+	$.post("/customerpackage/modify",{packagetype:packagetype,packageid:packageid},function(data){
 		if(data == "1"){
 			alert("Package Data successfully modified");
-			window.location.href="/package/add";
+			window.location.href="/customerpackage/dashboard";
 		}
 		else{
 			alert("Please enter all values");
@@ -115,9 +115,9 @@ function modifypackage()
 
 </script>
 <form name="editissuemaster" id="editissuemaster" method="post" action="" style="margin:0 auto; width:80%;">
-<input type="hidden" id="packageid" value="${customer[0]}" readonly><br/><br/>
+<input type="hidden" id="packageid" value="${custpkg.id}" readonly><br/><br/>
 <label>Customer Package:</label><br/><br/>
-<input type="text" class="large" id="modifypackagedata" value="${customer[1]}" maxlength="20"><br/><br/>
+<input type="text" class="large" id="packagetype" value="${custpkg.package_type}" maxlength="20"><br/><br/>
 <input type="button" value="Modify" onclick="javascript:modifypackage();">
 <input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="javascript:history.go(-1)"><br/><br/>
 </form>

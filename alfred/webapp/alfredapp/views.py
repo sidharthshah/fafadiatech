@@ -155,8 +155,69 @@ def deletedepartment(request):
         return HttpResponse(str(1))
     except:
         return HttpResponse(str(0))
+    
+def customerpackagedashboard(request):
+    c = request.COOKIES.get('csrftoken','')
+    tpl = tpl_lookup.get_template("customerpackage.html")
+    status = TicketStatus.objects.all()
+    customerpackage = CustomerPackage.objects.all() 
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,customerpackage=customerpackage,userName='Smita'))
+
+@csrf_exempt
+def customerpackageadd(request):
+    c = request.COOKIES.get('csrftoken','')
+    customerpackage = request.POST.get('customer_package')
+    try:      
+        deptobj = CustomerPackage(package_type=customerpackage)
+        deptobj.save() 
+        return HttpResponse(str(1))   
+    except:
+        return HttpResponse(str(0))
+    
+def customerpackageedit(request):
+    c = request.COOKIES.get('csrftoken','')
+    packageid = request.POST.get('packageid')
+    try:
+        custpkgobj = CustomerPackage.objects.filter(id=packageid)
+    except:
+        custpkgobj = None
+    tpl = tpl_lookup.get_template("editcustomerpackage.html")
+    status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,custpkg=custpkgobj[0],userName='Smita'))
+
+@csrf_exempt
+def customerpackagemodify(request):
+    c = request.COOKIES.get('csrftoken','')
+    packageid = request.POST.get('packageid')
+    packagetype = request.POST.get('packagetype')    
+    try:
+        custpkgobj = CustomerPackage.objects.filter(id=packageid).update(package_type=packagetype)
+        return HttpResponse(str(1))
+    except:
+        custpkgobj = None
+        return HttpResponse(str(0))
+
+
+@csrf_exempt
+def customerpackagedelete(request):
+    c = request.COOKIES.get('csrftoken','')
+    customerpackageid = request.POST.get('customerpackageid')
+    try:
+        obj = CustomerPackage.objects.filter(id=customerpackageid).delete()
+        return HttpResponse(str(1))
+    except:
+        pass
+
 
 def customersummary(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("customersummary.html")
+    
+@csrf_exempt
+def modifydepartment(request):
+    c = request.COOKIES.get('csrftoken','')
+    deptid = request.POST.get('deptid')
+    dept = request.POST.get('dept')
+    obj = Deparment.objects.filter(id=deptid).update(department=dept)
+    return HttpResponse(str(obj))
 

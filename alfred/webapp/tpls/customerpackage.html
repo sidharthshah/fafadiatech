@@ -4,10 +4,10 @@
 function addCustPackage()
 {
 	var customer_package = $("#customer_package").val();
-	$.post("/package/add",{"customer_package":customer_package},function(data){
+	$.post("/customerpackage/add",{"customer_package":customer_package},function(data){
 	if(data == "1"){
 		alert("New Package is added.");
-		window.location.href="/package/add";
+		window.location.href="/customerpackage/dashboard";
 		}
 	else if(data == "0"){
 		alert("Please Fill all Fields.");
@@ -19,19 +19,30 @@ function addCustPackage()
 	});
 }
 
+function editCustpackage(id){
+	var addForm = document.getElementById("customerpackage");
+	addForm.action="/customerpackage/edit?packageid="+id;
+	addForm.method="POST";
+	addForm.submit();
+	
+
+}
+
 function deletecustomerpackage(id){
 	//var issue_type = $("#issue_type").val();
 	var remove = confirm("Are you sure, you want to remove the Package Data?")
 	if (remove){
-	$.post("/package/delete",{"packageid":id},function (data){
+	$.post("/customerpackage/delete",{"customerpackageid":id},function (data){
 		if(data=="1"){
-			window.location.href="/package/add";
+			window.location.href="/customerpackage/dashboard";
 			}
+		
 		});
 	}
 }
 </script>
 <form name="customerpackage" id="customerpackage" style="margin-left:20px;">
+<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 	<label style="width:auto;">Add Customer Package:</label><br/><br/>
 	<input type="text" class="large" name="customer_package" id="customer_package"><br/><br/>
 	<input type="button" name="addcustpackage" id="addcustpackage" value="Submit" onclick="javascript:addCustPackage()"><br/><br/>
@@ -41,10 +52,10 @@ function deletecustomerpackage(id){
 		<th>Name</th>
 		<th>Action</th>
 		</tr>
-		%for i in customer:
+		%for i in customerpackage:
 		<tr>
-		<td>${i[1]}</td>
-		<td><a href="/package/modify?packageid=${i[0]}" id="${i[0]}" onclick="javascript:editcustomerpackage(id);">Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="${i[0]}" onclick="javascript:deletecustomerpackage(id);">Delete</a></td>
+		<td>${i.package_type}</td>
+		<td><a href="#" id="${i.id}" onclick="javascript:editCustpackage(id)">Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="${i.id}" onclick="javascript:deletecustomerpackage(id);">Delete</a></td>
 		</tr>
 		%endfor
 	</table>
