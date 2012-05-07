@@ -6,10 +6,10 @@ function modifyStatus()
 {
 	var statusId = $("#statusId").val();
 	var status_type = $("#status_type").val();
-	$.post("/ticketstatus/modify",{statusId:statusId,status_type:status_type},function(data){
+	$.post("/ticketstatus/modify",{statusId:statusId,statustype:status_type},function(data){
 		if(data == "1"){
 			alert("Ticket Status Data successfully Modified");
-			window.location.href="/ticketstatus/add";
+			window.location.href="/ticketstatus/dashboard";
 		}
 		else{
 			alert("Please enter all values");		
@@ -19,9 +19,9 @@ function modifyStatus()
 
 </script>
 <form name="editstatus" id="editstatus" method="post" action="" style="margin:0 auto; width:80%;">
-<input type="hidden" id="statusId" value="${ticket[0]}" readonly><br/><br/>
-<label>Ticket Status:</label><br/><br/>
-<input type="text" class="large" id="status_type" value="${ticket[1]}" maxlength="20"><br/><br/>
-<input type="button" value="Modify" onclick="javascript:modifyStatus();">
-<input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="javascript:history.go(-1)"><br/><br/>
+<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
+<label>Issue Type</label><br/><br/>
+<input type="hidden" id="statusId" value="${statusobj.id}" readonly><br/><br/>
+<input type="text" class="large" id="status_type" value="${statusobj.statustype}" maxlength="20"><br/><br/>
+<input type="button" value="Modify" onclick="javascript:modifyStatus();"><br/><br/>
 </form>

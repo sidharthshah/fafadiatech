@@ -100,12 +100,12 @@ function emailValidator(elem, helperMsg){
 
 function modifysla()
 {
-	var modifysladata = $("#modifysladata").val();
 	var slaid = $("#slaid").val();
-	$.post("/sla/modify",{modifysladata:modifysladata,slaid:slaid},function(data){
+	var slatype = $("#slatype").val();
+	$.post("/sla/modify",{slatype:slatype,slaid:slaid},function(data){
 		if(data == "1"){
 			alert("SLA Data successfully modified");
-			window.location.href="/sla/add";
+			window.location.href="/sla/dashboard";
 		}
 		else{
 			alert("Please enter all values");
@@ -115,9 +115,9 @@ function modifysla()
 
 </script>
 <form name="editissuemaster" id="editissuemaster" method="post" action="" style="margin:0 auto; width:80%;">
-<input type="hidden" id="slaid" value="${sla[0]}" readonly><br/><br/>
+<input type="hidden" id="slaid" value="${slaobj.id}" readonly><br/><br/>
 <label>SLA Type:</label><br/><br/>
-<input type="text" class="large" id="modifysladata" value="${sla[1]}" maxlength="20"><br/><br/>
+<input type="text" class="large" id="slatype" value="${slaobj.slatype}" maxlength="20"><br/><br/>
 <input type="button" value="Modify" onclick="javascript:modifysla();">
 <input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="javascript:history.go(-1)"><br/><br/>
 </form>

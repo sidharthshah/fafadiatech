@@ -6,7 +6,7 @@ function addSla(){
 	$.post("/sla/add",{"sla_type":sla_type},function (data){
 	if(data == "1"){
 		alert("SLA is added.");
-		window.location.href="/sla/add";
+		window.location.href="/sla/dashboard";
 		}
 	else if(data == "0"){
 		alert("Please Fill all Fields.");
@@ -17,13 +17,23 @@ function addSla(){
 	}
 	});
 }
+
+function slaedit(id){
+	var addForm = document.getElementById("Slatype");
+	addForm.action="/sla/edit?slaid="+id;
+	addForm.method="POST";
+	addForm.submit();
+
+}
+
+
 function deletesla(id){
 	//var issue_type = $("#issue_type").val();
 	var remove = confirm("Are you sure, you want to remove the Make Data?")
 	if (remove){
 	$.post("/sla/delete",{"slaid":id},function (data){
 		if(data=="1"){
-			window.location.href="/sla/add";
+			window.location.href="/sla/dashboard";
 			}
 		});
 	}
@@ -31,6 +41,7 @@ function deletesla(id){
 </script>
 
 <form name="Slatype" id="Slatype" method="post" action="" style="margin-left:20px;">
+	<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 	<label>SLA Type:</label><br/><br/>
 	<input type="text" class="large" name="sla_type" id="sla_type"><br/><br/>
 	<input type="button" name="addsla" id="addsla" value="Submit" onclick="javascript:addSla()"><br/><br/>
@@ -42,8 +53,8 @@ function deletesla(id){
 		</tr>
 		%for i in sla:
 		<tr>
-		<td>${i[1]}</td>
-		<td><a href="/sla/modify?slaid=${i[0]}" id="${i[0]}">Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="${i[0]}" onclick="javascript:deletesla(id);">Delete</a></td>
+		<td>${i.slatype}</td>
+		<td><a href="#" id="${i.id}" onclick="javascript:slaedit(id)">Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="${i.id}" onclick="javascript:deletesla(id);">Delete</a></td>
 		</tr>
 		%endfor
 	</table>
