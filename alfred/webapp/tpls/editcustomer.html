@@ -128,49 +128,13 @@ function modifycustomer()
 	var password = $("#password").val();
 	var role = $("#role").val();
 	var dept = $("#dept").val();
-	$.post("/customer/modify",{customer_id:customer_id, customer_name:customer_name, company_name:company_name, location:location, landline:landline, mobile:mobile,email:email,username:username,password:password,role:role,dept:dept},function(data){
-		if(data == "1"){
-			alert("Customer Data successfully modified");
-			window.location.href="/customer/summary";
-		}
-		else if(data=="-1")
-			{
-			 alert("User does not exists");
-			}
-		else if(data == "2")
-			{
-			alert("Customer Data successfully modified");
-			window.location.href="/customer/summary";
-			}
-		else{
-			alert("Email_Id already Exist");		
-		}
-	});
-	}
-}
-function addCustomer(){
-	if (formValidator()){
-	var customer_name = $("#customer_name").val();
-	var company_name = $("#company_name").val();
-	var email = $("#email").val();
-	var location = $("#location").val();
-	var mobile = $("#mobile").val();
-	var landline = $("#landline").val();
-	$.post("/customer/add",{customer_name:customer_name, company_name:company_name, email:email, location:location, mobile:mobile, landline:landline},function (data){
-	if(data == "1"){
-		alert("Customer is added.");
+	$.post("/customer/edit",{customer_id:customer_id, customer_name:customer_name, company_name:company_name, location:location, landline:landline, mobile:mobile,email:email,username:username,password:password,role:role,dept:dept},function(data){
+		alert("Customer Data successfully modified");
 		window.location.href="/customer/summary";
-		}
-	else if(data == "0"){
-		alert("Email_Id is already Exist.");
-	}
-	
-	else{
-		alert("Customer is already Exist.");
-	}
 	});
 	}
 }
+
 function updateemail(custid)
 {
 	var emailnew = $("#emailnew").val();
@@ -206,6 +170,7 @@ function updateemail(custid)
 <form name="editcustomer" id="editcustomer" method="post" action="/customer/modify" style="margin:0 auto; width:80%;">
 	<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 <h4 style="color: #0064CD; text-decoration:underline;">General Information</h4>
+<input type="hidden" class="small" name="customer_id" id="customer_id" value="${customer.id}" readonly><br/><br/>
 <label>Customer Name:</label><br/><br/>
 <input type="text" class="large" name="customer_name" id="customer_name" value="${customer.name}" maxlength="100"><br/><br/>
 <label>Company Name:</label><br/><br/>
