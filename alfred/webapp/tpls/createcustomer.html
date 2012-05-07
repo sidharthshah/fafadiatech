@@ -113,23 +113,17 @@ function addCustomer(){
 	var location = $("#location").val();
 	var mobile = $("#mobile").val();
 	var landline = $("#landline").val();
-	$.post("/customer/add",{customer_name:customer_name, company_name:company_name, email:email, location:location, mobile:mobile, landline:landline},function (data){
-	if(data == "1"){
+	$.post("/customer/add",{"customer_name":customer_name, "company_name":company_name, "email":email, "location":location, "mobile":mobile, "landline":landline},function (data){
 		alert("Customer is added.");
 		window.location.href="/customer/summary";
-		}
-	else if(data == "0"){
-		alert("Please enter all data");
-	}
-	else{
-		alert("Customer is already Exist.");
-	}
 	});
 	}
 }
+
 </script>
 <div id="ticketcreate" class="span10" style="margin:0 auto; width:85%;">
 	<form name="newcustomer" id="newcustomer" method="post" action="" style="margin:0 auto; width:80%;">
+	<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 		<h4 style="color: #0064CD; text-decoration:underline;">General Information</h4>
 		<div style="float:left;">
 			<label>Customer Name:</label><br/><br/>

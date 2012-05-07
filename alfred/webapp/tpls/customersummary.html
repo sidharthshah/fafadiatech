@@ -40,15 +40,23 @@
 	<th>Action</th>
 	<th><center>Username</center></th>
 </tr>
+%if customer != []:
+	%for i in customer:
 	<tr>
-		<td>{i[2]}</td>
-		<td>{i[1]}</td>
-		<td>{i[6]}</td>
-		<td>{i[5]}</td>
-		<td>{i[4]}</td>
+		<td>${i.name}</td>
+		<td>${i.company}</td>
+		<td>${i.email}</td>
+		<td>${i.mobile}</td>
+		<td>${i.landline}</td>
+		<td style="cursor:pointer;"><a href="/customer/modify?custId=${i.id}" id="${i.id}"><img src="/static/img/edit.png" title="Edit"></a>&nbsp;&nbsp;
+		<a href="#" id="${i.id}" onclick="javascript:customerDelete(id)"><img src="/static/img/delete.png" title="Delete"></a></td>
 	</tr>
+	%endfor
+%else:
 	<tr>
 		<td colspan="7" style="padding-top:5%;"><h2 style="color:#0069D6;"><center>Data Not Found</center></h2></td>
 	</tr>
+%endif
+
 </table>
 </form>

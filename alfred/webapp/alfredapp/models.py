@@ -46,7 +46,7 @@ class Customer(models.Model):
     alternateemail = models.EmailField()
 
     def __unicode__(self):
-        return self.company
+        return self.name
 
 class CustomerPackage(models.Model):
     package_type = models.CharField(max_length=50)

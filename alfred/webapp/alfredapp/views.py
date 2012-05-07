@@ -6,6 +6,7 @@ from mako.lookup import TemplateLookup
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from alfredapp.models import *
 
 tpl_lookup = TemplateLookup(directories=[os.path.join(os.path.dirname(__file__),"..","tpls")])
@@ -221,3 +222,81 @@ def modifydepartment(request):
     obj = Deparment.objects.filter(id=deptid).update(department=dept)
     return HttpResponse(str(obj))
 
+def customeradd(request):
+    c = request.COOKIES.get('csrftoken','')
+    tpl = tpl_lookup.get_template("createcustomer.html")
+    user = Alfreduser.objects.all()
+    status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
+
+@csrf_exempt
+def customeraddpost(request):
+    try:
+        customer_name = request.POST.get('customer_name')
+    except:
+        customer_name = None
+    print "customer_name",customer_name
+    try:
+        company_name = request.POST.get('company_name')
+    except:
+        company_name = None
+    try:
+        email = request.POST.get('email')
+    except:
+        email = None
+    try:
+        location = request.POST.get('location')
+    except:
+        location = None
+    try:
+        mobile = request.POST.get('mobile')
+    except:
+        mobile = None
+    try:
+        landline = request.POST.get('landline')
+    except:
+        landline = None
+    customerobj = Customer(name=customer_name,company=company_name,email=email,address=location,mobile=mobile,landline=landline)
+    customerobj.save()
+    c = request.COOKIES.get('csrftoken','')
+    tpl = tpl_lookup.get_template("createcustomer.html")
+    user = Alfreduser.objects.all()
+    status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
+
+def customeredit(request):
+    custId = request.GET.get('custId')
+    customer = Customer.objects.filter(id=custId)[0]
+    c = request.COOKIES.get('csrftoken','')
+    tpl = tpl_lookup.get_template("editcustomer.html")
+    user = Alfreduser.objects.all()
+    status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,User=user,userName='Smita'))
+
+@csrf_exempt
+def customermodify(request):
+    try:
+        customer_name = request.POST.get('customer_name')
+    except:
+        customer_name = None
+    print "customer_name",customer_name
+    try:
+        company_name = request.POST.get('company_name')
+    except:
+        company_name = None
+    try:
+        email = request.POST.get('email')
+    except:
+        email = None
+    try:
+        location = request.POST.get('location')
+    except:
+        location = None
+    try:
+        mobile = request.POST.get('mobile')
+    except:
+        mobile = None
+    try:
+        landline = request.POST.get('landline')
+    except:
+        landline = None

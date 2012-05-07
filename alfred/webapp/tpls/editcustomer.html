@@ -204,33 +204,21 @@ function updateemail(custid)
 }
 </script>
 <form name="editcustomer" id="editcustomer" method="post" action="/customer/modify" style="margin:0 auto; width:80%;">
-<input type="hidden" class="small" name="customer_id" id="customer_id" value="${customer[0]}" readonly><br/><br/>
+	<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 <h4 style="color: #0064CD; text-decoration:underline;">General Information</h4>
 <label>Customer Name:</label><br/><br/>
-<input type="text" class="large" name="customer_name" id="customer_name" value="${customer[2]}" maxlength="100"><br/><br/>
+<input type="text" class="large" name="customer_name" id="customer_name" value="${customer.name}" maxlength="100"><br/><br/>
 <label>Company Name:</label><br/><br/>
-<input type="text" class="large" name="company_name" id="company_name" value="${customer[1]}" maxlength="100"><br/><br/>
+<input type="text" class="large" name="company_name" id="company_name" value="${customer.company}" maxlength="100"><br/><br/>
 <label>Email Id:</label><br/><br/>
-<input type="text" class="large" name="email" id="email" value="${customer[6]}" readonly> <img id="editnewemail" src="/images/edit.png"><br/><br/>
-<span id="emailnewtext"><input type="text" class="large" name="emailnew" id="emailnew"> <input type="button" value="ok" id="${customer[0]}" onclick="javascript:updateemail(id)"></span><br/><br/>
+<input type="text" class="large" name="email" id="email" value="${customer.email}" readonly><br/><br/>
 <label>Location:</label><br/><br/>
-<textarea class="large" name="location" id="location" style="resize:vertical; max-height:60px; min-height:60px;" onkeypress="return imposeMaxLength(this, 139);">${customer[3]}</textarea><br/><br/>
+<textarea class="large" name="location" id="location" style="resize:vertical; max-height:60px; min-height:60px;" onkeypress="return imposeMaxLength(this, 139);">${customer.address}</textarea><br/><br/>
 <label>Mobile No.:</label><br/><br/>
-<input type="text" class="large" name="mobile" id="mobile" value="${customer[5]}" maxlength="15"><br/><br/>
+<input type="text" class="large" name="mobile" id="mobile" value="${customer.mobile}" maxlength="15"><br/><br/>
 <label>Landline No.:</label><br/><br/>
-<input type="text" class="large" name="landline" id="landline" value="${customer[4]}" maxlength="20"><br/><br/>
-%if userobj:
-	<label>User Role.:</label><br/><br/>
-	<input type="text" class="large" name="role" id="role" value="customer" readonly>
-	</select><br/><br/>
-	<label>User Name.:</label><br/><br/>
-	<input type="text" class="large" name="username" id="username"  value="${userobj[5]}" maxlength="15" readonly><br/><br/>
-	<label>Password.:</label><br/><br/>
-	<input type="password" class="large" name="password" id="password"  value="" maxlength="20"><br/><br/>
-%endif
+<input type="text" class="large" name="landline" id="landline" value="${customer.landline}" maxlength="20"><br/><br/>
+
 <input type="button" value="Modify" name="modifydata" id="modifydata" onclick="javascript:modifycustomer();">
 <input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="window.location.href='/customer/summary'">
-%if userobj:
-	<script>setSelectedIndex("dept", ${userobj[4]})</script>
-%endif
 </form>
