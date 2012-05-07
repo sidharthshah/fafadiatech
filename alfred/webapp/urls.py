@@ -37,6 +37,7 @@ urlpatterns = patterns('',
     url(r'^customerpackage/edit','alfredapp.views.customerpackageedit'),
     url(r'^customerpackage/modify','alfredapp.views.customerpackagemodify'),
     url(r'^customerpackage/delete','alfredapp.views.customerpackagedelete'),
+<<<<<<< HEAD
     url(r'^sla/dashboard','alfredapp.views.sladashboard'),
     url(r'^sla/add','alfredapp.views.slaadd'),
     url(r'^sla/edit','alfredapp.views.slaedit'),
@@ -49,6 +50,10 @@ urlpatterns = patterns('',
     url(r'^ticketstatus/delete','alfredapp.views.ticketstatusdelete'),
     
     
+=======
+    url(r'^ticket/create','alfredapp.views.createticket'),
+    url(r'^customer/displaydata','alfredapp.views.dispcustomerdata'),
+>>>>>>> adcb3e71f3c8c13e25aad7ac2391b852d3b98ea0
     url(FILE_ROOT, 'django.views.static.serve',{'document_root': DOC_ROOT, 'show_indexes': True}),
     url(r'^admin/', include(admin.site.urls)),
     
