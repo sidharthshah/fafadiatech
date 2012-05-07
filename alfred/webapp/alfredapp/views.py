@@ -6,7 +6,6 @@ from mako.lookup import TemplateLookup
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 from alfredapp.models import *
 
 tpl_lookup = TemplateLookup(directories=[os.path.join(os.path.dirname(__file__),"..","tpls")])
@@ -349,7 +348,6 @@ def customeraddpost(request):
         customer_name = request.POST.get('customer_name')
     except:
         customer_name = None
-    print "customer_name",customer_name
     try:
         company_name = request.POST.get('company_name')
     except:
@@ -380,6 +378,7 @@ def customeraddpost(request):
 
 def customeredit(request):
     custId = request.GET.get('custId')
+    print "custId==",custId
     customer = Customer.objects.filter(id=custId)[0]
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("editcustomer.html")
@@ -393,10 +392,13 @@ def customeredit(request):
 @csrf_exempt
 def customermodify(request):
     try:
+        custId = request.POST.get('customer_id')
+    except:
+        custId = None
+    try:
         customer_name = request.POST.get('customer_name')
     except:
         customer_name = None
-    print "customer_name",customer_name
     try:
         company_name = request.POST.get('company_name')
     except:
@@ -417,3 +419,12 @@ def customermodify(request):
         landline = request.POST.get('landline')
     except:
         landline = None
+    obj = Customer.objects.filter(id=custId).update(name=customer_name,company=company_name,email=email,address=location,mobile=mobile,landline=landline)
+    return HttpResponse(str(obj))
+
+@csrf_exempt
+def deletecustomer(request):
+    c = request.COOKIES.get('csrftoken','')
+    custId = request.POST.get('custId')
+    obj = Customer.objects.filter(id=custId).delete()
+    return HttpResponse(str(1))
