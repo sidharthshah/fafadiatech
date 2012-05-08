@@ -126,13 +126,13 @@ function addteam(){
 <form name="team" id="team" method="post" style="margin:0 auto; width:80%;">
 <input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 <h4 style="color: #0064CD; text-decoration:underline;">General Information</h4>
-<label>Employee Name</label><br/><br/>
+<label>Employee Name:<span style="color:red;">*</span></label><br/><br/>
 <input type="text" class="large" name="name" id="name" maxlength="100"><br/><br/>
-<label>Email Id:</label><br/><br/>
+<label>Email Id:<span style="color:red;">*</span></label><br/><br/>
 <input type="text" class="large" name="email" id="email"><br/><br/>
-<label>Location:</label><br/><br/>
+<label>Location:<span style="color:red;">*</span></label><br/><br/>
 <textarea name="teamaddress" id="teamaddress" style="resize:vertical; max-height:60px; min-height:60px;" onkeypress="return imposeMaxLength(this, 139);"></textarea><br/><br/>
-<label>Mobile No.:</label><br/><br/>
+<label>Mobile No.:<span style="color:red;">*</span></label><br/><br/>
 <input type="text" class="large" name="mobile" id="mobile" maxlength="15"><br/><br/>
 <label>Land Line No.:</label><br/><br/>
 <input type="text" class="large" name="landline" id="landline" maxlength="20"><br/><br/>

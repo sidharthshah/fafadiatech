@@ -11,7 +11,7 @@ FILE_ROOT = FILE_ROOT[1:]+'/(?P<path>.*)$'
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^user/dashboard', 'alfredapp.views.userdashboard'),
+    url(r'^dashboard', 'alfredapp.views.userdashboard'),
     url(r'^customer/summary', 'alfredapp.views.customersummary'),
     url(r'^customer/create', 'alfredapp.views.customeradd'),
     url(r'^customer/add', 'alfredapp.views.customeraddpost'),
@@ -38,6 +38,7 @@ urlpatterns = patterns('',
     url(r'^customerpackage/modify','alfredapp.views.customerpackagemodify'),
     url(r'^customerpackage/delete','alfredapp.views.customerpackagedelete'),
     url(r'^ticket/create','alfredapp.views.createticket'),
+    url(r'^ticket/add','alfredapp.views.createticketpost'),
     url(r'^customer/displaydata','alfredapp.views.dispcustomerdata'),
     url(FILE_ROOT, 'django.views.static.serve',{'document_root': DOC_ROOT, 'show_indexes': True}),
     url(r'^admin/', include(admin.site.urls)),

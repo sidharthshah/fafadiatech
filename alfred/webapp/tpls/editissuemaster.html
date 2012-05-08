@@ -115,6 +115,7 @@ function modifyissue()
 
 </script>
 <form name="editissuemaster" id="editissuemaster" method="post" action="" style="margin:0 auto; width:80%;">
+	<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 <input type="hidden" id="issueid" value="${dept.id}" readonly><br/><br/>
 <label>Issue Type:</label><br/><br/>
 <input type="text" class="large" id="dept" value="${dept.department}" maxlength="20"><br/><br/>

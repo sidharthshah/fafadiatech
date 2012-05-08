@@ -87,7 +87,7 @@ $.post("/customer/displaydata",{customerid:customerid},function(data)
 			<input type="text" class="large" name="email" id="email" value="" readonly><br/><br/>
 			</div>
 			<div style="float:right;">
-			<label style="color:red;">Alternate Email Id:</label><br/><br/>
+			<label>Alternate Email Id:</label><br/><br/>
 			<input type="text" class="large" name="alternateemail" id="alternateemail"><br/><br/>
 			</div>
 			<div style="float:left;">
@@ -95,7 +95,7 @@ $.post("/customer/displaydata",{customerid:customerid},function(data)
 			<input type="text" class="large" name="mobile" id="mobile" value="" readonly><br/><br/>
 			</div>
 			<div style="float:right;">
-			<label style="color:red;">Alternate Mobile No.:</label><br/><br/>
+			<label>Alternate Mobile No.:</label><br/><br/>
 			<input type="text" class="large" name="alternatemobile" id="alternatemobile"><br/><br/>
 			</div>
 			<div style="float:left; margin-bottom:7.5%;">
@@ -108,7 +108,7 @@ $.post("/customer/displaydata",{customerid:customerid},function(data)
 			</div>
 			<div style="float:left;">
 			<h4 style="color: #0064CD; text-decoration:underline;">Product Information</h4>
-			<label>Issue Type:</label><br/><br/>
+			<label>Issue Type:<span style="color:red;">*</span></label><br/><br/>
 			<select name="issue_type" id="issue_type" style="width:220px;">
 				%for i in issue:
 				<option value="${i[0]}">${i[1]}</option>
@@ -116,12 +116,12 @@ $.post("/customer/displaydata",{customerid:customerid},function(data)
 			</select>
 			</div>
 			<div style="float:right;"><br/><br style="margin-top:7px;">
-			<label>System Id:</label><br/><br/>
+			<label>System Id:<span style="color:red;">*</span></label><br/><br/>
 			<input type="text" class="large" name="system_id" id="system_id"><br/><br/>
 			</div>
 			<!--div style="float:right;"-->
 			<div style="float:left;">
-			<label>Problem Description:</label><br/><br/>
+			<label>Problem Description:<span style="color:red;">*</span></label><br/><br/>
 			<textarea name="problem" id="problem" style="resize:vertical; max-height:60px; min-height:60px; width:550px;" onkeypress="return imposeMaxLength(this, 139);"></textarea><br/><br/>
 			</div>
 			<div style="float:left;">
