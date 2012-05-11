@@ -126,23 +126,23 @@ function addCustomer(){
 	<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 		<h4 style="color: #0064CD; text-decoration:underline;">General Information</h4>
 		<div style="float:left;">
-			<label>Customer Name:</label><br/><br/>
+			<label>Customer Name:<span style="color:red;">*</span></label><br/><br/>
 			<input type="text" class="large" name="customer_name" id="customer_name" maxlength="100"><br/><br/>
 		</div>
 		<div style="float:right;">
-			<label>Company Name:</label><br/><br/>
+			<label>Company Name:<span style="color:red;">*</span></label><br/><br/>
 			<input type="text" class="large" name="company_name" id="company_name" maxlength="100"><br/><br/>
 		</div>
 		<div style="float:left;">
-			<label>Email Id:</label><br/><br/>
+			<label>Email Id:<span style="color:red;">*</span></label><br/><br/>
 			<input type="text" class="large" name="email" id="email"><br/><br/>
 		</div>
 		<div style="float:right;">
-			<label>Location:</label><br/><br/>
+			<label>Location:<span style="color:red;">*</span></label><br/><br/>
 			<textarea name="location" id="location" onkeypress="return imposeMaxLength(this, 139);"></textarea><br/><br/>
 		</div>
 		<div style="float:left;">
-			<label>Mobile No.:</label><br/><br/>
+			<label>Mobile No.:<span style="color:red;">*</span></label><br/><br/>
 			<input type="text" class="large" name="mobile" id="mobile" maxlength="15"><br/><br/>
 			<div style="margin-bottom:7.5%;">
 				<label>Land Line No.:</label><br/><br/>

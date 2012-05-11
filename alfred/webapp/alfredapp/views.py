@@ -1,6 +1,7 @@
 import os
 import urllib
 import datetime
+from time import gmtime, strftime
 import simplejson as json
 from mako.template import Template
 from mako.lookup import TemplateLookup
@@ -210,7 +211,7 @@ def deletedepartment(request):
         return HttpResponse(str(1))
     except:
         return HttpResponse(str(0))
-    
+   
 def customerpackagedashboard(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("customerpackage.html")
@@ -501,6 +502,81 @@ def createticket(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("sadmin_create_ticket.html")
     customer = Customer.objects.all()
+    deparment = Deparment.objects.all()
     user = Alfreduser.objects.all()
     status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,deparment=deparment,customer=customer,status=status,User=user,userName='Smita'))
+
+@csrf_exempt
+def createticketpost(request):
+    date = datetime.datetime.now()
+    try:
+        custId = request.POST.get('customer')
+    except:
+        custId = None
+    print "custId==",custId
+    try:
+        customer = request.POST.get('customer')
+    except:
+        customer = None
+    print "customer==",customer
+    try:
+        company_name = request.POST.get('company_name')
+    except:
+        company_name = None
+    print "company_name==",company_name
+    try:
+        email = request.POST.get('email')
+    except:
+        email = None
+    print "email==",email
+    try:
+        location = request.POST.get('location')
+    except:
+        location = None
+    print "location==",location
+    try:
+        mobile = request.POST.get('mobile')
+    except:
+        mobile = None
+    print "mobile==",mobile
+    try:
+        landline = request.POST.get('landline')
+    except:
+        landline = None
+    print "landline==",landline
+    try:
+        system_id =self.get_argument('system_id')
+    except:
+        system_id = None
+    print "system_id==",system_id
+    try:
+        problem = self.get_argument('problem')
+    except:
+        problem = None
+    print "problem==",problem
+    try:
+        issue_type=self.get_argument("issue_type")
+    except:
+        issue_type = None
+    print "issue_type==",issue_type
+    ticketid ="PSSPL/"+strftime("%y/%m/%d/%H/%M/%S")
+    ticketobj = Ticket(ts=date,ticketid=ticketid,customer=customer,dept=issue_type,systemid=system_id,summary=problem)
+    ticketobj.save()
+    c = request.COOKIES.get('csrftoken','')
+    tpl = tpl_lookup.get_template("sadmin_create_ticket.html")
+    user = Alfreduser.objects.all()
+    status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
+
+@csrf_exempt
+def dispcustomerdata(request):
+    c = request.COOKIES.get('csrftoken','')
+    custId = request.POST.get('customerid')
+    obj = Customer.objects.filter(id=custId)
+    listdata = []
+    for i in obj:
+        listdata.append((i.name,i.company,i.address,i.landline,i.mobile,i.email))
+    dict = {"data":listdata[0]}
+    return HttpResponse(json.dumps(dict))
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,User=user,userName='Smita'))

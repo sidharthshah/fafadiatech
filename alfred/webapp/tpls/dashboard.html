@@ -1,0 +1,179 @@
+<%inherit file="base_admin.html" />
+<script type="text/javascript">
+$(function () {
+    var chart;
+    $(document).ready(function() {
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'weekly_create_tickets',
+                type: 'column'
+            },
+            title: {
+                text: 'Weekly Create Tickets'
+            },
+            xAxis: {
+                categories: [
+                    'Sun',
+                    'Mon',
+                    'Tue',
+                    'Wed',
+                    'Thu',
+                    'Fri',
+                    'Sat',
+                ]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Tickets'
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                backgroundColor: '#FFFFFF',
+                align: 'left',
+                verticalAlign: 'top',
+                x: 100,
+                y: 70,
+                floating: true,
+                shadow: true
+            },
+            tooltip: {
+                formatter: function() {
+                    return ''+
+                        this.x +': '+ this.y +' tickets';
+                }
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+                series: [{
+                name: 'Create Tickets',
+                data: [1, 2, 3, 4, 5, 6,7]
+    
+            }]
+        });
+    });
+    
+});
+</script>
+<script type="text/javascript">
+$(function () {
+    var chart;
+    $(document).ready(function() {
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'weekly_tickets_status_report',
+                type: 'column'
+            },
+            title: {
+                text: 'Weekly Tickets Status Report'
+            },
+            xAxis: {
+                categories: [
+                    'Sun',
+                    'Mon',
+                    'Tue',
+                    'Wed',
+                    'Thu',
+                    'Fri',
+                    'Sat',
+                ]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Tickets'
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                backgroundColor: '#FFFFFF',
+                align: 'left',
+                verticalAlign: 'top',
+                x: 100,
+                y: 70,
+                floating: true,
+                shadow: true
+            },
+            tooltip: {
+                formatter: function() {
+                    return ''+
+                        this.x +': '+ this.y +' tickets';
+                }
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+                series: [{
+                name: 'Create Tickets',
+                data: [1, 2, 3, 4, 5, 6,7]
+    
+            }]
+        });
+    });
+    
+});
+</script>
+<script type="text/javascript">
+$(function () {
+    var chart;
+    $(document).ready(function() {
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'all_tickets_status',
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: 'All Tickets Status'
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %';
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        formatter: function() {
+                            return '<b>'+ this.point.name +'</b>: '+ this.percentage +' %';
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Browser share',
+                data: [
+                    ['Open',	45],
+                    ['Pending',	25],
+                    ['Close',	12],
+                    ['W.I.P',	18],
+                ]
+            }]
+        });
+    });
+    
+});
+</script>
+
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/highcharts.js"></script>
+<script type="text/javascript" src="/static/js/exporting.js"></script>
+
+<div id="weekly_create_tickets" style="width: 400px; height: 250px;float:left;"></div>
+<div id="weekly_tickets_status_report" style="width: 430px; height: 250px;float:right;"></div>
+<center><div id="all_tickets_status" style="width: 600px; height: 300px;float:left;margin-top:30px;"></div></center>

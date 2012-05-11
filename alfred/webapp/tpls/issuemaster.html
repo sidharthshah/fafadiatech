@@ -24,8 +24,6 @@ function editIssue(id){
 	addForm.action="/department/edit?deptid="+id;
 	addForm.method="POST";
 	addForm.submit();
-	
-
 }
 
 function deleteissue(id){
@@ -35,7 +33,7 @@ function deleteissue(id){
 			if(data=="1"){
 				window.location.href="/department/dashbard";
 			}
-			else if(data=="-1")
+			else
 			{
 			alert("Invalid Operation");
 			}
