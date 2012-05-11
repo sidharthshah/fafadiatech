@@ -1,4 +1,5 @@
-import os 
+import os
+import urllib
 import datetime
 from time import gmtime, strftime
 import simplejson as json
@@ -6,17 +7,70 @@ from mako.template import Template
 from mako.lookup import TemplateLookup
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import redirect
 from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.sessions.models import Session
+from django.contrib.sessions.backends.db import SessionStore
 from alfredapp.models import *
+
+from django.conf import settings
+from django.contrib.auth.models import User, check_password
+
 
 tpl_lookup = TemplateLookup(directories=[os.path.join(os.path.dirname(__file__),"..","tpls")])
 
-def userdashboard(request):
+
+def getUserDetails(request,uname,passwd):
+    alluser = Alfreduser.objects.all()
+    for i in alluser:
+        if i.username == uname and i.password==passwd:
+            return i
+    return None
+    
+
+def home(request):
     c = request.COOKIES.get('csrftoken','')
-    tpl = tpl_lookup.get_template("dashboard.html")
+    tpl = tpl_lookup.get_template("login.html")
     user = Alfreduser.objects.all()
     status = TicketStatus.objects.all()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,uname="status",password="user",unamemsg="dfdfdf",pmsg="",msg="",userName='Smita'))
+
+def useredit(request):
+    pass
+
+@csrf_exempt
+def userdelete(request):
+    c = request.COOKIES.get('csrftoken','')
+    
+
+@csrf_exempt
+def login(request):
+    c = request.COOKIES.get('csrftoken','')
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    userobj = getUserDetails(request,username,password)
+    if userobj: 
+        request.session.set_expiry(300)
+        request.session['userid']=urllib.quote(str(userobj.id))
+        request.session['last_login'] = datetime.datetime.now()
+        request.session['myname'] = urllib.quote(userobj.username)
+        request.session['department'] = urllib.quote(str(userobj.deparment))
+        request.session['type'] = urllib.quote(userobj.usertype)
+        request.session.modified = True
+        return HttpResponse(str(1))
+    else:
+        return HttpResponse(str(0))
+
+def userdashboard(request):
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+        c = request.COOKIES.get('csrftoken','')
+        tpl = tpl_lookup.get_template("usrsummry.html")
+        user = Alfreduser.objects.all()
+        status = TicketStatus.objects.all()
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName=s.get_decoded()['myname']))
+    except:
+        return HttpResponseRedirect('/')
 
 def adduserform(request):
     c = request.COOKIES.get('csrftoken','')
@@ -57,29 +111,30 @@ def teamdashboard(request):
 def addteamform(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("createteam.html")
-    user = Alfreduser.objects.all()
+    user = []#Alfreduser.objects.all()
     status = TicketStatus.objects.all()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
 
 @csrf_exempt
 def teamadd(request):
     name = request.POST.get('name')
+    password=request.POST.get('password')
     address = request.POST.get('address')
     landline = request.POST.get('landline')
     mobile = request.POST.get('mobile')
     email = request.POST.get('email')
     try:
-        teamobj = Team(name=name,address=address,landlineno=landline,mobileno=mobile,email=email)
+        teamobj = Team(username=name,password=password,name=name,address=address,landlineno=landline,mobileno=mobile,email=email)
         teamobj.save()
         return HttpResponse(str(1))   
     except:
         return HttpResponse(str(0))    
         
-
+@csrf_exempt
 def teameditform(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("editteam.html")
-    teamid = request.POST.get('teamid')
+    teamid = request.POST.get('teamId')
     team = Team.objects.filter(id=teamid)
     status = TicketStatus.objects.all()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,team=team,status=status,User=user,userName='Smita'))
@@ -149,10 +204,14 @@ def modifydepartment(request):
 @csrf_exempt
 def deletedepartment(request):
     c = request.COOKIES.get('csrftoken','')
-    deptid = request.POST.get('deptid')
-    obj = Deparment.objects.filter(id=deptid).delete()
-    return HttpResponse(str(1))
-
+    deptid = request.POST.get('deptid')  
+    try:
+        obj = Deparment.objects.filter(id=deptid).delete()
+        print  obj
+        return HttpResponse(str(1))
+    except:
+        return HttpResponse(str(0))
+   
 def customerpackagedashboard(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("customerpackage.html")
@@ -282,7 +341,6 @@ def ticketstatusadd(request):
 
 @csrf_exempt
 def ticketstatusedit(request):
-    print "okkkkkkkkkkkkk"
     c = request.COOKIES.get('csrftoken','')
     statusId = request.GET.get('statusId')
     try:
@@ -317,9 +375,6 @@ def ticketstatusdelete(request):
     except:
         return HttpResponse(str(0))
     
-
-
-    
 def customersummary(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("customersummary.html")
@@ -343,8 +398,15 @@ def customeradd(request):
     status = TicketStatus.objects.all()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
 
+def editcustomer(request):
+     c = request.COOKIES.get('csrftoken','')
+     custid = request.GET.get('teamId')
+     cust = CustomerPackage.objects.filter(id=slaid)
+
 @csrf_exempt
 def customeraddpost(request):
+    name="dfdfdfdf"
+    password = "aksakjs"
     try:
         customer_name = request.POST.get('customer_name')
     except:
@@ -369,13 +431,13 @@ def customeraddpost(request):
         landline = request.POST.get('landline')
     except:
         landline = None
-    customerobj = Customer(name=customer_name,company=company_name,email=email,address=location,mobile=mobile,landline=landline)
-    customerobj.save()
-    c = request.COOKIES.get('csrftoken','')
-    tpl = tpl_lookup.get_template("createcustomer.html")
-    user = Alfreduser.objects.all()
-    status = TicketStatus.objects.all()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
+    try:
+        custobj = Customer(username=name,password=password,name=customer_name,company=company_name,address=location,mobile=mobile,landline=landline)
+        custobj.save()
+        return HttpResponse(str(1))   
+    except:
+        return HttpResponse(str(0))  
+
 
 def customeredit(request):
     custId = request.GET.get('custId')

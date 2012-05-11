@@ -10,9 +10,12 @@ FILE_ROOT = os.path.join(STATIC_ROOT,"attachments")
 FILE_ROOT = FILE_ROOT[1:]+'/(?P<path>.*)$'
 
 urlpatterns = patterns('',
-    # Examples:
-    url(r'^dashboard', 'alfredapp.views.userdashboard'),
+    url(r'^$','alfredapp.views.home'),
+    url(r'^login','alfredapp.views.login'),
+    url(r'^user/dashboard', 'alfredapp.views.userdashboard'),
+    url(r'^user/edit', 'alfredapp.views.useredit'),
     url(r'^customer/summary', 'alfredapp.views.customersummary'),
+    url(r'^customer/edit','alfredapp.views.editcustomer'),
     url(r'^customer/create', 'alfredapp.views.customeradd'),
     url(r'^customer/add', 'alfredapp.views.customeraddpost'),
     url(r'^customer/modify', 'alfredapp.views.customeredit'),
