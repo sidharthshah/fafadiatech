@@ -13,6 +13,17 @@
 			});
 		}
 	}
+
+	function editTeam(id)
+	{
+		var addForm = document.getElementById("teamsummery");
+		addForm.action="/team/edit?teamId="+id;
+		addForm.method="POST";
+		addForm.submit();
+	
+	}
+
+
 	function addUserteamdata(id){
 		var addForm = document.getElementById("teamsummery");
 		addForm.action="/user/add?custId="+id;
@@ -43,7 +54,7 @@
 		<td>${i.email}</td>
 		<td></td>
 		<td></td>
-		<td style="cursor:pointer;"><a href="/team/modify?memberid=${i.id}" id="${i.id}" onclick="javascript:editTeam(id)"><img src="/static/img/edit.png" title="Edit"></a>&nbsp;&nbsp;
+		<td style="cursor:pointer;"><a href="#" id="${i.id}" onclick="javascript:editTeam(id)"><img src="/static/img/edit.png" title="Edit"></a>&nbsp;&nbsp;
 		<a href="#" id="${i.id}" onclick="javascript:deleteTeam(id)"><img src="/static/img/delete.png" title="Delete"></a></td>
 		<td></td>
 	</tr>

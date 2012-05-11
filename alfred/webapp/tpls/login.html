@@ -11,6 +11,7 @@ function checkusername()
 		return false;
 	}
 }
+
 function checkpassword()
 {
 	var password = changepwd.password.value;
@@ -20,11 +21,24 @@ function checkpassword()
 		return false;
 	}
 }
+
+function loginpage()
+{
+	username = $("#username").val();
+	password = $("#password").val();
+	$.post("/login",{username:username,password:password},function(data){
+		if(data=="1"){
+		window.location.href="user/dashboard"
+		}
+	});
+
+}
 </script>
 <div id="body" style="margin:0 auto; width:50%;"><br/><br/>
 	<div class="shell" style="border:1px solid #DDDDDD;">
 		<br/>
-		<form name="changepwd" method="post" action="/" enctype="application/x-www-form-urlencoded" class="form-stacked" id="changepwd" autocomplete="on">
+		<form name="changepwd" method="post" class="form-stacked" id="changepwd">
+		<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 			<label>Username:</label>
 			%if username != "":
 				<input type="text" name="username" id="username" size="15" value="${uname}">&nbsp;
@@ -49,7 +63,7 @@ function checkpassword()
 			%if msg !="":
 				<h6>${msg}</h6>
 			%endif
-			<input type="submit" id="login" name="login" value="Login"> 
+			<input type="button" id="login" name="login" value="Login" onclick="javascript:loginpage()"> 
 			| <a href="#" id="forgotpswd" onClick="window.location='/password/recovery';">Forgot Password</a>
 		</form>
 	</div><br/><br/>

@@ -13,6 +13,16 @@
 			});
 		}
 	}
+	
+	function editCustomer(id)
+	{
+	
+		var addForm = document.getElementById("teamsummery");
+		addForm.action="/customer/edit?teamId="+id;
+		addForm.method="POST";
+		addForm.submit();
+
+	}
 
 	function addUserdata(id){
 		var addForm = document.getElementById("customerdashboard");
@@ -48,7 +58,7 @@
 		<td>${i.email}</td>
 		<td>${i.mobile}</td>
 		<td>${i.landline}</td>
-		<td style="cursor:pointer;"><a href="/customer/modify?custId=${i.id}" id="${i.id}"><img src="/static/img/edit.png" title="Edit"></a>&nbsp;&nbsp;
+		<td style="cursor:pointer;"><a href="#" id="${i.id}" onclick="javascript:editCustomer(id)"><img src="/static/img/edit.png" title="Edit"></a>&nbsp;&nbsp;
 		<a href="#" id="${i.id}" onclick="javascript:customerDelete(id)"><img src="/static/img/delete.png" title="Delete"></a></td>
 	</tr>
 	%endfor

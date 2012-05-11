@@ -10,9 +10,12 @@ FILE_ROOT = os.path.join(STATIC_ROOT,"attachments")
 FILE_ROOT = FILE_ROOT[1:]+'/(?P<path>.*)$'
 
 urlpatterns = patterns('',
-    # Examples:
+    url(r'^$','alfredapp.views.home'),
+    url(r'^login','alfredapp.views.login'),
     url(r'^user/dashboard', 'alfredapp.views.userdashboard'),
+    url(r'^user/edit', 'alfredapp.views.useredit'),
     url(r'^customer/summary', 'alfredapp.views.customersummary'),
+    url(r'^customer/edit','alfredapp.views.editcustomer'),
     url(r'^customer/create', 'alfredapp.views.customeradd'),
     url(r'^customer/add', 'alfredapp.views.customeraddpost'),
     url(r'^customer/modify', 'alfredapp.views.customeredit'),
@@ -37,7 +40,6 @@ urlpatterns = patterns('',
     url(r'^customerpackage/edit','alfredapp.views.customerpackageedit'),
     url(r'^customerpackage/modify','alfredapp.views.customerpackagemodify'),
     url(r'^customerpackage/delete','alfredapp.views.customerpackagedelete'),
-<<<<<<< HEAD
     url(r'^sla/dashboard','alfredapp.views.sladashboard'),
     url(r'^sla/add','alfredapp.views.slaadd'),
     url(r'^sla/edit','alfredapp.views.slaedit'),
@@ -48,12 +50,8 @@ urlpatterns = patterns('',
     url(r'^ticketstatus/edit','alfredapp.views.ticketstatusedit'),
     url(r'^ticketstatus/modify','alfredapp.views.ticketstatusmodify'),
     url(r'^ticketstatus/delete','alfredapp.views.ticketstatusdelete'),
-    
-    
-=======
     url(r'^ticket/create','alfredapp.views.createticket'),
-    url(r'^customer/displaydata','alfredapp.views.dispcustomerdata'),
->>>>>>> adcb3e71f3c8c13e25aad7ac2391b852d3b98ea0
+    #url(r'^customer/displaydata','alfredapp.views.dispcustomerdata'),
     url(FILE_ROOT, 'django.views.static.serve',{'document_root': DOC_ROOT, 'show_indexes': True}),
     url(r'^admin/', include(admin.site.urls)),
     

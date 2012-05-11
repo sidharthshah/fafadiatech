@@ -108,7 +108,7 @@ function addteam(){
 	var landline = $("#landline").val();
 	var mobile = $("#mobile").val();
 	var email = $("#email").val();
-	$.post("/team/add",{name:name,address:address,landline:landline,mobile:mobile,email:email},function(data)
+	$.post("/team/add",{name:name,password:"asdf",address:address,landline:landline,mobile:mobile,email:email},function(data)
 	{
 		if(data=="1")
 		{
