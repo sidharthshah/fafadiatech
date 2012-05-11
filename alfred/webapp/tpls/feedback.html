@@ -20,7 +20,6 @@ function addfeedback()
 
 	$.post("/feedback",{customer:customer,ticketid:ticketid,dept:dept,val1of1:val1of1,val2of2:val2of2,val3of3:val3of3,val4of4:val4of4,val5of5:val5of5,surveydetail:surveydetail},function(data){
 		if(data == "1"){
-			
 			alert("Thank you for your Feedback");
 			window.location.href="/";
 		}

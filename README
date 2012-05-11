@@ -3,3 +3,30 @@ http://fafadiatech.com
 
 hackage - collections of scripts that fafadia tech has built
 uva-solutions - solutions to some of UVA problems
+
+Install Packages
+================
+
+1). Download & Install django1.3.1
+
+	- download django1.3.1 from https://www.djangoproject.com/download/1.3.1/tarball
+	- tar xzvf Django-1.3.1tar.gz
+	- cd Django-1.3.1
+	- sudo python setup.py install
+
+2). Install dateutil
+
+	- sudo apt-get install python-dateutil
+
+3). Install xlwt for generate all data in excel sheet.
+
+	- sudo apt-get install python-xlwt 
+
+4). Install reportlab for generate all data in PDF.
+
+	- sudo pip install reportlab
+
+5). Install pypdf for generate all data in PDF.
+
+	- http://pybrary.net/pyPdf/
+	- pyPdf-1.13.tar.gz
