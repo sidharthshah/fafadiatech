@@ -28,7 +28,7 @@ function loginpage()
 	password = $("#password").val();
 	$.post("/login",{username:username,password:password},function(data){
 		if(data=="1"){
-		window.location.href="user/dashboard"
+		window.location.href="/dashboard"
 		}
 	});
 

@@ -54,6 +54,7 @@ urlpatterns = patterns('',
     url(r'^ticket/create','alfredapp.views.createticketform'),
     url(r'^ticket/add','alfredapp.views.createticket'),
     url(r'^customer/displaydata','alfredapp.views.dispcustomerdata'),
+    url(r'^ticket/assign','alfredapp.views.ticketAssign'),
     url(FILE_ROOT, 'django.views.static.serve',{'document_root': DOC_ROOT, 'show_indexes': True}),
     url(r'^admin/', include(admin.site.urls)),
     

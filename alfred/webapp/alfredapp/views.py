@@ -29,11 +29,20 @@ def getUserDetails(request,uname,passwd):
     
 
 def home(request):
-    c = request.COOKIES.get('csrftoken','')
-    tpl = tpl_lookup.get_template("login.html")
-    user = Alfreduser.objects.all()
-    status = TicketStatus.objects.all()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,uname="status",password="user",unamemsg="dfdfdf",pmsg="",msg="",userName='Smita'))
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+        s.delete()
+        c = request.COOKIES.get('csrftoken','')
+        tpl = tpl_lookup.get_template("login.html")
+        user = Alfreduser.objects.all()
+        status = TicketStatus.objects.all()
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,uname="status",password="user",unamemsg="dfdfdf",pmsg="",msg="",userName='Smita'))
+    except:
+        c = request.COOKIES.get('csrftoken','')
+        tpl = tpl_lookup.get_template("login.html")
+        user = Alfreduser.objects.all()
+        status = TicketStatus.objects.all()
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,uname="status",password="user",unamemsg="dfdfdf",pmsg="",msg="",userName='Smita'))
 
 def useredit(request):
     pass
@@ -50,7 +59,7 @@ def login(request):
     password = request.POST.get('password')
     userobj = getUserDetails(request,username,password)
     if userobj: 
-        request.session.set_expiry(300)
+        request.session.set_expiry(1800)
         request.session['userid']=urllib.quote(str(userobj.id))
         request.session['last_login'] = datetime.datetime.now()
         request.session['myname'] = urllib.quote(userobj.username)
@@ -64,6 +73,7 @@ def login(request):
 def userdashboard(request):
     try:
         s = Session.objects.get(pk=request.session.session_key)
+        #print s.delete()
         c = request.COOKIES.get('csrftoken','')
         tpl = tpl_lookup.get_template("usrsummry.html")
         user = Alfreduser.objects.all()
@@ -811,5 +821,21 @@ def ticketreportsfeedback(request):
         status = TicketStatus.objects.all()
         return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName=s.get_decoded()['myname'],date=strftime("%Y/%m/%d")))
     except:
-        return HttpResponseRedirect('/') 
+        return HttpResponseRedirect('/')
+    
+def ticketAssign(request):
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    tpl = tpl_lookup.get_template("ticket_assign.html")
+    ticket = []
+    for i in Ticket.objects.all():
+        ticket.append(i)
+    ticket.reverse()
+    status = TicketStatus.objects.all()
+    status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
+
 
