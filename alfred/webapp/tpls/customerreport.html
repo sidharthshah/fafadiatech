@@ -1,7 +1,7 @@
 <%inherit file="base_admin.html" />
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="http://code.jquery.com/jquery-1.7.min.js"></script>
-<script src="/js/datepicker.js"></script>
+<script src="/static/js/datepicker.js"></script>
 <script>
       /* Update datepicker plugin so that MM/DD/YYYY format is used. */
       $.extend($.fn.datepicker.defaults, {
@@ -171,20 +171,20 @@ $(document).ready(function() {
 });
 </script>
 
-<form name="cust_report" id="cust_report" method="post" action="" style="margin-left:20px;">
+<form name="cust_report" id="cust_report" method="get" action="" style="margin-left:20px;">
 	<h5>Customer Reports</h5><br/>
-	Customer Name:&nbsp;<input type="text" name="customer_name" id="customer_name"> 
-	From:&nbsp;<input data-datepicker="datepicker" type="text" class="small" name="startdate" id="startdate"/>&nbsp;&nbsp;
-	To:&nbsp;<input data-datepicker="datepicker" type="text" class="small" name="enddate" id="enddate">&nbsp;&nbsp;
+	Customer Name:&nbsp;<input type="text" name="customer_name" id="customer_name" autocomplete="on"> 
+	From:&nbsp;<input data-datepicker="datepicker" type="text" class="small" name="startdate" id="startdate" value="${date}"/>&nbsp;&nbsp;
+	To:&nbsp;<input data-datepicker="datepicker" type="text" class="small" name="enddate" id="enddate" value="${date}">&nbsp;&nbsp;
 	
 	<input type="button" name="Find" id="Find" value="Submit" onclick="javascript:DisplayAllTicket()"><br/><br/><br/>
 	<div class="span15"> 
 		<h4 style="color: #0064CD; text-decoration:underline;">List of Tickets
-		<a id="exportexcel" style="float:right;" href="javascript:exportCustFile('excel')"><img src="/images/excel.jpeg" title="Export To EXCEL" style="margin-left:5px;"></a>
-		<a id="exportpdf" style="float:right;" href="javascript:exportCustFile('pdf')"><img src="/images/index.jpeg" title="Export To PDF"></a>
+		<a id="exportexcel" style="float:right;" href="javascript:exportCustFile('excel')"><img src="/static/img/excel.jpeg" title="Export To EXCEL" style="margin-left:5px;"></a>
+		<a id="exportpdf" style="float:right;" href="javascript:exportCustFile('pdf')"><img src="/static/img/index.jpeg" title="Export To PDF"></a>
 	</div><br/>
 
 	<div id="mytable">
 	</div>
-
 </form>
+

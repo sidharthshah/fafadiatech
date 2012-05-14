@@ -609,3 +609,24 @@ def dispcustomerdata(request):
     dict = {"data":listdata[0]}
     return HttpResponse(json.dumps(dict))
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,User=user,userName='Smita'))
+
+def ticketreports(request):
+    c = request.COOKIES.get('csrftoken','')
+    tpl = tpl_lookup.get_template("report.html")
+    user = Alfreduser.objects.all()
+    status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita',date=strftime("%Y/%m/%d")))
+
+def ticketreportscustomer(request):
+    c = request.COOKIES.get('csrftoken','')
+    tpl = tpl_lookup.get_template("customerreport.html")
+    user = Alfreduser.objects.all()
+    status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita',date=strftime("%Y/%m/%d")))
+
+def ticketreportsfeedback(request):
+    c = request.COOKIES.get('csrftoken','')
+    tpl = tpl_lookup.get_template("feedbackreport.html")
+    user = Alfreduser.objects.all()
+    status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita',date=strftime("%Y/%m/%d")))

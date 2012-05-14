@@ -53,7 +53,11 @@ urlpatterns = patterns('',
     url(r'^ticket/create','alfredapp.views.createticketform'),
     url(r'^ticket/add','alfredapp.views.createticket'),
     url(r'^customer/displaydata','alfredapp.views.dispcustomerdata'),
+    url(r'^report/allticket','alfredapp.views.ticketreports'),
+    url(r'^report/customer','alfredapp.views.ticketreportscustomer'),
+    url(r'^report/feedback','alfredapp.views.ticketreportsfeedback'),
     url(FILE_ROOT, 'django.views.static.serve',{'document_root': DOC_ROOT, 'show_indexes': True}),
+    url(STATIC_ROOT, 'django.views.static.serve',{'document_root': STATIC_ROOT, 'show_indexes': True}),
     url(r'^admin/', include(admin.site.urls)),
     
 )
