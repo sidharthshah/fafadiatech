@@ -127,8 +127,7 @@ function modifycustomer()
 	var username = $("#username").val();
 	var password = $("#password").val();
 	var role = $("#role").val();
-	var dept = $("#dept").val();
-	$.post("/customer/edit",{customer_id:customer_id, customer_name:customer_name, company_name:company_name, location:location, landline:landline, mobile:mobile,email:email,username:username,password:password,role:role,dept:dept},function(data){
+	$.post("/customer/edit",{customer_id:customer_id, customer_name:customer_name, company_name:company_name, location:location, landline:landline, mobile:mobile, email:email, username:username, password:password,role:role,dept:dept},function(data){
 		alert("Customer Data successfully modified");
 		window.location.href="/customer/summary";
 	});
@@ -183,6 +182,12 @@ function updateemail(custid)
 <input type="text" class="large" name="mobile" id="mobile" value="${customer.mobile}" maxlength="15"><br/><br/>
 <label>Landline No.:</label><br/><br/>
 <input type="text" class="large" name="landline" id="landline" value="${customer.landline}" maxlength="20"><br/><br/>
+
+<label>Username.:</label><br/><br/>
+<input type="text" class="large" name="username" id="username" value="${customer.username}" maxlength="20" readonly><br/><br/>
+
+<label>Password.:</label><br/><br/>
+<input type="password" class="large" name="password" id="landline" value="" maxlength="20"><br/><br/>
 
 <input type="button" value="Modify" name="modifydata" id="modifydata" onclick="javascript:modifycustomer();">
 <input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="window.location.href='/customer/summary'">
