@@ -2,7 +2,7 @@ from django.contrib import admin
 from alfredapp.models import * 
 
 admin.site.register(Alfreduser)
-admin.site.register(Deparment)
+admin.site.register(Department)
 admin.site.register(TicketStatus)
 admin.site.register(Team)
 admin.site.register(Customer)

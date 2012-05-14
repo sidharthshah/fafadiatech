@@ -171,9 +171,9 @@ $(document).ready(function() {
 	<input data-datepicker="datepicker" type="text" class="small" name="enddate" id="enddate" value="${date}" />&nbsp;&nbsp;Select Issue Type:&nbsp;
 		<select id="issueType" name="issueType">
 			<option value="All">All</option>
-			for issue in issueType:
-			<option value="{issue[0]}">{issue[1]}</option>
-			endfor
+			%for issue in department:
+			<option value="${issue.id}">${issue.department}</option>
+			%endfor
 		</select>
 	<input type="button" name="Find" id="Find" value="Submit" onclick="javascript:DisplayAllTicket()">
 	<br/><br/><br/>

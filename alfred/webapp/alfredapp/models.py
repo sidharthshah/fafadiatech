@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, UserManager
 
 STATIC_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","static","attachments")
 
-class Deparment(models.Model):
+class Department(models.Model):
     department = models.CharField(max_length=30)
 
     def __unicode__(self):
@@ -48,7 +48,7 @@ class SettingsBackend(object):
 class Alfreduser(User):
     USER_TYPE_CHOICES =  (('superadmin','superadmin'),('departmentadmin','departmentadmin'),('customer','customer'),('employee','employee'),)
     usertype = models.CharField(max_length=30,choices=USER_TYPE_CHOICES,default=None)
-    deparment = models.ForeignKey(Deparment,default=None)
+    department = models.ForeignKey(Department,default=None)
     objects = UserManager()
 
     def __unicode__(self):
@@ -63,7 +63,7 @@ class TicketStatus(models.Model):
 class Team(User):
     USER_TYPE_CHOICES =  (('superadmin','superadmin'),('departmentadmin','departmentadmin'),('customer','customer'),('employee','employee'),)
     usertype = models.CharField(max_length=30,choices=USER_TYPE_CHOICES,default=None)
-    deparment = models.ForeignKey(Deparment,default=None)
+    department = models.ForeignKey(Department,default=None)
     name = models.CharField(max_length=50)
     address = models.CharField(max_length=250)
     landlineno = models.CharField(max_length=15)
@@ -113,13 +113,13 @@ class Ticket(models.Model):
     ts= models.DateTimeField()
     ticketid = models.CharField(max_length=30)
     customer = models.ForeignKey(Customer)
-    dept = models.ForeignKey(Deparment)
+    dept = models.ForeignKey(Department)
     systemid = models.CharField(max_length=255)
     summary = models.CharField(max_length=255)
     status = models.ForeignKey(TicketStatus,blank=True,null=True)
     assignedto = models.ForeignKey(Team,blank=True,null=True)
     sla = models.ForeignKey(Sla,blank=True,null=True)
-    filattachment = models.FileField(upload_to=STATIC_PATH,blank=True,null=True)
+    attachment = models.FileField(upload_to=STATIC_PATH,blank=True,null=True)
     package = models.ForeignKey(CustomerPackage,blank=True,null=True)
 
     def __unicode__(self):

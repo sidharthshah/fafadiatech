@@ -1,4 +1,7 @@
 <%inherit file="base_admin.html" />
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/highcharts.js"></script>
+<script type="text/javascript" src="/static/js/exporting.js"></script>
 <script type="text/javascript">
 $(function () {
     var chart;
@@ -166,13 +169,8 @@ $(function () {
             }]
         });
     });
-    
 });
 </script>
-
-<script type="text/javascript" src="/static/js/jquery.js"></script>
-<script type="text/javascript" src="/static/js/highcharts.js"></script>
-<script type="text/javascript" src="/static/js/exporting.js"></script>
 
 <div id="weekly_create_tickets" style="width: 400px; height: 250px;float:left;"></div>
 <div id="weekly_tickets_status_report" style="width: 430px; height: 250px;float:right;"></div>
