@@ -104,7 +104,7 @@ def usereditform(request):
         tpl = tpl_lookup.get_template("edituser.html")
         user = Alfreduser.objects.all()
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/')
     
@@ -121,7 +121,7 @@ def teamdashboard(request):
         tpl = tpl_lookup.get_template("teamsummary.html")
         team = Team.objects.all()
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,team=team,userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,team=team,userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/')
 
@@ -133,7 +133,7 @@ def addteamform(request):
         dept = Deparment.objects.all()
         user = []#Alfreduser.objects.all()
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,dept=dept,status=status,User=user,userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,dept=dept,status=status,User=user,userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/')
 
@@ -200,7 +200,7 @@ def teameditform(request):
         teamid = request.POST.get('teamId')
         team = Team.objects.filter(id=teamid)
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,team=team,status=status,User=user,userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,team=team,status=status,User=user,userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/') 
    
@@ -242,7 +242,7 @@ def departmentdashboard(request):
         tpl = tpl_lookup.get_template("issuemaster.html")
         status = TicketStatus.objects.all()
         deparment = Deparment.objects.all() 
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,deparment=deparment,userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,deparment=deparment,userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/') 
 
@@ -272,13 +272,13 @@ def departmentedit(request):
             deptobj = None
         tpl = tpl_lookup.get_template("editissuemaster.html")
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,dept=deptobj[0],userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,dept=deptobj[0],userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/') 
 
 @csrf_exempt
 def modifydepartment(request):
-     try:
+    try:
         s = Session.objects.get(pk=request.session.session_key)
         c = request.COOKIES.get('csrftoken','')
         deptid = request.POST.get('deptid')
@@ -312,7 +312,7 @@ def customerpackagedashboard(request):
         tpl = tpl_lookup.get_template("customerpackage.html")
         status = TicketStatus.objects.all()
         customerpackage = CustomerPackage.objects.all() 
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,customerpackage=customerpackage,userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,customerpackage=customerpackage,userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/')
     
@@ -332,7 +332,7 @@ def customerpackageadd(request):
         return HttpResponseRedirect('/')
     
 def customerpackageedit(request):
-     try:
+    try:
         s = Session.objects.get(pk=request.session.session_key)
         c = request.COOKIES.get('csrftoken','')
         packageid = request.POST.get('packageid')
@@ -342,7 +342,7 @@ def customerpackageedit(request):
             custpkgobj = None
         tpl = tpl_lookup.get_template("editcustomerpackage.html")
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,custpkg=custpkgobj[0],userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,custpkg=custpkgobj[0],userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/')
 
@@ -384,7 +384,7 @@ def sladashboard(request):
         tpl = tpl_lookup.get_template("slatype.html")
         status = TicketStatus.objects.all()
         sla = Sla.objects.all() 
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,sla=sla,userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,sla=sla,userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/')
 
@@ -415,7 +415,7 @@ def slaedit(request):
             slaobj = None
         tpl = tpl_lookup.get_template("editslatype.html")
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,slaobj=slaobj[0],userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,slaobj=slaobj[0],userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/')
 
@@ -433,8 +433,8 @@ def slamodify(request):
             return HttpResponse(str(1))
         except:
             custpkgobj = None
-            return HttpResponse(str(0))
-     except:
+        return HttpResponse(str(0))
+    except:
         return HttpResponseRedirect('/')
 
 
@@ -459,7 +459,7 @@ def ticketstatusdashboard(request):
         c = request.COOKIES.get('csrftoken','')
         tpl = tpl_lookup.get_template("ticketstatusmaster.html")
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=status,status=status,userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=status,status=status,userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/')
 
@@ -492,7 +492,7 @@ def ticketstatusedit(request):
             statusobj = None
         tpl = tpl_lookup.get_template("editticketstatus.html")
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,statusobj=statusobj[0],userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,statusobj=statusobj[0],userName=s.get_decoded()['myname']))
      except:
         return HttpResponseRedirect('/')
 
@@ -510,8 +510,8 @@ def ticketstatusmodify(request):
             return HttpResponse(str(1))
         except:
             custpkgobj = None
-            return HttpResponse(str(0))
-     except:
+        return HttpResponse(str(0))
+    except:
         return HttpResponseRedirect('/')
 
 @csrf_exempt
@@ -536,7 +536,7 @@ def customersummary(request):
         customer = Customer.objects.all()
         user = Alfreduser.objects.all()
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,User=user,userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,User=user,userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/')
 
@@ -559,7 +559,7 @@ def customeradd(request):
         tpl = tpl_lookup.get_template("createcustomer.html")
         user = Alfreduser.objects.all()
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/')
 
@@ -628,7 +628,7 @@ def customeredit(request):
         tpl = tpl_lookup.get_template("editcustomer.html")
         user = Alfreduser.objects.all()
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,User=user,userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,User=user,userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/') 
 
@@ -694,7 +694,7 @@ def customercreateticket():
         tpl = tpl_lookup.get_template("ticket.html")
         user = Alfreduser.objects.all()
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/') 
 
@@ -707,7 +707,7 @@ def createticketform(request):
         deparment = Deparment.objects.all()
         user = Alfreduser.objects.all()
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,deparment=deparment,customer=customer,status=status,User=user,userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,deparment=deparment,customer=customer,status=status,User=user,userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/') 
 
@@ -747,7 +747,7 @@ def createticket(request):
         deparment = Deparment.objects.all()
         user = Alfreduser.objects.all()
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,deparment=deparment,customer=customer,status=status,User=user,userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,deparment=deparment,customer=customer,status=status,User=user,userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/') 
 
@@ -763,7 +763,7 @@ def dispcustomerdata(request):
             listdata.append((i.name,i.company,i.address,i.landline,i.mobile,i.email))
         dict = {"data":listdata[0]}
         return HttpResponse(json.dumps(dict))
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,User=user,userName='Smita'))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,User=user,userName=s.get_decoded()['myname']))
     except:
         return HttpResponseRedirect('/') 
 
@@ -774,7 +774,7 @@ def ticketreports(request):
         tpl = tpl_lookup.get_template("report.html")
         user = Alfreduser.objects.all()
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita',date=strftime("%Y/%m/%d")))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName=s.get_decoded()['myname'],date=strftime("%Y/%m/%d")))
     except:
         return HttpResponseRedirect('/') 
 
@@ -785,7 +785,7 @@ def ticketreportscustomer(request):
         tpl = tpl_lookup.get_template("customerreport.html")
         user = Alfreduser.objects.all()
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita',date=strftime("%Y/%m/%d")))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName=s.get_decoded()['myname'],date=strftime("%Y/%m/%d")))
     except:
         return HttpResponseRedirect('/') 
 
@@ -797,7 +797,7 @@ def ticketreportsfeedback(request):
         tpl = tpl_lookup.get_template("feedbackreport.html")
         user = Alfreduser.objects.all()
         status = TicketStatus.objects.all()
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita',date=strftime("%Y/%m/%d")))
+        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName=s.get_decoded()['myname'],date=strftime("%Y/%m/%d")))
     except:
         return HttpResponseRedirect('/') 
 
