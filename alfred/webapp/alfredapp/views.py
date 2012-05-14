@@ -284,7 +284,7 @@ def departmentedit(request):
         return HttpResponseRedirect('/') 
 
 @csrf_exempt
-def modifydepartment(request):
+def departmentmodify(request):
     try:
         s = Session.objects.get(pk=request.session.session_key)
         c = request.COOKIES.get('csrftoken','')
