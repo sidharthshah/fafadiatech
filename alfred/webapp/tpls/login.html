@@ -43,7 +43,7 @@ function loginpage()
 			%if username != "":
 				<input type="text" name="username" id="username" size="15" value="${uname}">&nbsp;
 			%else:
-				<input type="text" name="username" id="username" size="15" onkeypress="window.location.href='/'">&nbsp;
+				<input type="text" name="username" id="username" size="15" value="${uname}">&nbsp;
 			%endif
 			% if unamemsg != "":
 				<h6>${unamemsg}</h6>
