@@ -108,7 +108,11 @@ function addteam(){
 	var landline = $("#landline").val();
 	var mobile = $("#mobile").val();
 	var email = $("#email").val();
-	$.post("/team/add",{name:name,password:"asdf",address:address,landline:landline,mobile:mobile,email:email},function(data)
+	var username = $("#username").val();
+	var password = $("#password").val();
+	var usertype = $("#usertype").val();
+	var dept = $("#dept").val();
+	$.post("/team/add",{name:name,username:username,password:password, address:address, landline:landline, mobile:mobile,email:email,usertype:usertype,dept:dept},function(data)
 	{
 		if(data=="1")
 		{
@@ -136,6 +140,25 @@ function addteam(){
 <input type="text" class="large" name="mobile" id="mobile" maxlength="15"><br/><br/>
 <label>Land Line No.:</label><br/><br/>
 <input type="text" class="large" name="landline" id="landline" maxlength="20"><br/><br/>
+
+<label>User Type:</label><br/><br/>
+<select name="usertype" id="usertype">
+	<option value="superadmin">superadmin</option>
+	<option value="departmentadmin">departmentadmin</option>
+	<option value="employee">employee</option>
+</select><br/><br/>
+
+<label>Deparment:</label><br/><br/>
+<select name="dept" id="dept">
+%for i in dept:
+	<option value="${i.id}">${i.department}</option>
+%endfor
+</select><br/><br/>
+
+<label>Username:<span style="color:red;">*</span></label><br/><br/>
+<input type="text" class="large" name="username" id="username" /><br/><br/>
+<label>Password:<span style="color:red;">*</span></label><br/><br/>
+<input type="password" class="large" name="password" id="password"/><br/><br/>
 <input type="button" value="Submit" id="save" onclick="addteam()">
 <input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="window.location.href='/team/summary'"><br/><br/>
 </form>

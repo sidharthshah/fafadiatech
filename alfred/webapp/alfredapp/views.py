@@ -111,20 +111,56 @@ def teamdashboard(request):
 def addteamform(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("createteam.html")
+    dept = Deparment.objects.all()
     user = []#Alfreduser.objects.all()
     status = TicketStatus.objects.all()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,dept=dept,status=status,User=user,userName='Smita'))
 
 @csrf_exempt
 def teamadd(request):
-    name = request.POST.get('name')
-    password=request.POST.get('password')
-    address = request.POST.get('address')
-    landline = request.POST.get('landline')
-    mobile = request.POST.get('mobile')
-    email = request.POST.get('email')
     try:
-        teamobj = Team(username=name,password=password,name=name,address=address,landlineno=landline,mobileno=mobile,email=email)
+        name = request.POST.get('name')
+    except:
+        name = None
+    try:
+        password=request.POST.get('password')
+    except:
+        password = None
+    try:
+        address = request.POST.get('address')
+    except:
+        address = None
+    try:
+        landline = request.POST.get('landline')
+    except:
+        landline = None
+    try:
+        mobile = request.POST.get('mobile')
+    except:
+        mobile = None
+    try:
+        email = request.POST.get('email')
+    except:
+        email = None
+    try:
+        username = request.POST.get('username')
+    except:
+        username = None
+    try:
+        password = request.POST.get('password')
+    except:
+        password =None
+    try:
+        usertype = request.POST.get('usertype')
+    except:
+        usertype = None
+    try:
+        dept = request.POST.get('dept')
+    except:
+        dept =None
+    deptobj = Deparment.objects.filter(id=dept)[0]
+    try:
+        teamobj = Team(username=name,password=password,name=name,address=address,landlineno=landline,mobileno=mobile,email=email,deparment=deptobj,usertype=usertype)
         teamobj.save()
         return HttpResponse(str(1))   
     except:
@@ -405,8 +441,6 @@ def editcustomer(request):
 
 @csrf_exempt
 def customeraddpost(request):
-    name="dfdfdfdf"
-    password = "aksakjs"
     try:
         customer_name = request.POST.get('customer_name')
     except:
@@ -432,14 +466,23 @@ def customeraddpost(request):
     except:
         landline = None
     try:
-        custobj = Customer(username=name,password=password,name=customer_name,company=company_name,address=location,mobile=mobile,landline=landline)
+        username = request.POST.get('username')
+    except:
+        username = None
+    try:
+        password = request.POST.get('password')
+    except:
+        password =None
+    try:
+        custobj = Customer(username=username,password=password,email=email,name=customer_name,company=company_name,address=location,mobile=mobile,landline=landline)
         custobj.save()
         return HttpResponse(str(1))   
     except:
         return HttpResponse(str(0))  
 
-
+@csrf_exempt
 def customeredit(request):
+    c = request.COOKIES.get('csrftoken','')
     custId = request.GET.get('custId')
     customer = Customer.objects.filter(id=custId)[0]
     c = request.COOKIES.get('csrftoken','')
@@ -481,7 +524,11 @@ def customermodify(request):
         landline = request.POST.get('landline')
     except:
         landline = None
-    obj = Customer.objects.filter(id=custId).update(name=customer_name,company=company_name,email=email,address=location,mobile=mobile,landline=landline)
+    try:
+        password = 'smita'
+    except:
+        password =None
+    obj = Customer.objects.filter(id=custId).update(name=customer_name,company=company_name,email=email,address=location,mobile=mobile,landline=landline,password=password)
     return HttpResponse(str(obj))
 
 @csrf_exempt
@@ -498,7 +545,7 @@ def customercreateticket():
     status = TicketStatus.objects.all()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
 
-def createticket(request):
+def createticketform(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("sadmin_create_ticket.html")
     customer = Customer.objects.all()
@@ -508,7 +555,7 @@ def createticket(request):
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,deparment=deparment,customer=customer,status=status,User=user,userName='Smita'))
 
 @csrf_exempt
-def createticketpost(request):
+def createticket(request):
     date = datetime.datetime.now()
     try:
         custId = request.POST.get('customer')
@@ -516,52 +563,34 @@ def createticketpost(request):
         custId = None
     print "custId==",custId
     try:
-        customer = request.POST.get('customer')
-    except:
-        customer = None
-    print "customer==",customer
-    try:
-        company_name = request.POST.get('company_name')
-    except:
-        company_name = None
-    print "company_name==",company_name
-    try:
-        email = request.POST.get('email')
-    except:
-        email = None
-    print "email==",email
-    try:
-        location = request.POST.get('location')
-    except:
-        location = None
-    print "location==",location
-    try:
-        mobile = request.POST.get('mobile')
-    except:
-        mobile = None
-    print "mobile==",mobile
-    try:
-        landline = request.POST.get('landline')
-    except:
-        landline = None
-    print "landline==",landline
-    try:
-        system_id =self.get_argument('system_id')
+        system_id =request.POST.get('system_id')
     except:
         system_id = None
     print "system_id==",system_id
     try:
-        problem = self.get_argument('problem')
+        problem = request.POST.get('problem')
     except:
         problem = None
     print "problem==",problem
     try:
-        issue_type=self.get_argument("issue_type")
+        dept=request.POST.get("issue_type")
     except:
-        issue_type = None
-    print "issue_type==",issue_type
+        dept = None
+    print dept
+    try:
+        attachment = request.POST.get("files")
+    except:
+        attachment = None
     ticketid ="PSSPL/"+strftime("%y/%m/%d/%H/%M/%S")
-    ticketobj = Ticket(ts=date,ticketid=ticketid,customer=customer,dept=issue_type,systemid=system_id,summary=problem)
+    
+    customerobj = Customer.objects.filter(id=custId)[0]
+    print "customerobj",customerobj
+    deptobj = Deparment.objects.filter(id=dept)[0]
+    print "deptobj",deptobj
+    
+    ticketobj = Ticket.objects.create(ts=date,ticketid=ticketid,customer=customerobj,dept=deptobj,systemid=system_id,summary=problem,attachment=attachment)
+
+    #customer=custId,dept=dept,systemid=systemid,
     ticketobj.save()
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("sadmin_create_ticket.html")

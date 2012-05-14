@@ -17,8 +17,8 @@
 	function editCustomer(id)
 	{
 	
-		var addForm = document.getElementById("teamsummery");
-		addForm.action="/customer/edit?teamId="+id;
+		var addForm = document.getElementById("customerdashboard");
+		addForm.action="/customer/edit?custId="+id;
 		addForm.method="POST";
 		addForm.submit();
 

@@ -113,7 +113,9 @@ function addCustomer(){
 	var location = $("#location").val();
 	var mobile = $("#mobile").val();
 	var landline = $("#landline").val();
-	$.post("/customer/add",{"customer_name":customer_name, "company_name":company_name, "email":email, "location":location, "mobile":mobile, "landline":landline},function (data){
+	var username = $("#username").val();
+	var password = $("#password").val();
+	$.post("/customer/add",{"customer_name":customer_name, "company_name":company_name, "email":email, "location":location, "mobile":mobile, "landline":landline,"username":username,"password":password},function (data){
 		alert("Customer is added.");
 		window.location.href="/customer/summary";
 	});
@@ -141,6 +143,10 @@ function addCustomer(){
 			<label>Location:<span style="color:red;">*</span></label><br/><br/>
 			<textarea name="location" id="location" onkeypress="return imposeMaxLength(this, 139);"></textarea><br/><br/>
 		</div>
+
+		
+
+
 		<div style="float:left;">
 			<label>Mobile No.:<span style="color:red;">*</span></label><br/><br/>
 			<input type="text" class="large" name="mobile" id="mobile" maxlength="15"><br/><br/>
@@ -150,6 +156,15 @@ function addCustomer(){
 				<input type="button" name="submit" value="Submit" onclick="addCustomer();">
 				<input type="button" name="Cancel" value="Cancel" onclick="window.location.href='/customer/summary'">
 			</div>
+		</div>
+		<div style="float:right;">
+			<label>Username:<span style="color:red;">*</span></label><br/><br/>
+			<input type="text" class="large" name="username" id="username" onkeypress="return imposeMaxLength(this, 139);" /><br/><br/>
+		</div>
+
+		<div style="float:right;">
+			<label>Password:<span style="color:red;">*</span></label><br/><br/>
+			<input type="password" class="large" name="password" id="password" onkeypress="return imposeMaxLength(this, 139);" /><br/><br/>
 		</div>
 	</form>
 </div>
