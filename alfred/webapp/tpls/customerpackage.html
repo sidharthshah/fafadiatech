@@ -24,8 +24,13 @@ function editCustpackage(id){
 	addForm.action="/customerpackage/edit?packageid="+id;
 	addForm.method="POST";
 	addForm.submit();
-	
+}
 
+function editIssue(id){
+	var addForm = document.getElementById("issuemaster");
+	addForm.action="/department/edit?deptid="+id;
+	addForm.method="POST";
+	addForm.submit();
 }
 
 function deletecustomerpackage(id){

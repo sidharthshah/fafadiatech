@@ -102,6 +102,7 @@ function modifypackage()
 {
 	var packagetype = $("#packagetype").val();
 	var packageid = $("#packageid").val();
+
 	$.post("/customerpackage/modify",{packagetype:packagetype,packageid:packageid},function(data){
 		if(data == "1"){
 			alert("Package Data successfully modified");
@@ -114,10 +115,12 @@ function modifypackage()
 }
 
 </script>
-<form name="editissuemaster" id="editissuemaster" method="post" action="" style="margin:0 auto; width:80%;">
+<form name="editissuemaster" id="editissuemaster" method="" action="" style="margin:0 auto; width:80%;">
+	<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 <input type="hidden" id="packageid" value="${custpkg.id}" readonly><br/><br/>
 <label>Customer Package:</label><br/><br/>
 <input type="text" class="large" id="packagetype" value="${custpkg.package_type}" maxlength="20"><br/><br/>
 <input type="button" value="Modify" onclick="javascript:modifypackage();">
 <input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="javascript:history.go(-1)"><br/><br/>
 </form>
+
