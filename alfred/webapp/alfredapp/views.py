@@ -54,7 +54,7 @@ def login(request):
         request.session['userid']=urllib.quote(str(userobj.id))
         request.session['last_login'] = datetime.datetime.now()
         request.session['myname'] = urllib.quote(userobj.username)
-        request.session['department'] = urllib.quote(str(userobj.deparment))
+        request.session['department'] = urllib.quote(str(userobj.department.department))
         request.session['type'] = urllib.quote(userobj.usertype)
         request.session.modified = True
         return HttpResponse(str(1))
