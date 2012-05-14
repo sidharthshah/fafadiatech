@@ -3,7 +3,6 @@ from django.db import models
 from django.contrib.auth.models import User, UserManager
 
 STATIC_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","static","attachments")
-print "STATIC_PATH",STATIC_PATH
 
 class Department(models.Model):
     department = models.CharField(max_length=30)
@@ -120,7 +119,7 @@ class Ticket(models.Model):
     status = models.ForeignKey(TicketStatus,blank=True,null=True)
     assignedto = models.ForeignKey(Team,blank=True,null=True)
     sla = models.ForeignKey(Sla,blank=True,null=True)
-    attachment= models.FileField(upload_to=STATIC_PATH,blank=True,null=True)
+    attachment = models.FileField(upload_to=STATIC_PATH,blank=True,null=True)
     package = models.ForeignKey(CustomerPackage,blank=True,null=True)
 
     def __unicode__(self):
