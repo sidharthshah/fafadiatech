@@ -103,6 +103,13 @@ def dashboard(request):
     status = TicketStatus.objects.all()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,team=team,userName='Smita'))
 
+def teamdashboard(request):
+    c = request.COOKIES.get('csrftoken','')
+    tpl = tpl_lookup.get_template("teamsummary.html")
+    team = Team.objects.all()
+    status = TicketStatus.objects.all()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,team=team,userName='Smita'))
+
 def addteamform(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("createteam.html")

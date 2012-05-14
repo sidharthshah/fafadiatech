@@ -75,8 +75,8 @@ class Team(User):
         return self.name
 
 class Customer(User):
-    company = models.CharField(max_length=50)
     name = models.CharField(max_length=100)
+    company = models.CharField(max_length=50)
     address = models.CharField(max_length=255)
     landline = models.CharField(max_length=15)
     mobile = models.CharField(max_length=11)
