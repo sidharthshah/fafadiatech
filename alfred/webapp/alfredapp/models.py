@@ -114,7 +114,7 @@ class Ticket(models.Model):
     ts= models.DateTimeField()
     ticketid = models.CharField(max_length=30)
     customer = models.ForeignKey(Customer)
-    dept = models.ForeignKey(Deparment)
+    dept = models.ForeignKey(Department)
     systemid = models.CharField(max_length=255)
     summary = models.CharField(max_length=255)
     status = models.ForeignKey(TicketStatus,blank=True,null=True)
