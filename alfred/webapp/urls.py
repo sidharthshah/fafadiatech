@@ -1,9 +1,9 @@
 from django.conf.urls.defaults import patterns, include, url
 from alfredapp.views import *
 from django.contrib import admin
-
-admin.autodiscover()
 import os
+admin.autodiscover()
+
 STATIC_ROOT = os.path.join(os.path.dirname(os.path.realpath(__file__)),"static")
 DOC_ROOT = os.path.join(STATIC_ROOT,"attachments")
 FILE_ROOT = os.path.join(STATIC_ROOT,"attachments")
@@ -53,11 +53,7 @@ urlpatterns = patterns('',
     url(r'^ticket/create','alfredapp.views.createticketform'),
     url(r'^ticket/add','alfredapp.views.createticket'),
     url(r'^customer/displaydata','alfredapp.views.dispcustomerdata'),
-    url(r'^report/allticket','alfredapp.views.ticketreports'),
-    url(r'^report/customer','alfredapp.views.ticketreportscustomer'),
-    url(r'^report/feedback','alfredapp.views.ticketreportsfeedback'),
     url(FILE_ROOT, 'django.views.static.serve',{'document_root': DOC_ROOT, 'show_indexes': True}),
-    url(STATIC_ROOT, 'django.views.static.serve',{'document_root': STATIC_ROOT, 'show_indexes': True}),
     url(r'^admin/', include(admin.site.urls)),
     
 )
