@@ -116,8 +116,13 @@ function addCustomer(){
 	var username = $("#username").val();
 	var password = $("#password").val();
 	$.post("/customer/add",{"customer_name":customer_name, "company_name":company_name, "email":email, "location":location, "mobile":mobile, "landline":landline,"username":username,"password":password},function (data){
+		if(data){
 		alert("Customer is added.");
 		window.location.href="/customer/summary";
+		}
+		else{
+			alert("username password already exists");
+		}
 	});
 	}
 }

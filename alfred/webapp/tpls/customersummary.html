@@ -60,6 +60,11 @@
 		<td>${i.landline}</td>
 		<td style="cursor:pointer;"><a href="#" id="${i.id}" onclick="javascript:editCustomer(id)"><img src="/static/img/edit.png" title="Edit"></a>&nbsp;&nbsp;
 		<a href="#" id="${i.id}" onclick="javascript:customerDelete(id)"><img src="/static/img/delete.png" title="Delete"></a></td>
+		%try:
+			<td>${i.username}</td>
+		%except:
+			<td>not	</td>
+		%endtry
 	</tr>
 	%endfor
 %else:

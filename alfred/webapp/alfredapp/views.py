@@ -150,7 +150,7 @@ def addteamform(request):
         return HttpResponseRedirect('/')
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("createteam.html")
-    dept = Deparment.objects.all()
+    dept = Department.objects.all()
     user = []#Alfreduser.objects.all()
     status = TicketStatus.objects.all()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,dept=dept,status=status,User=user,userName=s.get_decoded()['myname']))
@@ -201,11 +201,11 @@ def teamadd(request):
         dept = request.POST.get('dept')
     except:
         dept =None
-    deptobj = Deparment.objects.filter(id=dept)[0]
+    deptobj = Department.objects.filter(id=dept)[0]
     try:
-        teamobj = Team(username=name,password=password,name=name,address=address,landlineno=landline,mobileno=mobile,email=email,deparment=deptobj,usertype=usertype)
+        teamobj = Team(username=username,password=password,name=name,address=address,landlineno=landline,mobileno=mobile,email=email,department=deptobj,usertype=usertype)
         teamobj.save()
-        return HttpResponse(str(1))   
+        return HttpResponse(str(1)) 
     except:
         return HttpResponse(str(0))
 
@@ -217,34 +217,44 @@ def teameditform(request):
         return HttpResponseRedirect('/')
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("editteam.html")
-    teamid = request.POST.get('teamId')
+    teamid = request.GET.get('teamId')
     team = Team.objects.filter(id=teamid)
+    dept = Department.objects.all()
     status = TicketStatus.objects.all()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,team=team,status=status,User=user,userName=s.get_decoded()['myname']))
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,issue=dept,team=team[0],status=status,userName=s.get_decoded()['myname']))
 
+@csrf_exempt
 def modifyteam(request):
+    c = request.COOKIES.get('csrftoken','')
     try:
         s = Session.objects.get(pk=request.session.session_key)
     except:
         return HttpResponseRedirect('/')
-    teamid = request.POST.get('id')
-    name = request.POST.get('name')
-    address = request.POST.get('address')
-    landlineno = request.POST.get('landlineno')
-    mobileno = request.POST.get('mobileno')
+    teamid = request.POST.get('memberid')
+    name = request.POST.get('membername')
+    address = request.POST.get('teamaddress')
+    landlineno = request.POST.get('landline')
+    mobileno = request.POST.get('mobile')
     email = request.POST.get('email')
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    role  = request.POST.get('role')
+    dept = request.POST.get('dept')
+    deptobj = Department.objects.filter(id=dept)[0]
     try:
-        obj = Team.objects.filter(id=teamid).update(name=name,address=address,landlineno=landlineno,mobileno=mobileno,email=email)
+        obj = Team.objects.filter(id=teamid).update(name=name,address=address,landlineno=landlineno,mobileno=mobileno,email=email,department=deptobj,usertype=role)
         return HttpResponse(str(1))
     except:
         return HttpResponse(str(0))
 
+@csrf_exempt
 def deleteteam(request):
+    c = request.COOKIES.get('csrftoken','')
     try:
         s = Session.objects.get(pk=request.session.session_key)
     except:
         return HttpResponseRedirect('/')
-    teamid = request.POST.get('id')
+    teamid = request.POST.get('memberid')
     try:
         Team.objects.filter(id=teamid).delete()
         return HttpResponse(str(1))
@@ -487,7 +497,7 @@ def ticketstatusadd(request):
 
 @csrf_exempt
 def ticketstatusedit(request):
-     try:
+    try:
         s = Session.objects.get(pk=request.session.session_key)
     except:
         return HttpResponseRedirect('/')
@@ -634,9 +644,8 @@ def customeredit(request):
     customer = Customer.objects.filter(id=custId)[0]
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("editcustomer.html")
-    user = Alfreduser.objects.all()
     status = TicketStatus.objects.all()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,User=user,userName=s.get_decoded()['myname'])) 
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,userName=s.get_decoded()['myname'])) 
 
 @csrf_exempt
 def customermodify(request):
@@ -673,7 +682,11 @@ def customermodify(request):
     except:
         landline = None
     try:
-        password = 'smita'
+        username = request.POST.get('username')
+    except:
+        username = None
+    try:
+        password = request.POST.get('password')
     except:
         password =None
     obj = Customer.objects.filter(id=custId).update(name=customer_name,company=company_name,email=email,address=location,mobile=mobile,landline=landline,password=password)
@@ -709,7 +722,7 @@ def createticketform(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("sadmin_create_ticket.html")
     customer = Customer.objects.all()
-    deparment = Deparment.objects.all()
+    deparment = Department.objects.all()
     user = Alfreduser.objects.all()
     status = TicketStatus.objects.all()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,deparment=deparment,customer=customer,status=status,User=user,userName=s.get_decoded()['myname']))
@@ -743,13 +756,13 @@ def createticket(request):
         attachment = None
     ticketid ="PSSPL/"+strftime("%y/%m/%d/%H/%M/%S")    
     customerobj = Customer.objects.filter(id=custId)[0]
-    deptobj = Deparment.objects.filter(id=dept)[0] 
-    ticketobj = Ticket.objects.create(ts=date,ticketid=ticketid,customer=customerobj,dept=deptobj,systemid=system_id,summary=problem,filattachment=attachment)
+    deptobj = Department.objects.filter(id=dept)[0] 
+    ticketobj = Ticket.objects.create(ts=date,ticketid=ticketid,customer=customerobj,dept=deptobj,systemid=system_id,summary=problem,attachment=attachment)
     ticketobj.save()
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("sadmin_create_ticket.html")
     customer = Customer.objects.all()
-    deparment = Deparment.objects.all()
+    deparment = Department.objects.all()
     user = Alfreduser.objects.all()
     status = TicketStatus.objects.all()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,deparment=deparment,customer=customer,status=status,User=user,userName=s.get_decoded()['myname']))

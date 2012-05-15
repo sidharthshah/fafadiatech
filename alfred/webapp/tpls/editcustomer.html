@@ -127,7 +127,7 @@ function modifycustomer()
 	var username = $("#username").val();
 	var password = $("#password").val();
 	var role = $("#role").val();
-	$.post("/customer/edit",{customer_id:customer_id, customer_name:customer_name, company_name:company_name, location:location, landline:landline, mobile:mobile, email:email, username:username, password:password,role:role,dept:dept},function(data){
+	$.post("/customer/modify",{customer_id:customer_id, customer_name:customer_name, company_name:company_name, location:location, landline:landline, mobile:mobile, email:email, username:username, password:password,role:role},function(data){
 		alert("Customer Data successfully modified");
 		window.location.href="/customer/summary";
 	});
@@ -187,7 +187,7 @@ function updateemail(custid)
 <input type="text" class="large" name="username" id="username" value="${customer.username}" maxlength="20" readonly><br/><br/>
 
 <label>Password.:</label><br/><br/>
-<input type="password" class="large" name="password" id="landline" value="" maxlength="20"><br/><br/>
+<input type="password" class="large" name="password" id="password" value="" maxlength="20"><br/><br/>
 
 <input type="button" value="Modify" name="modifydata" id="modifydata" onclick="javascript:modifycustomer();">
 <input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="window.location.href='/customer/summary'">
