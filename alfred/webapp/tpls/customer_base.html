@@ -112,8 +112,8 @@
 					<a href="#" class="dropdown-toggle">Ticket Status</a> 
 					<ul class="dropdown-menu">
 						<form name="customerbase" id="customerbase" methid="post" style="float:none;">
-						%for j in statusList:
-							<li><a href="#" id="${j[0]}" name="${j[0]}" onclick="javascript:displayTicketStatuwise(id)">${j[1]}</a></li>
+						%for j in status:
+							<li><a href="#" id="${j.id}" name="${j.statustype}" onclick="javascript:displayTicketStatuwise(id)">${j.statustype}</a></li>
 						%endfor
 						</form>
 					</ul>

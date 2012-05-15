@@ -21,10 +21,14 @@ tpl_lookup = TemplateLookup(directories=[os.path.join(os.path.dirname(__file__),
 
 
 def getUserDetails(request,uname,passwd):
-    alluser = Alfreduser.objects.all()
-    for i in alluser:
+    allteamuser = Team.objects.all()
+    allcustomer =  Customer.objects.all()   
+    for i in allteamuser:
         if i.username == uname and i.password==passwd:
             return i
+    for j in allcustomer:
+        if j.username == uname and j.password==passwd:
+            return j
     return None
     
 
@@ -58,17 +62,34 @@ def login(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
     userobj = getUserDetails(request,username,password)
+    print userobj
     if userobj: 
         request.session.set_expiry(1800)
         request.session['userid']=urllib.quote(str(userobj.id))
         request.session['last_login'] = datetime.datetime.now()
         request.session['myname'] = urllib.quote(userobj.username)
-        request.session['department'] = urllib.quote(str(userobj.department.department))
-        request.session['type'] = urllib.quote(userobj.usertype)
+        try:
+            request.session['department'] = urllib.quote(str(userobj.department.department))
+        except:
+            request.session['department'] = ""
+        try:
+            request.session['type'] = urllib.quote(userobj.usertype)
+        except:
+            request.session['type'] = urllib.quote("customer")
         request.session.modified = True
-        return HttpResponse(str(1))
+        if request.session['type'] == "superadmin":
+            return HttpResponse(str(1))
+        elif request.session['type'] == "departmentadmin":
+            return HttpResponse(str(2))
+        elif request.session['type'] == "customer":
+            return HttpResponse(str(3))
+        elif request.session['type'] == "employee":
+            return HttpResponse(str(4))
+        else:
+            return HttpResponse(str(0))
     else:
-        return HttpResponse(str(0))
+        tpl = tpl_lookup.get_template("login.html")
+        return HttpResponse(tpl.render(uname="",password="",msg = "Incorrect username or password.",pmsg="",unamemsg=""))
 
 def userdashboard(request):
     try:
@@ -261,16 +282,32 @@ def deleteteam(request):
     except:
         return HttpResponse(str(0))
 
+def teamadmindashboard(request):
+    c = request.COOKIES.get('csrftoken','')
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    tkobj = Ticket.getTicketByAssignedUser(cookieuserId)
+    tkobjlist=[]
+    for j in tkobj:
+        tkobjlist.append(j)
+    tkobjlist.reverse()
+    tpl = tpl_lookup.get_template("employeesummary.html")
+    data = {"Ticket":tkobjlist, "userName":urllib.unquote(cookieuserName)}
+    self.write(tpl.render(**data))
+
+    
 def departmentdashboard(request):
     try:
         s = Session.objects.get(pk=request.session.session_key)
     except:
         return HttpResponseRedirect('/')
-        c = request.COOKIES.get('csrftoken','')
-        tpl = tpl_lookup.get_template("issuemaster.html")
-        status = TicketStatus.objects.all()
-        deparment = Deparment.objects.all() 
-        return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,deparment=deparment,userName=s.get_decoded()['myname']))
+    c = request.COOKIES.get('csrftoken','')
+    tpl = tpl_lookup.get_template("issuemaster.html")
+    status = TicketStatus.objects.all()
+    deparment = Department.objects.all() 
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,deparment=deparment,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
 def departmentadd(request):
@@ -564,6 +601,26 @@ def modifydepartment(request):
     dept = request.POST.get('dept')
     obj = Deparment.objects.filter(id=deptid).update(department=dept)
     return HttpResponse(str(obj))
+
+@csrf_exempt
+def customerdashboard(request):
+    s = None
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    ticketList = []
+    tpl = tpl_lookup.get_template("customer_ticket_summary.html")
+    username = s.get_decoded()['myname']
+    customer = Customer.objects.filter(username=username)[0]
+    allTicket = getAllTicketByCust(customer)    
+    allTicket.reverse()
+    print allTicket
+    status = TicketStatus.objects.all()  
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,ticket=allTicket,userName=s.get_decoded()['myname']))
+
+#        
 
 def customeradd(request):
     try:

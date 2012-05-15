@@ -124,3 +124,12 @@ class Ticket(models.Model):
 
     def __unicode__(self):
         return self.ticketid
+    
+def getAllTicketByCust(cust):
+    ticket = []
+    allTicket = Ticket.objects.all()
+    for i in allTicket:
+        if i.customer is cust:
+            ticket.append(i)
+    ticket.reverse()
+    return ticket
