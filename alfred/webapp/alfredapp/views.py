@@ -478,7 +478,7 @@ def ticketstatusadd(request):
 
 @csrf_exempt
 def ticketstatusedit(request):
-     try:
+    try:
         s = Session.objects.get(pk=request.session.session_key)
     except:
         return HttpResponseRedirect('/')
