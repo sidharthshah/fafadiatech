@@ -5,7 +5,7 @@
 		if (remove){
 			$.post("/team/delete",{"memberid":id},function(data){
 				if(data=="1"){
-					window.location.href="/team/summary";
+					window.location.href="/team/dashboard";
 				}
 				else{
 					alert("Invalid operation");
@@ -35,7 +35,6 @@
 <form name="teamsummery" id="teamsummery" action="" method="">
 <table>
 <tr>
-	<th>Team Id</th>
 	<th>Name</th>
 	
 	<th>Mobile</th>
@@ -48,15 +47,14 @@
 %if team != []:
 	%for i in team:
 	<tr>
-		<td>${i.id}</td>
 		<td>${i.name}</td>
 		<td>${i.mobileno}</td>
 		<td>${i.email}</td>
-		<td></td>
-		<td></td>
+		<td>${i.department.department}</td>
+		<td>${i.usertype}</td>
 		<td style="cursor:pointer;"><a href="#" id="${i.id}" onclick="javascript:editTeam(id)"><img src="/static/img/edit.png" title="Edit"></a>&nbsp;&nbsp;
 		<a href="#" id="${i.id}" onclick="javascript:deleteTeam(id)"><img src="/static/img/delete.png" title="Delete"></a></td>
-		<td></td>
+		<td>${i.username}</td>
 	</tr>
 	%endfor
 %else:

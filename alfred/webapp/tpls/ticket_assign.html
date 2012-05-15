@@ -122,14 +122,17 @@ else if(type=="next")
 %if ticket != []:
 	%for i in ticket:
 	<tr>
-		<td><a href="#" id="${i[0]}" onclick="javascript:displaytickethistory(id)">${i[0]}</a></td>
-		<td>${i[1]}</td>
-		<td>${i[2]}</td>
-		<td>${i[3]}</td>
-		<td>${i[4]}</td>
-		<td>${i[5]}</td>
-	
-		<td><a href="#" id="${i[0]}" onclick="javascript:editTicket(id)"><img src="/images/edit.png" title="Edit"></a></td>
+		<td><a href="#" id="${i.id}" onclick="javascript:displaytickethistory(id)">${i.ticketid}</a></td>
+		<td>${i.ticketid}</td>
+		<td>${i.customer.name}</td>
+		<td>${i.customer.customer}</td>
+		<td>${i.dept.department}</td>
+		%try:
+			<td>${i.assignedto.name}</td>
+		%except:
+			<td></td>
+		%endtry
+		<td><a href="#" id="${i.id}" onclick="javascript:editTicket(id)"><img src="/images/edit.png" title="Edit"></a></td>
 		<!--td><a href="#" class="lnchPopop" ><img src="/images/mail.jpeg"></a>&nbsp;|&nbsp;<a href="#" class="lnchPopop1"><img  src="/images/mobile.jpeg"></a>&nbsp;&nbsp;</td-->
 	</tr>
 	%endfor

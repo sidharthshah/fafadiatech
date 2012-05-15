@@ -113,18 +113,20 @@ function modifyteam(){
 	if (formValidator()){
 	var memberid = $("#memberid").val();
 	var membername = $("#membername").val();
+	var email = $("#email").val();
 	var teamaddress = $("#teamaddress").val();
 	var mobile = $("#mobile").val();
 	var landline = $("#landline").val();
-	var email = $("#email").val();
-	var username = $("#username").val();
-	var password = $("#password").val();
 	var role = $("#role").val();
 	var dept = $("#dept").val();
+	var username = $("#username").val();
+	var password = $("#password").val();
+
+
 	$.post("/team/modify",{memberid:memberid, membername:membername, teamaddress:teamaddress, mobile:mobile, landline:landline, email:email, username:username,password:password,role:role,dept:dept},function(data){
 		if(data == "1"){
 			alert("Team member Data successfully Modified");
-			window.location.href="/team/summary";
+			window.location.href="/team/dashboard";
 		}
 		else if(data == "2")
 			{
@@ -141,8 +143,8 @@ function modifyteam(){
 function setSelectedIndex(obj_id, v) {
     object = document.getElementById(obj_id)
     for ( var i = 0; i < object.options.length; i++ ) {
-		if ( object.options[i].value == v ) {
-            object.options[i].selected = true;
+	if ( object.options[i].value == v ) {
+           	 object.options[i].selected = true;
             return;
         }
     }
@@ -179,43 +181,40 @@ function updateteamemail(custid)
 }
 </script>
 <form name="team" id="team" method="post" style="margin:0 auto; width:80%;">
-<input type="hidden" class="small" name="memberid" id="memberid" value="${team[0]}" readonly><br/><br/>
+<input type="hidden" class="small" name="memberid" id="memberid" value="${team.id}" readonly><br/><br/>
 <h4 style="color: #0064CD; text-decoration:underline;">General Information</h4>
 <label>Employee Name</label><br/><br/>
-<input type="text" class="large" name="membername" id="membername"  value="${team[1]}" maxlength="20"><br/><br/>
+<input type="text" class="large" name="membername" id="membername"  value="${team.name}" maxlength="20"><br/><br/>
 <label>Email Id:</label><br/><br/>
-<input type="text" class="large" name="email" id="email" value="${team[5]}" readonly><img id="editnewemail" src="/images/edit.png"><br/><br/>
-<span id="emailnewtext"><input type="text" class="large" name="emailnew" id="emailnew"><input type="button" value="ok" id="${team[0]}" onclick="javascript:updateteamemail(id)"></span><br/><br/>
+<input type="text" class="large" name="email" id="email" value="${team.email}"><!--img id="editnewemail" src="/images/edit.png"><br/><br/>
+<span id="emailnewtext"><input type="text" class="large" name="emailnew" id="emailnew"><input type="button" value="ok" id="${team.id}" onclick="javascript:updateteamemail(id)"></span--><br/><br/>
 
 <label>Location:</label><br/><br/>
-<textarea name="teamaddress" id="teamaddress" value="${team[2]}" style="resize:vertical; max-height:60px; min-height:60px;" onkeypress="return imposeMaxLength(this, 139);">${team[2]}</textarea><br/><br/>
+<textarea name="teamaddress" id="teamaddress" value="${team.address}" style="resize:vertical; max-height:60px; min-height:60px;" onkeypress="return imposeMaxLength(this, 139);">${team.address}</textarea><br/><br/>
 <label>Mobile No.:</label><br/><br/>
-<input type="text" class="large" name="mobile" id="mobile"  value="${team[4]}" maxlength="15"><br/><br/>
+<input type="text" class="large" name="mobile" id="mobile"  value="${team.mobileno}" maxlength="15"><br/><br/>
 <label>Land Line No.:</label><br/><br/>
-<input type="text" class="large" name="landline" id="landline"  value="${team[3]}" maxlength="20"><br/><br/>
-%if userobj:
+<input type="text" class="large" name="landline" id="landline"  value="${team.landlineno}" maxlength="20"><br/><br/>
 	<label>User Role.:</label><br/><br/>
 	<select class="large" name="role" id="role">
-		<option value="admin">Admin</option>
-		<option value="team">Employee</option>
+		<option value="superadmin">superadmin</option>
+		<option value="departmentadmin">departmentadmin</option>
+		<option value="employee">employee</option>
 	</select><br/><br/>	
 	</select><br/><br/>
 	<label>Department.:</label><br/><br/>
 	<select class="large" name="dept" id="dept">
 	%for i in issue:
-		<option value="${i[0]}">${i[1]}</option>
+		<option value="${i.id}">${i.department}</option>
 	%endfor	
 	</select><br/><br/>
 	<label>User Name.:</label><br/><br/>
-	<input type="text" class="large" name="username" id="username"  value="${userobj[5]}" maxlength="15" readonly><br/><br/>
+	<input type="text" class="large" name="username" id="username"  value="${team.username}" maxlength="15" readonly><br/><br/>
 	<label>Password.:</label><br/><br/>
 	<input type="password" class="large" name="password" id="password"  value="" maxlength="20"><br/><br/>
-%endif
 <input type="button" value="Modify" onclick="javascript:modifyteam();">
 <input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="javascript:history.go(-1)"><br/><br/>
-%if userobj:
-	<script>setSelectedIndex("role", "${userobj[3]}")</script>
-	<script>setSelectedIndex("dept", ${userobj[4]})</script>
-%endif
+<script>setSelectedIndex("role", "${team.usertype}")</script>
+<script>setSelectedIndex("dept", "${team.id}")</script>
 </form>
 
