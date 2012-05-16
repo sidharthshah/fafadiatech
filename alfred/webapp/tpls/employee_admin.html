@@ -103,10 +103,10 @@
 				<li class="dropdown"> 
 					<a href="#" class="dropdown-toggle">Tickets</a> 
 					<ul class="dropdown-menu">
-						<li><a href="/ticket/create">Create Ticket</a></li>
+						<li><a href="/team/ticketcreateform">Create Ticket</a></li>
 						<form name="frmstatus" id="frmstatus" style="float:none;margin:0px;">
-						%for i in tkStatus:
-							<li><a href="#" id="${i[0]}" onclick="javascript:displayreportdata(id)">${i[1]}</a></li>
+						%for i in status:
+							<li><a href="#" id="${i.id}" onclick="javascript:displayreportdata(id)">${i.statustype}</a></li>
 						%endfor
 						</form>
 					</ul>

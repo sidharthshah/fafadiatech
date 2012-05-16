@@ -35,7 +35,7 @@
 	function displayTicketStatuwise(id)
 	{
 			var addForm = document.getElementById("customerbase");
-			addForm.action="/ticket/displayticketstatuswise?status="+id;
+			addForm.action="/customer/displayticketstatuswise?status="+id;
 			addForm.method="post";
 			addForm.submit();
 		
@@ -101,7 +101,7 @@
 		<div class="container"> 
 			<ul class="nav">
 				<li><a href="/customer/dashboard">Dashboard</a></li>
-				<li><a href="/ticket/create">Create Ticket</a></li>
+				<li><a href="/customer/ticketcreateform">Create Ticket</a></li>
 				<li class="dropdown"> 
 					<a href="#" class="dropdown-toggle">Ticket Status</a> 
 					<ul class="dropdown-menu">

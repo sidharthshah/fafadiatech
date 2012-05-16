@@ -133,3 +133,48 @@ def getAllTicketByCust(cust):
             ticket.append(i)
     ticket.reverse()
     return ticket
+
+def getTicketBystatusandcust(status,cust):
+    datalist = []
+    tkobj = Ticket.objects.all()
+    for i in tkobj:
+        try:
+            if i.status.id == status and i.customer.id==cust :
+                    datalist.append(i)
+        except:
+            pass
+    return datalist
+
+def getTicketByAssignedUser(user):
+    allteamdata = []
+    tkobj = Ticket.objects.all()
+    for i in tkobj:
+        try:
+            if i.assignedto is user:
+                allteamdata.append(i)
+        except:
+            pass
+    return allteamdata
+
+
+def getAllTicketByStatusAndDept(status,dept):
+    datalist = []
+    tkobj = Ticket.objects.all()
+    for i in tkobj:
+        try:
+            if i.status.id == status and i.department.id==dept :
+                    datalist.append(i)
+        except:
+            pass
+    return datalist
+
+def getAllTicketByDept(department):
+    datalist = []
+    tkobj = Ticket.objects.all()
+    for i in tkobj:
+        try:
+            if i.department.department == department:
+                datalist.append(i)
+        except:
+            pass
+    return datalist
