@@ -1,20 +1,12 @@
 <%inherit file="base_admin.html" />
+<script type="text/javascript" src="/static/js/messages.js"></script>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript">
-function addSla(){
+function addSla(form){
 	var sla_type = $("#sla_type").val();
 	$.post("/sla/add",{"sla_type":sla_type},function (data){
-	if(data == "1"){
-		alert("SLA is added.");
+		inlineMsg(form,'addsla',"Sla is add.");
 		window.location.href="/sla/dashboard";
-		}
-	else if(data == "0"){
-		alert("Please Fill all Fields.");
-	}
-	else{
-		alert("SLA is already Exist.");
-
-	}
 	});
 }
 
@@ -23,28 +15,27 @@ function slaedit(id){
 	addForm.action="/sla/edit?slaid="+id;
 	addForm.method="POST";
 	addForm.submit();
-
 }
 
 
 function deletesla(id){
-	//var issue_type = $("#issue_type").val();
 	var remove = confirm("Are you sure, you want to remove the Make Data?")
 	if (remove){
-	$.post("/sla/delete",{"slaid":id},function (data){
-		if(data=="1"){
-			window.location.href="/sla/dashboard";
+		$.post("/sla/delete",{"slaid":id},function (data){
+			if(data=="1"){
+				window.location.href="/sla/dashboard";
 			}
 		});
 	}
 }
+
 </script>
 
 <form name="Slatype" id="Slatype" method="post" action="" style="margin-left:20px;">
 	<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 	<label>SLA Type:</label><br/><br/>
 	<input type="text" class="large" name="sla_type" id="sla_type"><br/><br/>
-	<input type="button" name="addsla" id="addsla" value="Submit" onclick="javascript:addSla()"><br/><br/>
+	<input type="button" name="addsla" id="addsla" value="Submit" onclick="javascript:addSla(this.form)"><br/><br/>
 
 	<table>
 		<tr>

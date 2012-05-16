@@ -82,7 +82,6 @@ function inlineMsg(form,target,string,autohide) {
   var msgcontent;
   if(!document.getElementById('msg')) {
     msg = document.createElement('div');
-
     msg.id = 'msg';
     msgcontent = document.createElement('div');
     msgcontent.id = 'msgcontent';

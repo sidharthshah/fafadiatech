@@ -1,20 +1,12 @@
 <%inherit file="base_admin.html" />
+<script type="text/javascript" src="/static/js/messages.js"></script>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript">
-function addIssue(){
+function addIssue(form){
 	var dept_type = $("#dept_type").val();
-	$.post("/department/add",{"department":dept_type},function (data){
-		if(data == "1"){
-		alert("New Department Type is added.");
+	$.post("/department/add",{"department":dept_type},function(data){
+		inlineMsg(form,'addissue',"Department is add.");
 		window.location.href="/department/dashbard";
-		}
-	else if(data == "0"){
-		alert("Please Fill all Fields.");
-	}
-	else{
-		alert("Issue type is already Exist.");
-
-	}
 	});
 }
 
@@ -43,9 +35,9 @@ function deleteissue(id){
 </script>
 <form name="issuemaster" id="issuemaster" method="post" action="" style="margin-left:20px;">
 	<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
-	<label>Add Issue Type:</label><br/><br/>
+	<label>Add Department Type:</label><br/><br/>
 	<input type="text" class="large" name="dept_type" id="dept_type"><br/><br/>
-	<input type="button" name="addissue" id="addissue" value="Submit" onclick="javascript:addIssue()"><br/><br/>
+	<input type="button" name="addissue" id="addissue" value="Submit" onclick="javascript:addIssue(this.form)"><br/><br/>
 
 	<table>
 		<tr>
@@ -53,7 +45,7 @@ function deleteissue(id){
 		<th>Action</th>
 		
 		</tr>
-		%for i in deparment:
+		%for i in department:
 			<tr>
 			<td>${i}</td>
 			<td><a href="#" id="${i.id}" onclick="javascript:editIssue(id)">Edit</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="${i.id}" onclick="javascript:deleteissue(id);">Delete</a></td>

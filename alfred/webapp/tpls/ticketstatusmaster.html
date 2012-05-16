@@ -1,29 +1,21 @@
 <%inherit file="base_admin.html" />
+<script type="text/javascript" src="/static/js/messages.js"></script>
 <script type="text/javascript">
-function addTicket()
+function addTicket(form)
 {
 	var ticket_status = $("#ticket_status").val();
 	$.post("/ticketstatus/add",{"ticket_status": ticket_status},function(data){
-	if(data == "1"){
-		alert("New Ticket Status is added");
+		inlineMsg(form,'save',"New Ticket Status is added");
 		window.location.href="/ticketstatus/dashboard";
-		}
-	else if(data == "0"){
-		alert("Please Fill all Fields.");
-	}
-	else{
-		alert("Ticket Status is already Exist");
-
-	}
 	});
 }
-function editstatus(id){
-		var addForm = document.getElementById("ticketstatusmaster");
-		addForm.action="/ticketstatus/edit?statusId="+id;
-		addForm.method="POST";
-		addForm.submit();
-		}
 
+function editstatus(id){
+	var addForm = document.getElementById("ticketstatusmaster");
+	addForm.action="/ticketstatus/edit?statusId="+id;
+	addForm.method="POST";
+	addForm.submit();
+}
 
 function deletestatus(id){
 	var remove = confirm("Are you sure, you want to remove the Ticket Status Data?")
@@ -47,7 +39,7 @@ function deletestatus(id){
 <input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 	<label>Ticket Status:</label><br/><br/>
 	<input type="text" class="large" name="ticket_status" id="ticket_status"><br/><br/>
-	<input type="button" name="save" id="save" value="Submit" onclick="javascript:addTicket()"><br/><br/>
+	<input type="button" name="save" id="save" value="Submit" onclick="javascript:addTicket(this.form)"><br/><br/>
 
 	<table>
 	<tr>

@@ -1,14 +1,14 @@
 <%inherit file="base_admin.html" />
+<script type="text/javascript" src="/static/js/messages.js"></script>
 <script type='text/javascript'>
 
-
-function modifyStatus()
+function modifyStatus(form)
 {
 	var statusId = $("#statusId").val();
 	var status_type = $("#status_type").val();
 	$.post("/ticketstatus/modify",{statusId:statusId,statustype:status_type},function(data){
 		if(data == "1"){
-			alert("Ticket Status Data successfully Modified");
+			inlineMsg(form,'modify',"Ticket Status Data successfully Modified");
 			window.location.href="/ticketstatus/dashboard";
 		}
 		else{
@@ -23,5 +23,5 @@ function modifyStatus()
 <label>Issue Type</label><br/><br/>
 <input type="hidden" id="statusId" value="${statusobj.id}" readonly><br/><br/>
 <input type="text" class="large" id="status_type" value="${statusobj.statustype}" maxlength="20"><br/><br/>
-<input type="button" value="Modify" onclick="javascript:modifyStatus();"><br/><br/>
+<input type="button" value="Modify" id="modify" onclick="javascript:modifyStatus(this.form);"><br/><br/>
 </form>

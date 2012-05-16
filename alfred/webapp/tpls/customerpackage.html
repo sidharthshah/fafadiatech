@@ -1,34 +1,19 @@
 <%inherit file="base_admin.html" />
+<script type="text/javascript" src="/static/js/messages.js"></script>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript">
-function addCustPackage()
+function addCustPackage(form)
 {
 	var customer_package = $("#customer_package").val();
 	$.post("/customerpackage/add",{"customer_package":customer_package},function(data){
-	if(data == "1"){
-		alert("New Package is added.");
+		inlineMsg(form,'addcustpackage',"New Package is added.");
 		window.location.href="/customerpackage/dashboard";
-		}
-	else if(data == "0"){
-		alert("Please Fill all Fields.");
-	}
-	else{
-		alert("Package is already Exist.");
-
-	}
 	});
 }
 
 function editCustpackage(id){
 	var addForm = document.getElementById("customerpackage");
 	addForm.action="/customerpackage/edit?packageid="+id;
-	addForm.method="POST";
-	addForm.submit();
-}
-
-function editIssue(id){
-	var addForm = document.getElementById("issuemaster");
-	addForm.action="/department/edit?deptid="+id;
 	addForm.method="POST";
 	addForm.submit();
 }
@@ -50,7 +35,7 @@ function deletecustomerpackage(id){
 <input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 	<label style="width:auto;">Add Customer Package:</label><br/><br/>
 	<input type="text" class="large" name="customer_package" id="customer_package"><br/><br/>
-	<input type="button" name="addcustpackage" id="addcustpackage" value="Submit" onclick="javascript:addCustPackage()"><br/><br/>
+	<input type="button" name="addcustpackage" id="addcustpackage" value="Submit" onclick="javascript:addCustPackage(this.form)"><br/><br/>
 
 	<table>
 		<tr>
