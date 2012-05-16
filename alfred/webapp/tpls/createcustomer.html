@@ -23,7 +23,7 @@ function addCustomer(form){
 	$.post("/customer/add",{"customer_name":customer_name, "company_name":company_name, "email":email, "location":location, "mobile":mobile, "landline":landline,"username":username,"password":password},function (data){
 		inlineMsg(form,'submit','Customer is added');
 		window.location.href="/customer/summary";
-		}
+		
 	});
 	}
 }

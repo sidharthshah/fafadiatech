@@ -63,7 +63,7 @@ class TicketStatus(models.Model):
 class Team(User):
     USER_TYPE_CHOICES =  (('superadmin','superadmin'),('departmentadmin','departmentadmin'),('customer','customer'),('employee','employee'),)
     usertype = models.CharField(max_length=30,choices=USER_TYPE_CHOICES,default=None)
-    department = models.ForeignKey(Department,default=None)
+    department = models.ForeignKey(Department,default=None,blank=True,null=True)
     name = models.CharField(max_length=50)
     address = models.CharField(max_length=250)
     landlineno = models.CharField(max_length=15)
@@ -113,7 +113,7 @@ class Ticket(models.Model):
     ts= models.DateTimeField()
     ticketid = models.CharField(max_length=30)
     customer = models.ForeignKey(Customer)
-    dept = models.ForeignKey(Department)
+    dept = models.ForeignKey(Department,blank=True,null=True)
     systemid = models.CharField(max_length=255)
     summary = models.CharField(max_length=255)
     status = models.ForeignKey(TicketStatus,blank=True,null=True)

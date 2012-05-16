@@ -76,15 +76,16 @@ def login(request):
             request.session['type'] = urllib.quote(userobj.usertype)
         except:
             request.session['type'] = urllib.quote("customer")
+        print request.session['type']
         request.session.modified = True
         if request.session['type'] == "superadmin":
             return HttpResponse(str(1))
         elif request.session['type'] == "departmentadmin":
-            return HttpResponse(str(3))
-        elif request.session['type'] == "customer":
-            return HttpResponse(str(2))
-        elif request.session['type'] == "employee":
             return HttpResponse(str(4))
+        elif request.session['type'] == "customer":
+            return HttpResponse(str(3))
+        elif request.session['type'] == "employee":
+            return HttpResponse(str(2))
         else:
             return HttpResponse(str(0))
     else:
@@ -282,7 +283,7 @@ def deleteteam(request):
     except:
         return HttpResponse(str(0))
 
-def teamadmindashboard(request):
+def employeedashboard(request):
     c = request.COOKIES.get('csrftoken','')
     try:
         s = Session.objects.get(pk=request.session.session_key)
@@ -824,6 +825,7 @@ def createcustomerTicketform(request):
     username = s.get_decoded()['myname']
     customerobj = Customer.objects.filter(username = username)    
     tpl = tpl_lookup.get_template("ticket.html")
+    
     status = TicketStatus.objects.all()
     department = Department.objects.all()
     make = Make.objects.all()
@@ -914,6 +916,21 @@ def createteamTicket(request):
     ticketobj = Ticket.objects.create(ts=date,ticketid=ticketid,customer=customerobj,dept=deptobj,systemid=system_id,summary=problem,attachment=attachment)
     ticketobj.save()
     return HttpResponse(str(1))
+
+def createemployeeTicketform(request):
+    s = None
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    status = TicketStatus.objects.all()
+    department = Department.objects.all()
+    make = Make.objects.all()    
+    custdata = Customer.objects.all()
+    tpl = tpl_lookup.get_template("dept_create_ticket.html")
+    #data = {"customerdata":custobj,"status":TicketStatus.getAllTicketStatus(),"statusList":statusList,"issue":Issue.getAllIssueType(),"make":Make.getAllmakeType(),"userName":urllib.unquote(cookieuserName),"usertype":urllib.unquote(cookieuserType),"tkStatus":TicketStatus.getAllTicketStatus()}
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,customerdata=custdata,status=status,department=department,make=make,userName=s.get_decoded()['myname']))
 
 
 

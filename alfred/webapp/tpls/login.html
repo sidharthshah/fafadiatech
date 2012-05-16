@@ -28,17 +28,17 @@ function loginpage()
 	password = $("#password").val();
 	$.post("/login",{username:username,password:password},function(data){
 		if(data=="1"){
-		window.location.href="/admin";
+		window.location.href="/dashboard";
 		}
 		else if(data == "2"){
-		window.location.href="/team/admin";
+		window.location.href="/employee/dashboard";
 		}
 		else if(data == "3"){
 		window.location.href="/customer/dashboard";
 		
 		}
 		else if(data == "4"){
-		window.location.href="/admin";
+		window.location.href="/teamadmin/dashboard";
 		}
 		
 	});
