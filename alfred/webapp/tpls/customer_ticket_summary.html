@@ -4,7 +4,7 @@
 function displayTicketCustDetails(id)
 {
 	var addForm = document.getElementById("customer_ticket_summary");
-	addForm.action="/ticket/displyinfo?id="+id;
+	addForm.action="/customer/ticketdisplayinfo?id="+id;
 	addForm.method="POST";
 	addForm.submit();
 }
@@ -49,8 +49,19 @@ else if(type=="next")
 	<tr>
 		<td><a href="#" id="${i.id}" onclick="javascript:displaycusttickethistory(id)">${i.ticketid}</a></td>
 		<td>${i.dept.department}</td>
-		<td>${i.status.statustype}</td>
-		<td>${i.assignedto.name}</td>
+		%try:
+			<% status = i.status.statustype%>
+		%except:
+			<% status = "Not Assigned"%>
+		%endtry
+		<td>${status}</td>
+		%try:
+			<% assign = i.assignedto.name %>
+		%except:
+			<% assign = "Not Assigned"%>
+		%endtry
+		<td>${assign}</td>
+		
 		<td><a href="#" id="${i.id}" onclick="javascript:displayTicketCustDetails(id)">Details</a></td>	
 	</tr>
 	%endfor

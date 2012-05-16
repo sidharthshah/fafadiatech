@@ -3,7 +3,7 @@
 function addTicketDetails(id,type){
 	var addForm = document.getElementById("employee_tickets");
 	if(type=="dept"){
-		addForm.action="/team/getallticketbyassign?id="+id;
+		addForm.action="/employee/ticketdetails?id="+id;///team/getallticketbyassign
 		}
 	addForm.method="POST";
 	addForm.submit();
@@ -36,20 +36,9 @@ else if(type=="next")
 
 </script>
 <form name="employee_tickets" id="employee_tickets" method="post" action="">
+<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 <table>
-    <ul class="pager">
-	%if not first < 20:
-    <li>
-	  	<a href="#" onclick="javascript:pagination('previous',${first},${last})"> Previous</a>
-    </li>
-	%endif
-	<% dcount = count %>
-	%if	dcount > last:
-    	<li>
-    		<a href="#" onclick="javascript:pagination('next',${first},${last})">Next</a>
-    	</li>
-	%endif
-    </ul>
+    
 <tr>
 	<th>Ticket Id</th>
 	<th>About Ticket Id</th>
@@ -57,8 +46,8 @@ else if(type=="next")
 %if allTicket != []:
 	%for i in allTicket:
 	<tr>
-		<td><a href="#" id="${i[1]}" onclick="javascript:displaytickethistory(id)">${i[1]}</a></td>
-		<td><a href="#" id="${i[1]}" onclick="javascript:addTicketDetails(id,'dept')">Details</a></td>
+		<td><a href="#" id="${i.id}" onclick="javascript:displaytickethistory(id)">${i.ticketid}</a></td>
+		<td><a href="#" id="${i.id}" onclick="javascript:addTicketDetails(id,'dept')">Details</a></td>
 	</tr>
 	%endfor
 %else:

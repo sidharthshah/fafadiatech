@@ -23,26 +23,54 @@
 
 <form name="report" id="report" action="" method="post">
 
-<h3>Ticket Id: ${ticket[1]}</h3><br/>
+<h3>Ticket Id: ${ticket.ticketid}</h3><br/>
 <h4><u>General Information:</u></h4>
-Customer Name:<span style="padding-left:3.7%;">${ticket[2]}</span><br/><br/>
-Company Name:<span style="padding-left:3.8%;">${ticket[3]}</span><br/><br/>
-Email Id:<span style="padding-left:9.4%;">${ticket[7]}</span><br/><br/>
-Location:<span style="padding-left:9.1%;">${ticket[9]}</span><br/><br/>
-Land Line No.:<span style="padding-left:5.4%;">${ticket[4]}</span><br/><br/>
-Mobile No.:<span style="padding-left:7.5%;">${ticket[5]}</span><br/><br/><br/>
+Customer Name:<span style="padding-left:3.7%;">${ticket.customer.name}</span><br/><br/>
+Company Name:<span style="padding-left:3.8%;">${ticket.customer.company}</span><br/><br/>
+Email Id:<span style="padding-left:9.4%;">${ticket.customer.email}</span><br/><br/>
+Location:<span style="padding-left:9.1%;">${ticket.customer.address}</span><br/><br/>
+Land Line No.:<span style="padding-left:5.4%;">${ticket.customer.landline}</span><br/><br/>
+Mobile No.:<span style="padding-left:7.5%;">${ticket.customer.mobile}</span><br/><br/><br/>
 
 <h4><u>Product Information:</u></h4>
-<!--Make / Model:<span style="padding-left:5.6%;">${make}</span><br/><br/-->
-System Id:<span style="padding-left:7.8%;">${ticket[10]}</span><br/><br/>
-Problem Description:<span style="padding-left:1%;">${ticket[12]}</span><br/><br/><br/>
+%try:	
+	System Id:<span style="padding-left:7.8%;">${ticket.systemid}</span><br/><br/>
+%except:
+	System Id:<span style="padding-left:7.8%;">Not defined</span><br/><br/>
+%endtry
+%try:
+	Problem Description:<span style="padding-left:1%;">${ticket.summary}</span><br/><br/><br/>
+%except:
+	Problem Description:<span style="padding-left:1%;">Not defined</span><br/><br/><br/>
+%endtry
+
 
 <h4><u>Ticket Information:</u></h4><br/>
-Ticket Id:<span style="padding-left:9%;">${ticket[1]}</span><br/><br/>
-Department:<span style="padding-left:6.6%;">${dept}</span><br/><br/>
-Customer Package:<span style="padding-left:1.8%;">${customer_pkg}</span><br/><br/>
-Assign To:<span style="padding-left:8.2%;">${assign}</span><br/><br/>
-Sla Time:<span style="padding-left:9%;">${sla}</span><br/><br/>
-Status:<span style="padding-left:10.5%;">${status}</span><br/><br/>
+Ticket Id:<span style="padding-left:9%;">${ticket.ticketid}</span><br/><br/>
+%try:
+	Department:<span style="padding-left:6.6%;">${ticket.dept.department}</span><br/><br/>
+%except:
+	Department:<span style="padding-left:6.6%;">Not defined</span><br/><br/>
+%endtry
+%try:
+	Customer Package:<span style="padding-left:1.8%;">${customer_pkg}</span><br/><br/>
+%except:
+	Customer Package:<span style="padding-left:1.8%;">Not defined</span><br/><br/>
+%endtry
+%try:
+	Assign To:<span style="padding-left:8.2%;">${ticket.assign.name}</span><br/><br/>
+%except:
+	Assign To:<span style="padding-left:8.2%;">Not defined</span><br/><br/>
+%endtry
+%try:
+	Sla Time:<span style="padding-left:9%;">${ticket.sla.slatype}</span><br/><br/>
+%except:
+	Sla Time:<span style="padding-left:9%;">Not defined</span><br/><br/>
+%endtry
+%try:
+	Status:<span style="padding-left:10.5%;">${ticket.status.statustype}</span><br/><br/>
+%except:
+	Status:<span style="padding-left:10.5%;">Not defined</span><br/><br/>
+%endtry
 </form>
 <input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="window.location.href='/customer/dashboard'">
