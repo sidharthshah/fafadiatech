@@ -129,7 +129,7 @@ def getAllTicketByCust(cust):
     ticket = []
     allTicket = Ticket.objects.all()
     for i in allTicket:
-        if i.customer is cust:
+        if i.customer.id == cust.id:
             ticket.append(i)
     ticket.reverse()
     return ticket
@@ -173,7 +173,7 @@ def getAllTicketByDept(department):
     tkobj = Ticket.objects.all()
     for i in tkobj:
         try:
-            if i.department.department == department:
+            if i.dept.id == department:
                 datalist.append(i)
         except:
             pass

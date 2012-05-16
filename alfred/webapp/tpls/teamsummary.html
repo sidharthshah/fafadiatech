@@ -50,7 +50,12 @@
 		<td>${i.name}</td>
 		<td>${i.mobileno}</td>
 		<td>${i.email}</td>
-		<td>${i.department.department}</td>
+		%try:
+			<td>${i.department.department}</td>
+		%except:
+			<td>None</td>
+		%endtry
+	
 		<td>${i.usertype}</td>
 		<td style="cursor:pointer;"><a href="#" id="${i.id}" onclick="javascript:editTeam(id)"><img src="/static/img/edit.png" title="Edit"></a>&nbsp;&nbsp;
 		<a href="#" id="${i.id}" onclick="javascript:deleteTeam(id)"><img src="/static/img/delete.png" title="Delete"></a></td>

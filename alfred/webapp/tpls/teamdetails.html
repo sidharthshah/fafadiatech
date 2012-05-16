@@ -33,41 +33,37 @@ window.location.href="/team/admin"
 }
 </script>
 <form name="report" id="report" action="" method="post">
-<h3>Ticket Id: ${ticket[1]}</h3><br/>
+<h3>Ticket Id: ${ticket.ticketid}</h3><br/>
 
 <h4><u>General Information:</u></h4>
-Customer Name:<span style="padding-left:3.7%;">${ticket[2]}</span><br/><br/>
-Company Name:<span style="padding-left:3.8%;">${ticket[3]}</span><br/><br/>
-Email Id:<span style="padding-left:9.4%;">${ticket[7]}</span><br/><br/>
-Location:<span style="padding-left:9.1%;">${ticket[9]}</span><br/><br/>
-Land Line No.:<span style="padding-left:5.4%;">${ticket[4]}</span><br/><br/>
-Mobile No.:<span style="padding-left:7.5%;">${ticket[5]}</span><br/><br/><br/>
+Customer Name:<span style="padding-left:3.7%;">${ticket.customer.name}</span><br/><br/>
+Company Name:<span style="padding-left:3.8%;">${ticketcustomer.company}</span><br/><br/>
+Email Id:<span style="padding-left:9.4%;">${ticketcustomer.email}</span><br/><br/>
+Location:<span style="padding-left:9.1%;">${ticket.customer.address}</span><br/><br/>
+Land Line No.:<span style="padding-left:5.4%;">${ticket.customer.landline}</span><br/><br/>
+Mobile No.:<span style="padding-left:7.5%;">${ticket.customer.mobile}</span><br/><br/><br/>
 
 <h4><u>Product Information:</u></h4>
 <!--Make / Model:<span style="padding-left:5.6%;">${make}</span><br/><br/-->
-System Id:<span style="padding-left:7.8%;">${ticket[10]}</span><br/><br/>
-Problem Description:<span style="padding-left:1%;">${ticket[12]}</span><br/><br/><br/>
+System Id:<span style="padding-left:7.8%;">${ticket.systemid}</span><br/><br/>
+Problem Description:<span style="padding-left:1%;">${ticket.summary}</span><br/><br/><br/>
 
 <h4><u>Ticket Information:</u></h4><br/>
-Ticket Id:<span style="padding-left:9%;">${ticket[1]}</span><br/><br/>
-Department:<span style="padding-left:6.6%;">${dept}</span><br/><br/>
-Customer Package:<span style="padding-left:1.8%;">${customer_pkg}</span><br/><br/>
-Assign To:<span style="padding-left:8%;">${assign}</span><br/><br/>
-Sla Time:<span style="padding-left:8.5%;">${sla}</span><br/><br/>
+Ticket Id:<span style="padding-left:9%;">${ticket.ticketid}</span><br/><br/>
+Department:<span style="padding-left:6.6%;">${ticket.dept.department}</span><br/><br/>
+Customer Package:<span style="padding-left:1.8%;">${ticket.package.package_type}</span><br/><br/>
+Assign To:<span style="padding-left:8%;">${ticket.assignedto.name}</span><br/><br/>
+Sla Time:<span style="padding-left:8.5%;">${ticket.sla.slatype}</span><br/><br/>
 Status :<span style="padding-left:10%;">
 <select id="status">
 %if status == 0:
-	<option value="0">Not Assigned</option>
-	%for i in tkStatus:
-		<option value="${i[0]}">${i[1]}</option>
-	%endfor
-%else:
-	<option value="${status[0]}">${status[1]}</option>
-	%for i in tkStatus:
-		%if i[0] != status[0]:
-			<option value="${i[0]}">${i[1]}</option>
-		%endif
-	%endfor
+	%try:
+		<option value="${i.id}">${i.status.statustype}</option>
+	%except:
+		%for i in tkStatus:
+			<option value="${i.id}">${i.status.statustype}</option>
+		%endfor
+	%endtry
 %endif
 </select></span><br/><br/>
 <input type="button" value="Save" id="${ticket[1]}" onclick="javascript:assignStatus(id)">

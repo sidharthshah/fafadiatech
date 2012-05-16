@@ -639,6 +639,64 @@ def customerdisplayticketBystatus(request):
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketdata,status=status,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
+def customerdisplayTicket(request):
+    s = None
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    ticketId = request.GET.get("id")
+    tpl = tpl_lookup.get_template("reportdetails.html")
+    ticketobj = Ticket.objects.filter(id=ticketId)[0]
+    c = request.COOKIES.get('csrftoken','')
+    tkDict = {}
+#    try:
+#        tkDict[ticketId]=TicketActivity.getTicketActivityByTicketId(ticketId)
+#    except:
+#        tkDict[ticketId]=()
+    status = TicketStatus.objects.all()  
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketobj,statusList=status,status=status,userName=s.get_decoded()['myname']))
+            
+def employeeallticket(request):
+    s = None
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    username = s.get_decoded()['myname']
+    employee = Team.objects.filter(username=username)[0]
+    ticketlist = []
+    allTicket = getAllTicketByDept(employee.department.id)
+    allTicket.reverse()
+    status = TicketStatus.objects.all()
+    tpl = tpl_lookup.get_template("employee_alltickets.html")
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,allTicket=allTicket,status=status,tkStatus=status,userName=s.get_decoded()['myname']))
+
+@csrf_exempt
+def employeeticketdetails(request):
+    s = None
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    status = TicketStatus.objects.all()
+    c = request.COOKIES.get('csrftoken','')
+    username = s.get_decoded()['myname']
+    ticketId = request.GET.get("id")
+    ticketobj = Ticket.objects.filter(ticketid=ticketId)[0]
+    tpl = tpl_lookup.get_template("teamdetails.html")
+    tkDict = {}
+    try:
+        tkDict[ticketId]=TicketActivity.getTicketActivityByTicketId(ticketId)
+    except:
+        tkDict[ticketId]=()
+    #data = {"ticket":ticketobj,"make":make, "customer_pkg":customer_pkg, "sla":sla, "dept":dept, "assign":assign,"tkStatus":TicketStatus.getAllTicketStatus(),"status":tkstatus, "userName":urllib.unquote(cookieuserName),"history":tkDict}
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketobj,status=status,tkStatus=status,userName=s.get_decoded()['myname']))
+            
+            
+@csrf_exempt
 def teamdisplayticketBystatus(request):
     s = None
     try:
