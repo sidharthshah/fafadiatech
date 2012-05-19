@@ -57,11 +57,15 @@
 		<td>${i.company}</td>
 		<td>${i.email}</td>
 		<td>${i.mobile}</td>
-		<td>${i.landline}</td>
+		%if i.landline != "":
+			<td>${i.landline}</td>
+		%else:
+			<td>---</td>
+		%endif
 		<td style="cursor:pointer;"><a href="#" id="${i.id}" onclick="javascript:editCustomer(id)"><img src="/static/img/edit.png" title="Edit"></a>&nbsp;&nbsp;
 		<a href="#" id="${i.id}" onclick="javascript:customerDelete(id)"><img src="/static/img/delete.png" title="Delete"></a></td>
 		%try:
-			<td>${i.username}</td>
+			<td><center>${i.username}</center></td>
 		%except:
 			<td>not	</td>
 		%endtry

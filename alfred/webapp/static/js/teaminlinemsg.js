@@ -1,33 +1,23 @@
 // form validation function //
 function validate(form) {
-  var name = form.customer_name.value;
-  var company = form.company_name.value;
+  var name = form.name.value;
   var email = form.email.value;
-  var message = form.location.value;
+  var message = form.teamaddress.value;
   var mobile = form.mobile.value;
   var landline = form.landline.value;
   var username = form.username.value;
   var password = form.password.value;
   var conf_password = form.conf_password.value;
   var nameRegex = /^[a-zA-Z]+(([\'\,\.\- ][a-zA-Z ])?[a-zA-Z]*)*$/;
-  var companyRegex = /^[a-zA-Z]+(([\'\,\.\- ][a-zA-Z ])?[a-zA-Z]*)*$/;
   var emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
   var contactRegex = /^[0-9]+$/;
   var messageRegex = new RegExp(/<\/?\w+((\s+\w+(\s*=\s*(?:".*?"|'.*?'|[^'">\s]+))?)+\s*|\s*)\/?>/gim);
   if(name == "") {
-    inlineMsg(form,'customer_name','You must enter your name.',2);
+    inlineMsg(form,'name','You must enter your name.',2);
     return false;
   }
   if(!name.match(nameRegex)) {
-    inlineMsg(form,'customer_name','You have entered an invalid name.',2);
-    return false;
-  }
-  if(company == "") {
-    inlineMsg(form,'company_name','You must enter your company name.',2);
-    return false;
-  }
-  if(!company.match(companyRegex)) {
-    inlineMsg(form,'company_name','You have entered an invalid company name.',2);
+    inlineMsg(form,'name','You have entered an invalid name.',2);
     return false;
   }
   if(email == "") {
@@ -39,11 +29,11 @@ function validate(form) {
     return false;
   }
   if(message == "") {
-    inlineMsg(form,'location','You must enter a location.');
+    inlineMsg(form,'teamaddress','You must enter a location.');
     return false;
   }
   if(message.match(messageRegex)) {
-    inlineMsg(form,'location','You have entered an invalid location.');
+    inlineMsg(form,'teamaddress','You have entered an invalid location.');
     return false;
   }
   if(mobile == "") {
@@ -52,14 +42,6 @@ function validate(form) {
   }
   if(!mobile.match(contactRegex)) {
     inlineMsg(form,'mobile','<strong>Error</strong><br />You have entered an invalid mobile no.',2);
-    return false;
-  }
-  if(company == "") {
-    inlineMsg(form,'company_name','You must enter your company name.',2);
-    return false;
-  }
-  if(!company.match(companyRegex)) {
-    inlineMsg(form,'company_name','You have entered an invalid company name.',2);
     return false;
   }
   if(password != conf_password) {

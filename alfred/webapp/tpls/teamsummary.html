@@ -42,7 +42,7 @@
 	<th>Deparment</th>
 	<th>Role</th>
 	<th>Action</th>
-	<th> <center>Username<center></th>
+	<th>Username</th>
 </tr>
 %if team != []:
 	%for i in team:
@@ -51,11 +51,11 @@
 		<td>${i.mobileno}</td>
 		<td>${i.email}</td>
 		%try:
-			<td>${i.department.department}</td>
+			<% department=i.department.department %>
 		%except:
-			<td>None</td>
+			<% department="Superadmin" %>
 		%endtry
-	
+		<td>${department}</td>	
 		<td>${i.usertype}</td>
 		<td style="cursor:pointer;"><a href="#" id="${i.id}" onclick="javascript:editTeam(id)"><img src="/static/img/edit.png" title="Edit"></a>&nbsp;&nbsp;
 		<a href="#" id="${i.id}" onclick="javascript:deleteTeam(id)"><img src="/static/img/delete.png" title="Delete"></a></td>
