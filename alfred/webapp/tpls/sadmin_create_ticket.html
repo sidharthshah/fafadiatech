@@ -125,7 +125,7 @@ $.post("/customer/displaydata",{customerid:customerid},function(data)
 			<h4 style="color: #0064CD; text-decoration:underline;">Product Information</h4>
 			<label>Issue Type:<span style="color:red;">*</span></label><br/><br/>
 			<select name="issue_type" id="issue_type" style="width:220px;">
-			%for i in deparment:
+			%for i in department:
 				<option value="${i.id}">${i.department}</option>
 			%endfor
 			</select>
