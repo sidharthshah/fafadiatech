@@ -69,6 +69,8 @@ urlpatterns = patterns('',
     url(r'^departmentadmin/dashboard','alfredapp.views.teamadmindashboard'),
     url(r'^employee/allticket','alfredapp.views.employeeallticket'),
     url(r'^employee/ticketdetails','alfredapp.views.employeeticketdetails'),
+    url(r'^ticket/sadmin/status','alfredapp.views.sadminticketstatus'),
+    url(r'^ticket/assign/edit','alfredapp.views.editassignticket'),
     url(FILE_ROOT, 'django.views.static.serve',{'document_root': DOC_ROOT, 'show_indexes': True}),
     url(r'^admin/', include(admin.site.urls)),
     

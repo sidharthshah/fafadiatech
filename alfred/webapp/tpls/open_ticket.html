@@ -32,22 +32,10 @@ else if(type=="next")
 
 </script>
 <form name="openticket" class="ticketassign" id="openticket" method="" action="" style="margin:0 auto; width:99%;" onsubmit='formValidator()' >
+<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 <table>
 <input type="hidden" id="statusticket" name="statusticket" value="${statusticket}">
-    <ul class="pager">
-	%if not first < 20:
-    <li>
-	  	<a href="#" onclick="javascript:pagination('previous',${first},${last})"> Previous</a>
-    </li>
-	%endif
-	<% dcount = count %>
-	%if	dcount > last:
-    	<li>
-    		<a href="#" onclick="javascript:pagination('next',${first},${last})">Next</a>
-    	</li>
-	%endif
-    </ul>
-<tr>
+  <tr>
 	<th>Ticket Id</th>
 	<th>Company</th>
 	<th>Email</th>
@@ -59,21 +47,39 @@ else if(type=="next")
 %if ticket != []:
 	%for i in ticket:
 		<tr>
-			<td><a href="#" id="${i[0]}" onclick="javascript:displayticketallhistory(id)">${i[0]}</a></td>
-			<td>${i[1]}</td>
-			<td>${i[2]}</td>
-			<td>${i[3]}</td>
-			%if i[5] !=0:
-				<td>${i[5][1]}</td>
-			%else:
-				<td>Not Assigned</td>	
-			%endif
-			%if i[4] !=0:
-				<td>${i[4][1]}</td>
-			%else:
-				<td>Not assigned</td>
-			%endif
-			<td><a href="#" id="${i[0]}" onClick="displayTkDetails(id)">Details</a></td>
+			<td><a href="#" id="${i.ticketid}" onclick="javascript:displayticketallhistory(id)">${i.ticketid}</a></td>			
+			%try:
+				<% company = i.customer.company %>
+			%except:
+				<% company = "Not assigned" %>
+			%endtry
+			<td>${company}</td>
+					
+			
+			%try:
+				<% email = i.customer.email %>
+			%except:
+				<% email = "Not assigned" %>
+			%endtry
+			<td>${email}</td>
+			
+			
+			%try:
+				<% mobile = i.customer.mobile %>
+			%except:
+				<% mobile = "Not assigned" %>
+			%endtry
+			<td>${mobile}</td>
+
+			%try:
+				<% assign = i.assignedto.name %>
+			%except:
+				<% mobile = "Not assigned" %>
+			%endtry
+			<td>${assign}</td>
+
+			
+			<td><a href="#" id="${i.id}" onClick="displayTkDetails(id)">Details</a></td>
 		</tr>
 	%endfor
 %else:

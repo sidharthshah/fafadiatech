@@ -90,8 +90,10 @@ else if(type=="next")
 	addForm.method="POST";
 	addForm.submit();
 }
+
 </script>
 <form name="ticketassign" class="ticketassign" id="ticketassign" method="post" action="/ticket/assign" style="margin:0 auto; width:99%;" onsubmit='formValidator()' >
+	<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 <table>
 <ul class="pager">
 	%if not first < 20:
@@ -123,17 +125,25 @@ else if(type=="next")
 	%for i in ticket:
 	<tr>
 		<td><a href="#" id="${i.id}" onclick="javascript:displaytickethistory(id)">${i.ticketid}</a></td>
-		<td>${i.ticketid}</td>
 		<td>${i.customer.name}</td>
-		<td>${i.customer.customer}</td>
+		<td>${i.customer.company}</td>
 		<td>${i.dept.department}</td>
 		%try:
-			<td>${i.assignedto.name}</td>
+			<% assign = i.assignedto.name %>
 		%except:
-			<td></td>
+			<% assign = "Not assigned" %>
 		%endtry
-		<td><a href="#" id="${i.id}" onclick="javascript:editTicket(id)"><img src="/images/edit.png" title="Edit"></a></td>
-		<!--td><a href="#" class="lnchPopop" ><img src="/images/mail.jpeg"></a>&nbsp;|&nbsp;<a href="#" class="lnchPopop1"><img  src="/images/mobile.jpeg"></a>&nbsp;&nbsp;</td-->
+		<td>${assign}</td>
+		%try:
+			<% status = i.status.statustype %>
+		%except:
+			<% status = "Not assigned" %>
+		%endtry
+		<td>${status}</td>
+
+		<td style="cursor:pointer;"><a href="#" id="${i.id}" onclick="javascript:editTicket(id)"><img src="/static/img/edit.png" title="Edit"></a>&nbsp;&nbsp;
+		<a href="#" id="${i.id}" onclick="javascript:deleteTicket(id)"><img src="/static/img/delete.png" title="Delete"></a></td>
+
 	</tr>
 	%endfor
 %else:

@@ -9,6 +9,9 @@ class Department(models.Model):
 
     def __unicode__(self):
         return self.department
+    
+    def getalldept(self):
+        return Department.objects.all()
 
 class SettingsBackend(object):
     """
@@ -72,6 +75,9 @@ class Team(User):
 
     def __unicode__(self):
         return self.name
+    
+    def getallteam(self):
+        return Team.objects.all()
 
 class Customer(User):
     name = models.CharField(max_length=100)
@@ -87,9 +93,13 @@ class Customer(User):
 
 class CustomerPackage(models.Model):
     package_type = models.CharField(max_length=50)
+    
 
     def __unicode__(self):
         return self.package_type
+    
+    def getallcustomerpackage(self):
+        return CustomerPackage.objects.all()
 
 class Sla(models.Model):
     slatype = models.CharField(max_length=50)
@@ -108,6 +118,9 @@ class Make(models.Model):
 
     def __unicode__(self):
         return self.make
+    
+    def getallmake(self):
+        return Make.objects.all()
 
 class Ticket(models.Model):
     ts= models.DateTimeField()
@@ -125,56 +138,71 @@ class Ticket(models.Model):
     def __unicode__(self):
         return self.ticketid
     
-def getAllTicketByCust(cust):
-    ticket = []
-    allTicket = Ticket.objects.all()
-    for i in allTicket:
-        if i.customer.id == cust.id:
-            ticket.append(i)
-    ticket.reverse()
-    return ticket
-
-def getTicketBystatusandcust(status,cust):
-    datalist = []
-    tkobj = Ticket.objects.all()
-    for i in tkobj:
-        try:
-            if i.status.id == status and i.customer.id==cust :
+    def getallticket(self):
+        return Ticket.objects.all()
+    
+    def getTicketByTicketId(self,ticketid):
+        return Ticket.objects.filter(ticketid=ticketid)
+    
+    
+    def getdatewiseticket(self,date):
+        alldata = []
+        for i in Ticket.objects.all():
+            if i.ts.date() == date.date():
+                alldata.append(i)
+        return alldata
+            
+        
+    def getallticketbycust(self,cust):
+        ticket = []
+        allTicket = Ticket.objects.all()
+        for i in allTicket:
+            if i.customer.id == cust.id:
+                ticket.append(i)
+        ticket.reverse()
+        return ticket
+    
+    def getticketbystatusandcust(self,status,cust):
+        datalist = []
+        tkobj = Ticket.objects.all()
+        for i in tkobj:
+            try:
+                if i.status.id == status and i.customer.id==cust :
+                        datalist.append(i)
+            except:
+                pass
+        return datalist
+    
+    def getticketbyassigneduser(self,user):
+        allteamdata = []
+        tkobj = Ticket.objects.all()
+        for i in tkobj:
+            try:
+                if i.assignedto is user:
+                    allteamdata.append(i)
+            except:
+                pass
+        return allteamdata
+    
+    
+    def getallticketbystatusanddept(self,status,dept):
+        datalist = []
+        tkobj = Ticket.objects.all()
+        for i in tkobj:
+            try:
+                if i.status.id == status and i.department.id==dept :
+                        datalist.append(i)
+            except:
+                pass
+        return datalist
+    
+    def getallticketbydept(self,department):
+        datalist = []
+        tkobj = Ticket.objects.all()
+        for i in tkobj:
+            try:
+                if i.dept.id == department:
                     datalist.append(i)
-        except:
-            pass
-    return datalist
-
-def getTicketByAssignedUser(user):
-    allteamdata = []
-    tkobj = Ticket.objects.all()
-    for i in tkobj:
-        try:
-            if i.assignedto is user:
-                allteamdata.append(i)
-        except:
-            pass
-    return allteamdata
-
-
-def getAllTicketByStatusAndDept(status,dept):
-    datalist = []
-    tkobj = Ticket.objects.all()
-    for i in tkobj:
-        try:
-            if i.status.id == status and i.department.id==dept :
-                    datalist.append(i)
-        except:
-            pass
-    return datalist
-
-def getAllTicketByDept(department):
-    datalist = []
-    tkobj = Ticket.objects.all()
-    for i in tkobj:
-        try:
-            if i.dept.id == department:
-                datalist.append(i)
-        except:
-            pass
-    return datalist
+            except:
+                pass
+        return datalist

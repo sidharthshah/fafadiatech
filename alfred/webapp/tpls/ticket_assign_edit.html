@@ -100,6 +100,7 @@ function assignIssueType(id,obj)
 }
 </script>
 <form name="assignedit" id="assignedit" action="" method="post">
+<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 <h3>Ticket Id: <span name="ticketId" id="ticketId" value="${ticket[1]}">${ticket[1]}</h3><br/>
 <h4><u>General Information:</u></h4>
 Customer Name:<span style="padding-left:3.6%;">${ticket[2]}</span><br/><br/>
