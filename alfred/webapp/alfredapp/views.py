@@ -1008,7 +1008,9 @@ def createticketform(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("sadmin_create_ticket.html")
     customer = Customer.objects.all()
+    print "customer==",customer
     department = Department.objects.all()
+    print "department-",department
     user = Alfreduser.objects.all()
     status = TicketStatus.objects.all()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,department=department,customer=customer,status=status,User=user,userName=s.get_decoded()['myname']))
@@ -1097,7 +1099,7 @@ def ticketreportsfeedback(request):
     except:
         return HttpResponseRedirect('/')
     
-def ticketAssign(request):
+def ticketassign(request):
     try:
         s = Session.objects.get(pk=request.session.session_key)
     except:
@@ -1108,7 +1110,6 @@ def ticketAssign(request):
     for i in Ticket.objects.all():
         ticket.append(i)
     ticket.reverse()
-    status = TicketStatus.objects.all()
     status = TicketStatus.objects.all()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
 

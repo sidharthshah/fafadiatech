@@ -123,16 +123,22 @@ else if(type=="next")
 	%for i in ticket:
 	<tr>
 		<td><a href="#" id="${i.id}" onclick="javascript:displaytickethistory(id)">${i.ticketid}</a></td>
-		<td>${i.ticketid}</td>
 		<td>${i.customer.name}</td>
-		<td>${i.customer.customer}</td>
+		<td>${i.customer.company}</td>
 		<td>${i.dept.department}</td>
 		%try:
-			<td>${i.assignedto.name}</td>
+			<% assignedto=i.assignedto.name %>
 		%except:
-			<td></td>
+			<% assignedto="Not Assign" %>
 		%endtry
-		<td><a href="#" id="${i.id}" onclick="javascript:editTicket(id)"><img src="/images/edit.png" title="Edit"></a></td>
+		<td>${assignedto}</td>
+		%try:
+			<% assignedto=i.assignedto.name %>
+		%except:
+			<% assignedto="Not Assign" %>
+		%endtry
+		<td>${assignedto}</td>
+		<td><a href="#" id="${i.id}" onclick="javascript:editTicket(id)"><img src="/static/img/edit.png" title="Edit"></a></td>
 		<!--td><a href="#" class="lnchPopop" ><img src="/images/mail.jpeg"></a>&nbsp;|&nbsp;<a href="#" class="lnchPopop1"><img  src="/images/mobile.jpeg"></a>&nbsp;&nbsp;</td-->
 	</tr>
 	%endfor
