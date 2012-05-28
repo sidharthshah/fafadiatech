@@ -809,20 +809,10 @@ def customeradd(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("createcustomer.html")
     user = Alfreduser.objects.all()
+    custpackage = CustomerPackage()
     status = TicketStatus.objects.all()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName=s.get_decoded()['myname']))
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,allCustPackage=custpackage.getallcustomerpackage(),status=status,User=user,userName=s.get_decoded()['myname']))
 
-#def editcustomer(request):
-#    try:
-#        s = Session.objects.get(pk=request.session.session_key)
-#    except:
-#        return HttpResponseRedirect('/')
-#    c = request.COOKIES.get('csrftoken','')
-#    custid = request.GET.get('teamId')
-#    cust = CustomerPackage.objects.filter(id=slaid)
-#    tpl = tpl_lookup.get_template("editcustomer.html")
-#    status = TicketStatus.objects.all()
-#    return HttpResponse(tpl.render(csrf_token=c,on_home=True,team=team,status=status,User=user,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
 def customeraddpost(request):
@@ -863,7 +853,13 @@ def customeraddpost(request):
     except:
         password =None
     try:
-        custobj = Customer(username=username,password=password,email=email,name=customer_name,company=company_name,address=location,mobile=mobile,landline=landline)
+        custpackage = request.POST.get('custpackage')
+    except:
+        custpackage = None
+    obj = CustomerPackage()
+    custpkgobj = obj.getcustomerpackagebyid(custpackage) 
+    try:
+        custobj = Customer(username=username,password=password,email=email,name=customer_name,company=company_name,address=location,mobile=mobile,landline=landline,package=custpkgobj)
         custobj.save()
         return HttpResponse(str(1))
     except:
@@ -1156,7 +1152,7 @@ def ticketreportsfeedback(request):
     except:
         return HttpResponseRedirect('/')
     
-def ticketAssign(request):
+def ticketassign(request):
     try:
         s = Session.objects.get(pk=request.session.session_key)
     except:
@@ -1192,26 +1188,35 @@ def sadminticketstatus(request):
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,statusticket=statusticket,status=status,userName=s.get_decoded()['myname'],ticket=ticket))
 
 @csrf_exempt
-def editassignticket(request):
+def ticketdisplayinfo(request):
     try:
         s = Session.objects.get(pk=request.session.session_key)
     except:
         return HttpResponseRedirect('/')
     c = request.COOKIES.get('csrftoken','')
     status = TicketStatus.objects.all()
-    ticketId = request.POST.get('tkId')
-    print "ticketId",ticketId
-#    dept = Department()
-#    teamobj = Team()
-#    slaobj= Sla()
-#    custpackage = CustomerPackage()
-#    makeobj = Make()
-#    tkobj = Ticket()
-#    ticketobject = tkobj.getTicketByTicketId(ticketId)[0]
-#    tpl = tpl_lookup.get_template("ticket_assign_edit.html")
-#    print "okkkkkkkkkkkkk"
-#    return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketobject,status=status,allDept=dept.getalldept(),allMake=makeobj.getallmake(),allCustPackage=custpackage.getallcustomerpackage(),allAssign=teamobj.getallteam(),allsla=slaobj.getallsla(),userName=urllib.unquote(cookieuserName)))
-#    
-    
-    
-    
+    ticketId = request.GET.get('tkId')
+    dept = Department()
+    teamobj = Team()
+    slaobj= Sla()
+    makeobj = Make()
+    tkobj = Ticket()
+    ticketobject = tkobj.getTicketByTicketId(ticketId)[0]
+    tpl = tpl_lookup.get_template("ticket_assign_edit.html")
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketobject,status=status,allDept=dept.getalldept(),allMake=makeobj.getallmake(),allAssign=teamobj.getallteam(),allsla=slaobj.getallsla(),userName=s.get_decoded()['myname']))
+
+
+def deleteticket(request):  
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    status = TicketStatus.objects.all()
+    ticketId = request.GET.get('tkId')
+    ticketobj = Ticket()
+    ticketobj.deleteticketbyticketid(ticket)
+
+
+def assignissuetype(request):
+    pass

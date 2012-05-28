@@ -101,100 +101,74 @@ function assignIssueType(id,obj)
 </script>
 <form name="assignedit" id="assignedit" action="" method="post">
 <input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
-<h3>Ticket Id: <span name="ticketId" id="ticketId" value="${ticket[1]}">${ticket[1]}</h3><br/>
+<h3>Ticket Id: <span name="ticketId" id="ticketId" value="${ticket.ticketid}">${ticket.ticketid}</h3><br/>
 <h4><u>General Information:</u></h4>
-Customer Name:<span style="padding-left:3.6%;">${ticket[2]}</span><br/><br/>
-Company Name:<span style="padding-left:3.6%;">${ticket[3]}</span><br/><br/>
-Email Id:<span style="padding-left:9.2%;">${ticket[7]}</span><br/><br/>
-Location:<span style="padding-left:8.9%;">${ticket[9]}</span><br/><br/>
-Land Line No.:<span style="padding-left:5.1%;">${ticket[4]}</span><br/><br/>
-Mobile No.:<span style="padding-left:7.3%;">${ticket[5]}</span><br/><br/><br/>
+Customer Name:<span style="padding-left:3.6%;">${ticket.customer.name}</span><br/><br/>
+Company Name:<span style="padding-left:3.6%;">${ticket.customer.company}</span><br/><br/>
+Email Id:<span style="padding-left:9.2%;">${ticket.customer.email}</span><br/><br/>
+Location:<span style="padding-left:8.9%;">${ticket.customer.address}</span><br/><br/>
+Land Line No.:<span style="padding-left:5.1%;">${ticket.customer.landline}</span><br/><br/>
+Mobile No.:<span style="padding-left:7.3%;">${ticket.customer.mobile}</span><br/><br/><br/>
 <h4><u>Product Information:</u></h4>
-<!--Make / Model:<span style="padding-left:5.3%;">
-	<select id="make" name="make">
-	%if make!=None:
-		<option value="${makeid}">${make}</option>
-		%for  m in allMake:
-			%if m[0] != makeid:
-				<option value="${m[0]}">${m[1]}</option>
-			%endif
-		%endfor
-	%else:
-		<option value="not assigned">not assigned</option>
-		%for  m in allMake:
-			<option value="${m[0]}">${m[1]}</option>
-		%endfor
-	%endif
-	</select></span><br/><br/-->
-System Id:<span style="padding-left:8%;"><input type="text" name="system_id" id="system_id" value="${ticket[10]}" maxlength="150"></span><br/><br/>
-Problem Description:<span style="padding-left:1%;"><textarea name="problem" id="problem" value="${ticket[14]}" style="resize:vertical; max-height:60px; min-height:60px;" onkeypress="return imposeMaxLength(this, 139);">${ticket[12]}</textarea></span><br/><br/><br/>
+System Id:<span style="padding-left:8%;"><input type="text" name="system_id" id="system_id" value="${ticket.systemid}" maxlength="150"></span><br/><br/>
+Problem Description:<span style="padding-left:1%;"><textarea name="problem" id="problem" value="${ticket.summary}" style="resize:vertical; max-height:60px; min-height:60px;" onkeypress="return imposeMaxLength(this, 139);">${ticket.summary}</textarea></span><br/><br/><br/>
 <h4><u>Add Information:</u></h4><br/>
 Issue Type
-<span style="padding-left:7.4%;"><select style="width:auto;" id="${ticket[1]}" onchange="javascript:assignIssueType(id,this)" >
-	%if dept != None:
-		<option value="${deptid}">${dept}</option>
+<span style="padding-left:7.4%;"><select style="width:auto;" id="${ticket.ticketid}" onchange="javascript:assignIssueType(id,this)" >
+        %try:
+		<option value="${ticket.dept.id}">${ticket.dept.department}</option>
 		%for d in allDept:
-			%if deptid != d[0]:
-				<option value="${d[0]}">${d[1]}</option>
+			%if d.id != ticket.dept.id:
+				<option value="${d.id}">${d.department}</option>
 			%endif
 		%endfor
-	%else:
-		<option value="not assigned">not assigned</option>
+		
+	%except:
+		<option value="None">Not assigned</option>
 		%for d in allDept:
-			<option value="${d[0]}">${d[1]}</option>
-		%endfor		
-	%endif
+				<option value="${d.id}">${d.department}</option>
+		%endfor
+	%endtry
 	</select></span><br/><br/>
 
 
-Customer Package:
-	<span style="padding-left:1.4%;"><select style="width:auto;" id="${ticket[1]}" onchange="javascript:assignCustPackage(id,this)" >
-	%if custpkg != None:
-		<option value="${custpkgid}">${custpkg}</option>
-		%for c in allCustPackage:
-			%if custpkgid != c[0]:
-				<option value="${c[0]}">${c[1]}</option>
+	Assigned To:
+	<span style="padding-left:6%;"><select style="width:auto;" id="${ticket.ticketid}" onchange="javascript:assignmemeber(id,this)">
+	
+	%try:
+		<option value="${ticket.assignedto.id}">${ticket.assignedto.name}</option>
+		%for emp in allAssign:
+			%if emp.id != ticket.assignedto.id:
+				<option value="${emp.id}">${emp.name}</option>
 			%endif
 		%endfor
-	%else:
-		<option value="not assigned">not assigned</option>
-		%for c in allCustPackage:
-			<option value="${c[0]}">${c[1]}</option>
-		%endfor		
-	%endif
-	</select></span><br/><br/>
-Assigned To:
-	<span style="padding-left:6%;"><select style="width:auto;" id="${ticket[1]}" onchange="javascript:assignmemeber(id,this)">
-	%if assign != None:
-		<option value="${assignid}">${assign}</option>
-		%for a in allAssign:
-			%if assignid != a[0]:
-				<option value="${a[0]}">${a[1]}</option>
-			%endif
+		
+	%except:
+		<option value="None">Not assigned</option>
+		%for emp in allAssign:
+			<option value="${emp.id}">${emp.name}</option>
 		%endfor
-	%else:		
-		<option value="not assigned">not assigned</option>
-		%for a in allAssign:
-			<option value="${a[0]}">${a[1]}</option>
-		%endfor
-	%endif
+		
+	%endtry
 	</select></span><br/><br/>
 Sla Time:
-	<span style="padding-left:8.4%;"><select style="width:auto;" name="sla_time" id="${ticket[1]}"  onchange="javascript:assignsla(id,this)">
-	%if sla != None:
-		<option value="${slaid}">${sla}</option>
-		%for s in allsla:
-			%if slaid != s[0]:
-				<option value="${s[0]}">${s[1]}</option>
+	<span style="padding-left:8.4%;"><select style="width:auto;" name="sla_time" id="${ticket.ticketid}"  onchange="javascript:assignsla(id,this)">
+	%try:
+		<option value="${ticket.sla.id}">${ticket.sla.slatype}</option>
+		%for sla in allsla:
+			%if sla.id != ticket.sla.id:
+				<option value="${sla.id}">${sla.slatype}</option>
 			%endif
 		%endfor
-	%else:		
-		<option value="not assigned">not assigned</option>
-		%for s in allsla:
-			<option value="${s[0]}">${s[1]}</option>
+		
+	%except:
+		<option value="None">Not assigned</option>
+		%for sla in allsla:
+			<option value="${sla.id}">${sla.slatype}</option>
 		%endfor
-	%endif
+		
+	%endtry
 	</select></span><br/><br/>
-	<input type="button" name="modifyassign" id="${ticket[1]}" Value="submit" onclick="javascript:modifyassignvalue(id);">
+	<input type="button" name="modifyassign" id="${ticket.ticketid}" Value="submit" onclick="javascript:modifyassignvalue(id);">
 	<input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="window.location.href='/ticket/assign'">
 </form>

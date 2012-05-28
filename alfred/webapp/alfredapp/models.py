@@ -79,18 +79,6 @@ class Team(User):
     def getallteam(self):
         return Team.objects.all()
 
-class Customer(User):
-    name = models.CharField(max_length=100)
-    company = models.CharField(max_length=50)
-    address = models.CharField(max_length=255)
-    landline = models.CharField(max_length=15)
-    mobile = models.CharField(max_length=11)
-    alternatemobile = models.CharField(max_length=11)
-    alternateemail = models.EmailField()
-
-    def __unicode__(self):
-        return self.name
-
 class CustomerPackage(models.Model):
     package_type = models.CharField(max_length=50)
     
@@ -100,12 +88,36 @@ class CustomerPackage(models.Model):
     
     def getallcustomerpackage(self):
         return CustomerPackage.objects.all()
+    
+    def getcustomerpackagebyid(self,id):
+        try:
+            return CustomerPackage.objects.filter(id=id)[0]
+        except:
+            return None
+        
+class Customer(User):
+    name = models.CharField(max_length=100)
+    company = models.CharField(max_length=50)
+    address = models.CharField(max_length=255)
+    landline = models.CharField(max_length=15)
+    mobile = models.CharField(max_length=11)
+    alternatemobile = models.CharField(max_length=11)
+    alternateemail = models.EmailField()
+    package = models.ForeignKey(CustomerPackage,blank=True,null=True)
+
+    def __unicode__(self):
+        return self.name
+
+
 
 class Sla(models.Model):
     slatype = models.CharField(max_length=50)
 
     def __unicode__(self):
         return self.slatype
+    
+    def getallsla(self):
+        return Sla.objects.all()
 
 class Dsk(models.Model):
     dsktype = models.CharField(max_length=50)
@@ -133,7 +145,7 @@ class Ticket(models.Model):
     assignedto = models.ForeignKey(Team,blank=True,null=True)
     sla = models.ForeignKey(Sla,blank=True,null=True)
     attachment = models.FileField(upload_to=STATIC_PATH,blank=True,null=True)
-    package = models.ForeignKey(CustomerPackage,blank=True,null=True)
+   # package = models.ForeignKey(CustomerPackage,blank=True,null=True)
 
     def __unicode__(self):
         return self.ticketid
@@ -142,7 +154,7 @@ class Ticket(models.Model):
         return Ticket.objects.all()
     
     def getTicketByTicketId(self,ticketid):
-        return Ticket.objects.filter(ticketid=ticketid)
+        return Ticket.objects.filter(id=ticketid)
     
     
     def getdatewiseticket(self,date):
@@ -206,3 +218,6 @@ class Ticket(models.Model):
             except:
                 pass
         return datalist
+    
+    def deleteTicketyTicketId(self,ticketid):
+        pass

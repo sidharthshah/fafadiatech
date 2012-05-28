@@ -63,11 +63,24 @@ alert("Status Assignd");
 }
 function editTicket(id)
 {
+alert("okkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+alert(id);
 var addForm = document.getElementById("ticketassign");
-addForm.action="/ticket/assign/edit?tkId="+id;
+addForm.action="/ticket/displayedit?tkId="+id;
 addForm.method="POST";
 addForm.submit();
 }
+
+
+function deleteTicket(id)
+{
+var addForm = document.getElementById("ticketassign");
+addForm.action="/ticket/delete?tkId="+id;
+addForm.method="POST";
+addForm.submit();
+}
+
+
 function displaytickethistory(id)
 {
 var addForm = document.getElementById("ticketassign");
@@ -92,7 +105,7 @@ else if(type=="next")
 }
 
 </script>
-<form name="ticketassign" class="ticketassign" id="ticketassign" method="post" action="/ticket/assign" style="margin:0 auto; width:99%;" onsubmit='formValidator()' >
+<form name="ticketassign" class="ticketassign" id="ticketassign" style="margin:0 auto; width:99%;" onsubmit='formValidator()' >
 	<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 <table>
 <ul class="pager">
@@ -143,6 +156,7 @@ else if(type=="next")
 
 		<td style="cursor:pointer;"><a href="#" id="${i.id}" onclick="javascript:editTicket(id)"><img src="/static/img/edit.png" title="Edit"></a>&nbsp;&nbsp;
 		<a href="#" id="${i.id}" onclick="javascript:deleteTicket(id)"><img src="/static/img/delete.png" title="Delete"></a></td>
+
 
 	</tr>
 	%endfor
