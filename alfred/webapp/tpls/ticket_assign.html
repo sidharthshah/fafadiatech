@@ -1,26 +1,5 @@
 <%inherit file="base_admin.html" />
-<!-- popup box jquery -->
-<script  type="text/javascript" language="javascript">
-$(document).ready(function(){
-	$(".QTPopup").css('display','none')
-	$(".lnchPopop").click(function(){
-		$(".QTPopup").animate({width: 'show'}, 'slow');})
-		$(".closeBtn").click(function(){			
-			$(".QTPopup").css('display', 'none');
-		})
-})
-
-$(document).ready(function(){
-	$(".QTPopup1").css('display','none')
-	$(".lnchPopop1").click(function(){
-		$(".QTPopup1").animate({width: 'show'}, 'slow');})
-		$(".closeBtn").click(function(){			
-			$(".QTPopup1").css('display', 'none');
-		})
-})
-
-</script>
-
+<script type="text/javascript" src="/static/js/accordion.js"></script>
 <script type="text/javascript">
 function displayCustinfo(id)
 {
@@ -91,62 +70,136 @@ else if(type=="next")
 	addForm.submit();
 }
 </script>
-<form name="ticketassign" class="ticketassign" id="ticketassign" method="post" action="/ticket/assign" style="margin:0 auto; width:99%;" onsubmit='formValidator()' >
-<table>
-<ul class="pager">
-	%if not first < 20:
-    <li>
-	  	<a href="#" onclick="javascript:pagination('previous',${first},${last})">Previous</a>
-    </li>
-	%endif
-	<% dcount = count %>
-	%if	dcount > last:
-    	<li>
-    		<a href="#" onclick="javascript:pagination('next',${first},${last})">Next</a>
-    	</li>
-	%endif
-    </ul>
-<tr>
-	<th>Ticket Id</th>
-	<th>Name</th>
-	<th>Company</th>
-	<!--th>Email</th>
-	<th>Location</th>
-	<th>System Id</th-->
-	<th>Department</th>
-	<th>Assigned To</th>
-	<th>Status</th>
-	<th>Action</th>
-	<!--th>Send To</th-->
-</tr>
-%if ticket != []:
-	%for i in ticket:
-	<tr>
-		<td><a href="#" id="${i.id}" onclick="javascript:displaytickethistory(id)">${i.ticketid}</a></td>
-		<td>${i.customer.name}</td>
-		<td>${i.customer.company}</td>
-		<td>${i.dept.department}</td>
-		%try:
-			<% assignedto=i.assignedto.name %>
-		%except:
-			<% assignedto="Not Assign" %>
-		%endtry
-		<td>${assignedto}</td>
-		%try:
-			<% assignedto=i.assignedto.name %>
-		%except:
-			<% assignedto="Not Assign" %>
-		%endtry
-		<td>${assignedto}</td>
-		<td><a href="#" id="${i.id}" onclick="javascript:editTicket(id)"><img src="/static/img/edit.png" title="Edit"></a></td>
-		<!--td><a href="#" class="lnchPopop" ><img src="/images/mail.jpeg"></a>&nbsp;|&nbsp;<a href="#" class="lnchPopop1"><img  src="/images/mobile.jpeg"></a>&nbsp;&nbsp;</td-->
-	</tr>
-	%endfor
-%else:
-	<tr>
-		<td colspan="7" style="padding-top:5%;"><h2 style="color:#0069D6;"><center>Data Not Found</center></h2></td>
-	</tr>
-%endif
-</table>
-</form>
+<script type="text/javascript">
+$(document).ready(function()
+{
+	//slides the element with class "menu_body" when paragraph with class "menu_head" is clicked 
+	$("#firstpane p.menu_head").click(function()
+    {
+		$(this).css({backgroundImage:"url(/static/img/down.png)"}).next("div.menu_body").slideToggle(300).siblings("div.menu_body").slideUp("slow");
+       	$(this).siblings().css({backgroundImage:"url(/static/img/left.png)"});
+	});
+	//slides the element with class "menu_body" when mouse is over the paragraph
+	$("#secondpane p.menu_head").mouseover(function()
+    {
+	     $(this).css({backgroundImage:"url(/static/img/down.png)"}).next("div.menu_body").slideDown(500).siblings("div.menu_body").slideUp("slow");
+         $(this).siblings().css({backgroundImage:"url(/static/img/left.png)"});
+	});
+});
+</script>
+<style type="text/css">
 
+</style>
+<script type="text/javascript">
+	function displayreport(id)
+	{
+			var addForm = document.getElementById("frmstatus");
+			addForm.action="/ticket/sadmin/status?status="+id;
+			addForm.method="post";
+			addForm.submit();
+		
+	}
+	</script>
+<div class="span3" style="background-color:#7CA0C7;margin-left:0px;margin-top:15px;">
+	<h5 style="margin:12px 12px 12px 12px; line-height:0px; color:white;">Filter</h5>
+	<div class="product" style="background:#EFEFEF;"><br>
+		<div class="menu_list" id="firstpane"> <!--Code for menu starts here-->
+			<p class="menu_head">By Customer Name</p>
+			<div class="menu_body">
+				<form name="customername" id="customername" style="float:none;margin:0px;">
+				%for i in ticket:
+					<a href="#" id="${i.id}" onclick="javascript:displayreport(id)">${i.customer.name}</a>
+				%endfor
+				</form>
+			</div>
+			<p class="menu_head">By Company Name</p>
+			<div class="menu_body">
+				<form name="companyname" id="companyname" style="float:none;margin:0px;">
+				%for i in ticket:
+					<a href="#" id="${i.id}" onclick="javascript:displayreport(id)">${i.customer.company}</a>
+				%endfor
+				</form>
+			</div>
+			<p class="menu_head">By Department</p>
+			<div class="menu_body">
+				<form name="departmentname" id="departmentname" style="float:none;margin:0px;">
+				%for i in ticket:
+					<a href="#" id="${i.id}" onclick="javascript:displayreport(id)">${i.dept.department}</a>
+				%endfor
+				</form>
+			</div>
+			<p class="menu_head">By Assigned Name</p>
+			<div class="menu_body">
+				<form name="assignedname" id="assignedname" style="float:none;margin:0px;">
+				%for i in ticket:
+					<a href="#" id="${i.id}" onclick="javascript:displayreport(id)">{i.assignedto.name}</a>
+				%endfor
+				</form>
+			</div>
+			<p class="menu_head">By Status</p>
+			<div class="menu_body">
+				<form name="frmstatus" id="frmstatus" style="float:none;margin:0px;">
+				%for i in ticket:
+					<a href="#" id="${i.id}" onclick="javascript:displayreport(id)">{i.status.name}</a>
+				%endfor
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="span13">
+	<form name="ticketassign" class="ticketassign" id="ticketassign" method="post" action="/ticket/assign" style="margin:0 auto; width:99%;" onsubmit='formValidator()' >
+	<table>
+	<ul class="pager">
+		%if not first < 20:
+	    <li>
+		  	<a href="#" onclick="javascript:pagination('previous',${first},${last})">Previous</a>
+	    </li>
+		%endif
+		<% dcount = count %>
+		%if	dcount > last:
+	    	<li>
+	    		<a href="#" onclick="javascript:pagination('next',${first},${last})">Next</a>
+	    	</li>
+		%endif
+	    </ul>
+	<tr>
+		<th>Ticket Id</th>
+		<th>Name</th>
+		<th>Company</th>
+		<th>Department</th>
+		<th>Assigned To</th>
+		<th>Status</th>
+		<th>Action</th>
+	</tr>
+	%if ticket != []:
+		%for i in ticket:
+		<tr>
+			<td><a href="#" id="${i.id}" onclick="javascript:displaytickethistory(id)">${i.ticketid}</a></td>
+			<td>${i.customer.name}</td>
+			<td>${i.customer.company}</td>
+			<td>${i.dept.department}</td>
+			%try:
+				<% assignedto=i.assignedto.name %>
+			%except:
+				<% assignedto="Not Assign" %>
+			%endtry
+			<td>${assignedto}</td>
+			%try:
+				<% status=i.status.name %>
+			%except:
+				<% status="Not Assign" %>
+			%endtry
+			<td>${status}</td>
+			<td><a href="#" id="${i.id}" onclick="javascript:editTicket(id)"><img src="/static/img/edit.png" title="Edit"></a></td>
+			<!--td><a href="#" class="lnchPopop" ><img src="/images/mail.jpeg"></a>&nbsp;|&nbsp;<a href="#" class="lnchPopop1"><img  src="/images/mobile.jpeg"></a>&nbsp;&nbsp;</td-->
+		</tr>
+		%endfor
+	%else:
+		<tr>
+			<td colspan="7" style="padding-top:5%;"><h2 style="color:#0069D6;"><center>Data Not Found</center></h2></td>
+		</tr>
+	%endif
+	</table>
+	</form>
+</div>

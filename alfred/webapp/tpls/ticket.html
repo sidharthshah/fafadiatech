@@ -1,9 +1,8 @@
-
 <%inherit file="customer_base.html" />
+<script type="text/javascript" src="/static/js/createticket.js"></script>
 <script language="javascript" type="text/javascript">
 function imposeMaxLength(Object, MaxLen)
 {
-	
   return (Object.value.length <= MaxLen);
 }
 </script>
@@ -24,7 +23,6 @@ function Get_Cookie( check_name ) {
 	{
 		// now we'll split apart each name=value pair
 		a_temp_cookie = a_all_cookies[i].split( '=' );
-
 
 		// and trim left/right whitespace while we're at it
 		cookie_name = a_temp_cookie[0].replace(/^\s+|\s+$/g, '');
@@ -51,7 +49,8 @@ function Get_Cookie( check_name ) {
 	}
 }
 
-function addProduct(){
+function addProduct(form){
+	if(validate(form)){
 	var a = document.cookie.split( ';' )
 	var custid = $("#custid").val();
 	var customer = $("#customer").val();
@@ -67,24 +66,23 @@ function addProduct(){
 	var system_id = $("#system_id").val();
 	var problem = $("#problem").val();
 	$.post("/customer/ticketcreate",{custid:custid,customer:customer,company_name:company_name, email:email, alternateemail:alternateemail, mobile:mobile, alternatemobile:alternatemobile, location:location, landline:landline, issue_type:issue_type, make_type:make_type, system_id:system_id, problem:problem},function(data){
-		if(data == "1"){
-			var type = Get_Cookie("type");
-			
-				alert("Ticket Create successfully.")
-				$("save").attr("disabled", "disabled");
-				
-					window.location.href="/customer/dashboard"
-							
-			
-			}
-			else if(data == "0"){
-				alert("Please Enter data")
-			}
-			else if(data == "-1") {
-				alert("Data added but sms and email not send")
-			}
-		
-		  	});
+		if(data == "1")
+		{
+		var type = Get_Cookie("type");
+
+			alert("Ticket Create successfully.");
+			$("save").attr("disabled", "disabled");
+
+				window.location.href="/customer/dashboard";
+		}
+		else if(data == "0"){
+			alert("Please Enter data")
+		}
+		else if(data == "-1") {
+			alert("Data added but sms and email not send")
+		}
+		});
+	}
 }
 
 function displaycustdetails()
@@ -101,12 +99,10 @@ $.post("/customer/displaydata",{customerid:customerid},function(data)
 	$("#location").val(data["data"][3]);
 	$("#landline").val(data["data"][4]);
 },"json");
-
-
 }
 </script>
 <div id="ticketcreate" class="span10">
-	<form name="newcustomer" id="newcustomer" method="post" action="/ticket/create" style="margin-left:20px;"  enctype="multipart/form-data; charset=utf-8">
+	<form name="newcustomer" id="newcustomer" style="margin-left:20px;"  enctype="multipart/form-data; charset=utf-8">
 	<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 		<h4 style="color: #0064CD; text-decoration:underline;">General Information</h4>
 			<div style="float:left;">
@@ -153,34 +149,17 @@ $.post("/customer/displaydata",{customerid:customerid},function(data)
 			</select>
 			</div>
 			<div style="float:right;"><br/><br style="margin-top:7px;">
-			<!--label>Make / Model:</label><br/><br/>
-			<select name="make_type" id="make_type" style="width:220px;">
-				%for i in make:
-				<option value="${i[0]}">${i[1]}</option>
-				%endfor
-			</select><br/><br/>
-			</div>
-			<div style="float:left;"><br/-->
 			<label>System Id:<span style="color:red;">*</span></label><br/><br/>
 			<input type="text" class="large" name="system_id" id="system_id"><br/><br/>
 			</div>
-			<!--div style="float:right;"-->
 			<div style="float:left;">
 			<label>Problem Description:<span style="color:red;">*</span></label><br/><br/>
 			<textarea name="problem" id="problem" style="resize:vertical; max-height:60px; min-height:60px; width:550px;" onkeypress="return imposeMaxLength(this, 139);"></textarea><br/><br/>
 			</div>
 			<div style="float:left;">
 			<label>Attach File</label><br/><br/>
-
-			<input name="files"  id="files" type="file" multiple/>
-
-<!--span class="readBytesButtons">
-  <button data-startbyte="0" data-endbyte="4">1-5</button>
-  <button data-startbyte="5" data-endbyte="14">6-15</button>
-  <button data-startbyte="6" data-endbyte="7">7-8</button>
-  <button>entire file</button>
-</span--><br/><br/>
-		<input type="button" value="Submit" id="customer.usertype" name="save" onclick="javascript:addProduct();">
+			<input name="files"  id="files" type="file" multiple/><br/><br/>
+		<input type="button" value="Submit" id="customer.usertype" name="save" onclick="javascript:addProduct(this.form);">
 		<input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="window.location.href='/customer/dashboard'">
 		</div>
 	</form>

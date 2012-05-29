@@ -43,8 +43,6 @@ class SettingsBackend(object):
         except User.DoesNotExist:
             return None
 
-
-
 class Alfreduser(User):
     USER_TYPE_CHOICES =  (('superadmin','superadmin'),('departmentadmin','departmentadmin'),('customer','customer'),('employee','employee'),)
     usertype = models.CharField(max_length=30,choices=USER_TYPE_CHOICES,default=None)

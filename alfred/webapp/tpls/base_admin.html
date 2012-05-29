@@ -4,9 +4,7 @@
     <meta charset="utf-16">
     <title>Alfred - Ticketing Management System</title> 
 	<link href="/static/css/bootstrap.css" rel="stylesheet">
-	<link href="/static/css/accodian.css" rel="stylesheet">
 	<link href="/static/css/messages.css" rel="stylesheet">
-	<link href="/static/css/popup.css" rel="stylesheet" media="screen"/>
 	<script type="text/javascript">
 		function setSelectedIndex(obj_id, v) {
 		        object = document.obj_id;
@@ -18,16 +16,7 @@
 		        }
 		}
 	</script>
-	<script type="text/javascript">
-	function displayreport(id)
-	{
-			var addForm = document.getElementById("frmstatus");
-			addForm.action="/ticket/sadmin/status?status="+id;
-			addForm.method="post";
-			addForm.submit();
-		
-	}
-	</script>
+	
     <style type="text/css"> 
       /* Override some defaults */
       html, body {
@@ -93,11 +82,6 @@
 					<ul class="dropdown-menu">
 						<li><a href="/ticket/create">Create Ticket</a></li>
 						<li><a href="/ticket/assign">Tickets Summary</a></li>
-						<form name="frmstatus" id="frmstatus" style="float:none;margin:0px;">
-						%for i in status:
-							<li><a href="#" id="${i.id}" onclick="javascript:displayreport(id)">${i.statustype}</a></li>
-						%endfor
-						</form>
 					</ul>
 				</li>
 				<li class="dropdown">
@@ -160,12 +144,8 @@
 	<script type="text/javascript" src="/static/js/jquery-1.5.2.min.js"></script>
 	<script type="text/javascript" src="/static/js/bootstrap-dropdown.js"></script>
 	<script type="text/javascript" src="/static/js/jquery.js"></script>
-	<script type="text/javascript" src="/static/js/alert.js"></script>
-	<script type="text/javascript" src="/static/js/js/jquery.js" ></script>
-	<script type="text/javascript" src="/static/js/accodian/jquery-1.2.1.min.js" ></script>
-	<script type="text/javascript" src="/static/js/accodian/menu.js" ></script>
-	<script type="text/javascript" src="/static/js/accodian/menu-collapsed.js" ></script>
 
+	<script type="text/javascript" src="/static/js/js/jquery.js" ></script>
   </body> 
 </html> 
 

@@ -636,3 +636,32 @@ button.btn::-moz-focus-inner,input[type=submit].btn::-moz-focus-inner{padding:0;
 .alert-block p + p {
   margin-top: 5px;
 }
+
+
+.menu_list{
+
+}
+.menu_head {
+	padding: 5px 10px;
+	cursor: pointer;
+	position: relative;
+	margin:1px;
+	font-weight:bold;
+	background: url(/static/img/left.png) center right no-repeat;
+}
+.menu_body {
+	display:none;
+}
+.menu_body a{
+  display:block;
+  color:#006699;
+  background-color:#EFEFEF;
+  padding-left:10px;
+  font-weight:bold;
+  text-decoration:none;
+  line-height:1.3em;
+}
+.menu_body a:hover{
+  color: #000000;
+  text-decoration:underline;
+  }
