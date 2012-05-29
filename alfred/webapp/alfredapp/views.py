@@ -1146,10 +1146,11 @@ def createticket(request):
         attachment = None
     ticketid ="PSSPL/"+strftime("%y/%m/%d/%H/%M/%S")    
     custobj = Customer()
+    ticketobj = Ticket()
     customerobj = custobj.getcustomerid(custId)
     deptobj = Department()    
-    deptobj = deptobj.getdepartmentbyid() 
-    if custobj.createTicket(date,ticketid,custId,dept,system_id,problem,attachment):
+    deptobj = deptobj.getdepartmentbyid(dept) 
+    if ticketobj.createTicket(date,ticketid,custId,dept,system_id,problem,attachment):
         return HttpResponse(str(1))
     else:
         return HttpResponse(str(0))
@@ -1272,4 +1273,14 @@ def deleteticket(request):
 
 
 def assignissuetype(request):
-    pass
+   try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
+    ticketId = request.POST.get('ticketId')
+    dept = request.POST.get('issueType')
+    ticketobj = Ticket()
+    if ticketobj.assignticket(ticketId,dept):
