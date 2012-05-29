@@ -20,10 +20,16 @@ function addCustomer(form){
 	var landline = $("#landline").val();
 	var username = $("#username").val();
 	var password = $("#password").val();
-	$.post("/customer/add",{"customer_name":customer_name, "company_name":company_name, "email":email, "location":location, "mobile":mobile, "landline":landline,"username":username,"password":password},function (data){
+	var custpackage = $("#custpackage").val();
+	$.post("/customer/add",{"customer_name":customer_name, "company_name":company_name, "email":email, "location":location, "mobile":mobile, "landline":landline,"username":username,"password":password,"custpackage":custpackage},function (data){
+		if(data=="1"){
 		inlineMsg(form,'submit','Customer is added');
 		window.location.href="/customer/summary";
+		}
 		
+		else{
+			inlineMsg(form,'submit','username or password already exist');
+		}
 	});
 	}
 }
@@ -51,6 +57,14 @@ function addCustomer(form){
 			<input type="password" class="large" name="password" id="password"/><br/><br/>
 			<label>Confirm Password:<span style="color:red;">*</span></label>
 			<input type="password" class="large" name="conf_password" id="conf_password"/><br/><br/>
+
+			Customer Package:
+			<span style="padding-left:1.4%;">
+			<select style="width:auto;" id="custpackage">
+				%for package in allCustPackage:
+					<option value="${package.id}">${package.package_type}</option>
+				%endfor	
+			</select></span><br/><br/>
 			<input type="button" name="submit" value="Submit"  id="submit" onclick="addCustomer(this.form);">
 			<input type="button" name="Cancel" value="Cancel" onclick="window.location.href='/customer/summary'">
 	</form>

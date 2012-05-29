@@ -9,6 +9,9 @@ class Department(models.Model):
 
     def __unicode__(self):
         return self.department
+    
+    def getalldept(self):
+        return Department.objects.all()
 
 class SettingsBackend(object):
     """
@@ -70,7 +73,26 @@ class Team(User):
 
     def __unicode__(self):
         return self.name
+    
+    def getallteam(self):
+        return Team.objects.all()
 
+class CustomerPackage(models.Model):
+    package_type = models.CharField(max_length=50)
+    
+
+    def __unicode__(self):
+        return self.package_type
+    
+    def getallcustomerpackage(self):
+        return CustomerPackage.objects.all()
+    
+    def getcustomerpackagebyid(self,id):
+        try:
+            return CustomerPackage.objects.filter(id=id)[0]
+        except:
+            return None
+        
 class Customer(User):
     name = models.CharField(max_length=100)
     company = models.CharField(max_length=50)
@@ -79,21 +101,21 @@ class Customer(User):
     mobile = models.CharField(max_length=11)
     alternatemobile = models.CharField(max_length=11)
     alternateemail = models.EmailField()
+    package = models.ForeignKey(CustomerPackage,blank=True,null=True)
 
     def __unicode__(self):
         return self.name
 
-class CustomerPackage(models.Model):
-    package_type = models.CharField(max_length=50)
 
-    def __unicode__(self):
-        return self.package_type
 
 class Sla(models.Model):
     slatype = models.CharField(max_length=50)
 
     def __unicode__(self):
         return self.slatype
+    
+    def getallsla(self):
+        return Sla.objects.all()
 
 class Dsk(models.Model):
     dsktype = models.CharField(max_length=50)
@@ -106,6 +128,9 @@ class Make(models.Model):
 
     def __unicode__(self):
         return self.make
+    
+    def getallmake(self):
+        return Make.objects.all()
 
 class Ticket(models.Model):
     ts= models.DateTimeField()
@@ -118,61 +143,101 @@ class Ticket(models.Model):
     assignedto = models.ForeignKey(Team,blank=True,null=True)
     sla = models.ForeignKey(Sla,blank=True,null=True)
     attachment = models.FileField(upload_to=STATIC_PATH,blank=True,null=True)
-    package = models.ForeignKey(CustomerPackage,blank=True,null=True)
+   # package = models.ForeignKey(CustomerPackage,blank=True,null=True)
 
     def __unicode__(self):
         return self.ticketid
     
-def getAllTicketByCust(cust):
-    ticket = []
-    allTicket = Ticket.objects.all()
-    for i in allTicket:
-        if i.customer.id == cust.id:
-            ticket.append(i)
-    ticket.reverse()
-    return ticket
-
-def getTicketBystatusandcust(status,cust):
-    datalist = []
-    tkobj = Ticket.objects.all()
-    for i in tkobj:
-        try:
-            if i.status.id == status and i.customer.id==cust :
+    def getallticket(self):
+        return Ticket.objects.all()
+    
+    def getTicketByTicketId(self,ticketid):
+        return Ticket.objects.filter(id=ticketid)
+    
+    
+    def getdatewiseticket(self,date):
+        alldata = []
+        for i in Ticket.objects.all():
+            if i.ts.date() == date.date():
+                alldata.append(i)
+        return alldata
+            
+        
+    def getallticketbycust(self,cust):
+        ticket = []
+        allTicket = Ticket.objects.all()
+        for i in allTicket:
+            if i.customer.id == cust.id:
+                ticket.append(i)
+        ticket.reverse()
+        return ticket
+    
+    def getticketbystatusandcust(self,status,cust):
+        datalist = []
+        tkobj = Ticket.objects.all()
+        for i in tkobj:
+            try:
+                if i.status.id == status and i.customer.id==cust :
+                        datalist.append(i)
+            except:
+                pass
+        return datalist
+    
+    def getticketbyassigneduser(self,user):
+        allteamdata = []
+        tkobj = Ticket.objects.all()
+        for i in tkobj:
+            try:
+                if i.assignedto is user:
+                    allteamdata.append(i)
+            except:
+                pass
+        return allteamdata
+    
+    
+    def getallticketbystatusanddept(self,status,dept):
+        datalist = []
+        tkobj = Ticket.objects.all()
+        for i in tkobj:
+            try:
+                if i.status.id == status and i.department.id==dept :
+                        datalist.append(i)
+            except:
+                pass
+        return datalist
+    
+    def getallticketbydept(self,department):
+        datalist = []
+        tkobj = Ticket.objects.all()
+        for i in tkobj:
+            try:
+                if i.dept.id == department:
                     datalist.append(i)
-        except:
-            pass
-    return datalist
+            except:
+                pass
+        return datalist
+    
+    def deleteTicketyTicketId(self,ticketid):
+        pass
+    
+    
+def getUserDetails(request,uname,passwd):
+    allteamuser = Team.objects.all()
+    allcustomer =  Customer.objects.all()   
+    for i in allteamuser:
+        if i.username == uname and i.password==passwd:
+            return i
+    for j in allcustomer:
+        if j.username == uname and j.password==passwd:
+            return j
+    return None
+    
 
-def getTicketByAssignedUser(user):
-    allteamdata = []
-    tkobj = Ticket.objects.all()
-    for i in tkobj:
-        try:
-            if i.assignedto is user:
-                allteamdata.append(i)
-        except:
-            pass
-    return allteamdata
+class Note(models.Model):
+    user = models.ForeignKey(User)
+    pub_date = models.DateTimeField()
+    title = models.CharField(max_length=200)
+    body = models.TextField()
 
-
-def getAllTicketByStatusAndDept(status,dept):
-    datalist = []
-    tkobj = Ticket.objects.all()
-    for i in tkobj:
-        try:
-            if i.status.id == status and i.department.id==dept :
-                    datalist.append(i)
-        except:
-            pass
-    return datalist
-
-def getAllTicketByDept(department):
-    datalist = []
-    tkobj = Ticket.objects.all()
-    for i in tkobj:
-        try:
-            if i.dept.id == department:
-                datalist.append(i)
-        except:
-            pass
-    return datalist
+    def __unicode__(self):
+        return self.title

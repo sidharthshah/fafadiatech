@@ -30,7 +30,8 @@ function modifycustomer(form){
 	var username = $("#username").val();
 	var password = $("#password").val();
 	var role = $("#role").val();
-	$.post("/customer/modify",{customer_id:customer_id, customer_name:customer_name, company_name:company_name, location:location, landline:landline, mobile:mobile, email:email, username:username, password:password,role:role},function(data){
+	var custpackage = $("#custpackage").val();
+	$.post("/customer/modify",{customer_id:customer_id, customer_name:customer_name, company_name:company_name, location:location, landline:landline, mobile:mobile, email:email, username:username, password:password,role:role,custpackage:custpackage},function(data){
 		inlineMsg(form,'modifydata','Customer Data successfully modified');
 		window.location.href="/customer/summary";
 	});
@@ -91,6 +92,26 @@ function updateemail(custid)
 <input type="password" class="large" name="password" id="password" value="" maxlength="20"><br/><br/>
 <label>Confirm Password:<span style="color:red;">*</span></label>
 <input type="password" class="large" name="conf_password" id="conf_password"/><br/><br/>
+Customer Package:
+	<span style="padding-left:1.4%;">
+	<select style="width:auto;" id="custpackage">
+	%try:
+		<option value="${customer.package.id}">${customer.package.package_type}</option>
+		%for package in allCustPackage:
+			%if package.id != customer.package.id:
+				<option value="${package.id}">${package.package_type}</option>
+			%endif
+		%endfor
+		
+	%except:
+		<option value="None">Not assigned</option>
+		%for package in allCustPackage:
+			<option value="${package.id}">${package.package_type}</option>
+		%endfor
+		
+	%endtry
+	
+	</select></span><br/><br/>
 <input type="button" value="Modify" name="modifydata" id="modifydata" onclick="javascript:modifycustomer(this.form);">
 <input type="button" value="Cancel" name="Cancel" id="Cancel" onclick="window.location.href='/customer/summary'">
 </form>
