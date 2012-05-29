@@ -122,6 +122,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'south',
+    'haystack',
     'alfredapp',
 )
 
@@ -147,3 +148,16 @@ LOGGING = {
         },
     }
 }
+
+HAYSTACK_SITECONF = 'alfredapp'
+HAYSTACK_SEARCH_ENGINE = 'solr'
+HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr'
+
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+        'URL': 'http://127.0.0.1:8983/solr'
+    },
+}
+

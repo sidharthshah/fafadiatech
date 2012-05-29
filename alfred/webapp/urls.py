@@ -73,6 +73,7 @@ urlpatterns = patterns('',
     url(r'^ticket/displayedit','alfredapp.views.ticketdisplayinfo'),
     url(r'^ticket/delete','alfredapp.views.deleteticket'),
     url(r'^ticket/assignissuetype','alfredapp.views.assignissuetype'),
+    url(r'^search/', include('haystack.urls')),
     url(FILE_ROOT, 'django.views.static.serve',{'document_root': DOC_ROOT, 'show_indexes': True}),
     url(r'^admin/', include(admin.site.urls)),
     

@@ -221,3 +221,25 @@ class Ticket(models.Model):
     
     def deleteTicketyTicketId(self,ticketid):
         pass
+    
+    
+def getUserDetails(request,uname,passwd):
+    allteamuser = Team.objects.all()
+    allcustomer =  Customer.objects.all()   
+    for i in allteamuser:
+        if i.username == uname and i.password==passwd:
+            return i
+    for j in allcustomer:
+        if j.username == uname and j.password==passwd:
+            return j
+    return None
+    
+
+class Note(models.Model):
+    user = models.ForeignKey(User)
+    pub_date = models.DateTimeField()
+    title = models.CharField(max_length=200)
+    body = models.TextField()
+
+    def __unicode__(self):
+        return self.title

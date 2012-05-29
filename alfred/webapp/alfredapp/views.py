@@ -22,17 +22,7 @@ from django.contrib.auth.models import User, check_password
 tpl_lookup = TemplateLookup(directories=[os.path.join(os.path.dirname(__file__),"..","tpls")])
 
 
-def getUserDetails(request,uname,passwd):
-    allteamuser = Team.objects.all()
-    allcustomer =  Customer.objects.all()   
-    for i in allteamuser:
-        if i.username == uname and i.password==passwd:
-            return i
-    for j in allcustomer:
-        if j.username == uname and j.password==passwd:
-            return j
-    return None
-    
+
 
 def home(request):
     try:
@@ -194,19 +184,19 @@ def dashboard(request):
     dictdata = {}
     
     
-    for sts in status:
-        tkobj = Ticket()
-        for ticket in tkobj.getallticket():
-            statuscount = 0
-            try:
-                if ticket.status.statustype == sts.statustype:
-                    statuscount = statuscount + 1
-            except:
-                pass
-        dictdata[sts.statustype]= statuscount
-    
-    print "dictdata",dictdata
-    
+#    for sts in status:
+#        tkobj = Ticket()
+#        for ticket in tkobj.getallticket():
+#            statuscount = 0
+#            try:
+#                if ticket.status.statustype == sts.statustype:
+#                    statuscount = statuscount + 1
+#            except:
+#                pass
+#            dictdata[sts.statustype]= statuscount
+#    
+#    print "dictdata",dictdata
+#    
                     
             
         
@@ -877,7 +867,8 @@ def customeredit(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("editcustomer.html")
     status = TicketStatus.objects.all()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,userName=s.get_decoded()['myname'])) 
+    custpackage = CustomerPackage()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,allCustPackage=custpackage.getallcustomerpackage(),userName=s.get_decoded()['myname'])) 
 
 @csrf_exempt
 def customermodify(request):
@@ -921,7 +912,13 @@ def customermodify(request):
         password = request.POST.get('password')
     except:
         password =None
-    obj = Customer.objects.filter(id=custId).update(name=customer_name,company=company_name,email=email,address=location,mobile=mobile,landline=landline,password=password)
+    try:
+        custpackage = request.POST.get('custpackage')
+    except:
+        custpackage = None
+    custpkgobj = CustomerPackage()
+    custpakg = custpkgobj.getcustomerpackagebyid(custpackage)
+    obj = Customer.objects.filter(id=custId).update(name=customer_name,company=company_name,email=email,address=location,mobile=mobile,landline=landline,password=password,package=custpakg)
     return HttpResponse(str(obj))
 
 @csrf_exempt
