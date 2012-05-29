@@ -12,6 +12,9 @@ class Department(models.Model):
     
     def getalldept(self):
         return Department.objects.all()
+    
+    def getdepartmentbyid(self,id):
+        return Department.objects.filter(id=dept)[0]
 
 class SettingsBackend(object):
     """
@@ -62,6 +65,9 @@ class TicketStatus(models.Model):
 
     def __unicode__(self):
         return self.statustype
+    
+    def getallticketstatus(self):
+        return TicketStatus.objects.all()
 
 class Team(User):
     USER_TYPE_CHOICES =  (('superadmin','superadmin'),('departmentadmin','departmentadmin'),('customer','customer'),('employee','employee'),)
@@ -78,6 +84,9 @@ class Team(User):
     
     def getallteam(self):
         return Team.objects.all()
+    
+    def getteammemberbyid(self,id):
+        return Team.objects.filter(id=teamid)
 
 class CustomerPackage(models.Model):
     package_type = models.CharField(max_length=50)
@@ -107,8 +116,38 @@ class Customer(User):
 
     def __unicode__(self):
         return self.name
-
-
+    
+    def getallcustomer(self):
+        return Customer.objects.all()
+    
+    def getcustomerid(self,custid):
+        return Customer.objects.filter(id=custid)[0]
+    
+    def createcustomer(self,username,password,email,customer_name,company_name,location,mobile,landline,custpackage):
+        obj = CustomerPackage()
+        custpkgobj = obj.getcustomerpackagebyid(custpackage)
+        try:
+            custobj = Customer(username=username,password=password,email=email,name=customer_name,company=company_name,address=location,mobile=mobile,landline=landline,package=custpkgobj)
+            custobj.save()
+            return 1
+        except:
+            return 0
+    
+    def modifycustomer(self,custId,customer_name,company_name,email,location,mobile,landline,password,custpackage):
+        custpkgobj = CustomerPackage()
+        custpakg = custpkgobj.getcustomerpackagebyid(custpackage)
+        try:
+            obj = Customer.objects.filter(id=custId).update(name=customer_name,company=company_name,email=email,address=location,mobile=mobile,landline=landline,password=password,package=custpakg)
+            return 1
+        except:
+            return 0
+        
+    def deletecustomer(self,custId):
+        try:
+            Customer.objects.filter(id=custId).delete()
+            return 1
+        except:
+            return 0
 
 class Sla(models.Model):
     slatype = models.CharField(max_length=50)
@@ -219,8 +258,21 @@ class Ticket(models.Model):
                 pass
         return datalist
     
-    def deleteTicketyTicketId(self,ticketid):
-        pass
+    def createTicket(self,date,ticketid,custId,dept,system_id,problem,attachment):
+        custobj = Customer()
+        customerobj = custobj.getcustomerid(custId)
+        
+        deptobj = Department()    
+        deptobj = deptobj.getdepartmentbyid(dept) 
+        try:
+            ticketobj = Ticket.objects.create(ts=date,ticketid=ticketid,customer=customerobj,dept=deptobj,systemid=system_id,summary=problem,attachment=attachment)
+            ticketobj.save()
+            return 1
+        except:
+            return 0
+    
+    def deleteticketbyticketid(self,ticketid):
+        return Ticket.objects.filter(id=ticketid).delete()
     
     
 def getUserDetails(request,uname,passwd):

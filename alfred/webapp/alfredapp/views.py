@@ -31,13 +31,15 @@ def home(request):
         c = request.COOKIES.get('csrftoken','')
         tpl = tpl_lookup.get_template("login.html")
         user = Alfreduser.objects.all()
-        status = TicketStatus.objects.all()
+        statusobj = TicketStatus()    
+        status = statusobj.getallticketstatus()
         return HttpResponse(tpl.render(csrf_token=c,on_home=True,uname="status",password="user",unamemsg="dfdfdf",pmsg="",msg="",userName='Smita'))
     except:
         c = request.COOKIES.get('csrftoken','')
         tpl = tpl_lookup.get_template("login.html")
         user = Alfreduser.objects.all()
-        status = TicketStatus.objects.all()
+        statusobj = TicketStatus()    
+        status = statusobj.getallticketstatus()
         return HttpResponse(tpl.render(csrf_token=c,on_home=True,uname="status",password="user",unamemsg="dfdfdf",pmsg="",msg="",userName='Smita'))
 
 def useredit(request):
@@ -92,7 +94,8 @@ def userdashboard(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("usrsummry.html")
     user = Alfreduser.objects.all()
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName=s.get_decoded()['myname']))
 
 def adduserform(request):
@@ -103,7 +106,8 @@ def adduserform(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("usr_add.html")
     user = Alfreduser.objects.all()
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName='Smita'))
 
 def useradd(request):
@@ -126,7 +130,8 @@ def usereditform(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("edituser.html")
     user = Alfreduser.objects.all()
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName=s.get_decoded()['myname']))
 
 def modifyuser(request):
@@ -143,8 +148,10 @@ def teamdashboard(request):
         return HttpResponseRedirect('/')
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("teamsummary.html")
-    team = Team.objects.all()
-    status = TicketStatus.objects.all()
+    teamobj = Team()    
+    team = teamobj.getallteam()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,team=team,userName=s.get_decoded()['myname']))
 
 def dashboard(request):
@@ -160,26 +167,27 @@ def dashboard(request):
     for i in lastweekdates:
             allday.append(len(tkobj.getdatewiseticket(i)))
     
-    status = TicketStatus.objects.all()    
-    weeklyTicket = []
-    dict = {}
-    for j in lastweekdates:
-        data = {}
-        tkobj = Ticket()
-        for k in tkobj.getdatewiseticket(j):
-            count = 0
-            for l in status:
-                try:
-                    if k.status.statustype == l.statustype:
-                        count = count+1
-                except:
-                    pass
-            if data.has_key(l.statustype):
-                data[l.statustype] = data[l.statustype] + count
-            else:
-                data[l.statustype] = count
-        weeklyTicket.append(data)
-    print weeklyTicket[0:7]
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()  
+#    weeklyTicket = []
+#    dict = {}
+#    for j in lastweekdates:
+#        data = {}
+#        tkobj = Ticket()
+#        for k in tkobj.getdatewiseticket(j):
+#            count = 0
+#            for l in status:
+#                try:
+#                    if k.status.statustype == l.statustype:
+#                        count = count+1
+#                except:
+#                    pass
+#            if data.has_key(l.statustype):
+#                data[l.statustype] = data[l.statustype] + count
+#            else:
+#                data[l.statustype] = count
+#        weeklyTicket.append(data)
+#    print weeklyTicket[0:7]
     
     dictdata = {}
     
@@ -205,7 +213,8 @@ def dashboard(request):
     
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("dashboard.html")
-    team = Team.objects.all()
+    teamobj = Team()    
+    team = teamobj.getallteam()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,team=team,userName=s.get_decoded()['myname'],allday=allday))
 
 def addteamform(request):
@@ -215,9 +224,11 @@ def addteamform(request):
         return HttpResponseRedirect('/')
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("createteam.html")
-    dept = Department.objects.all()
+    deptobj = Department()
+    dept = deptobj.getalldept()
     user = []#Alfreduser.objects.all()
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,dept=dept,status=status,User=user,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
@@ -266,7 +277,8 @@ def teamadd(request):
         dept = request.POST.get('dept')
     except:
         dept =None
-    deptobj = Department.objects.filter(id=dept)[0]
+    obj = Department()
+    deptobj = obj.getdepartmentbyid(dept)
     try:
         teamobj = Team(username=username,password=password,name=name,address=address,landlineno=landline,mobileno=mobile,email=email,department=deptobj,usertype=usertype)
         teamobj.save()
@@ -283,9 +295,12 @@ def teameditform(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("editteam.html")
     teamid = request.GET.get('teamId')
-    team = Team.objects.filter(id=teamid)
-    dept = Department.objects.all()
-    status = TicketStatus.objects.all()
+    teamobj = Team()
+    team = teamobj.getteammemberbyid(teamid)
+    deptobj = Department()
+    dept = deptobj.getalldept()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,issue=dept,team=team[0],status=status,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
@@ -305,7 +320,8 @@ def modifyteam(request):
     password = request.POST.get('password')
     role  = request.POST.get('role')
     dept = request.POST.get('dept')
-    deptobj = Department.objects.filter(id=dept)[0]
+    obj = Department()
+    deptobj = obj.getdepartmentbyid(dept)
     try:
         obj = Team.objects.filter(id=teamid).update(name=name,address=address,landlineno=landlineno,mobileno=mobileno,email=email,department=deptobj,usertype=role)
         return HttpResponse(str(1))
@@ -338,7 +354,8 @@ def employeedashboard(request):
     tkobjlist = tkobj.getticketbyassigneduser(teamobj)
     tkobjlist.reverse()
     tpl = tpl_lookup.get_template("employeesummary.html")
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,ticket=tkobjlist,userName=s.get_decoded()['myname']))
 
 
@@ -351,9 +368,11 @@ def departmentdashboard(request):
         return HttpResponseRedirect('/')
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("issuemaster.html")
-    status = TicketStatus.objects.all()
-    department = Department.objects.all() 
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,department=department,userName=s.get_decoded()['myname']))
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
+    deptobj = Department()
+    dept = deptobj.getalldept() 
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,department=dept,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
 def departmentadd(request):
@@ -383,7 +402,8 @@ def departmentedit(request):
     except:
         deptobj = None
     tpl = tpl_lookup.get_template("editissuemaster.html")
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,dept=deptobj[0],userName=s.get_decoded()['myname']))
 
 @csrf_exempt
@@ -420,7 +440,8 @@ def customerpackagedashboard(request):
         return HttpResponseRedirect('/')
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("customerpackage.html")
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     customerpackage = CustomerPackage.objects.all() 
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,customerpackage=customerpackage,userName=s.get_decoded()['myname']))
 
@@ -452,7 +473,8 @@ def customerpackageedit(request):
     except:
         custpkgobj = None
     tpl = tpl_lookup.get_template("editcustomerpackage.html")
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,custpkg=custpkgobj[0],userName=s.get_decoded()['myname']))
 
 @csrf_exempt
@@ -493,7 +515,8 @@ def sladashboard(request):
         return HttpResponseRedirect('/')
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("slatype.html")
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     sla = Sla.objects.all() 
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,sla=sla,userName=s.get_decoded()['myname']))
 
@@ -525,7 +548,8 @@ def slaedit(request):
     except:
         slaobj = None
     tpl = tpl_lookup.get_template("editslatype.html")
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,slaobj=slaobj[0],userName=s.get_decoded()['myname']))
 
 @csrf_exempt
@@ -566,7 +590,8 @@ def ticketstatusdashboard(request):
         return HttpResponseRedirect('/')
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("ticketstatusmaster.html")
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=status,status=status,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
@@ -598,7 +623,8 @@ def ticketstatusedit(request):
     except:
         statusobj = None
     tpl = tpl_lookup.get_template("editticketstatus.html")
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,statusobj=statusobj[0],userName=s.get_decoded()['myname']))
 
 @csrf_exempt
@@ -641,7 +667,8 @@ def customersummary(request):
     tpl = tpl_lookup.get_template("customersummary.html")
     customer = Customer.objects.all()
     user = Alfreduser.objects.all()
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,User=user,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
@@ -672,11 +699,12 @@ def customerdashboard(request):
     tkobj = Ticket()
     allTicket = tkobj.getallticketbycust(customer)    
     allTicket.reverse()
-    status = TicketStatus.objects.all()  
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,ticket=allTicket,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
-def customerdisplayticketBystatus(request):
+def customerdisplayticketbystatus(request):
     s = None
     try:
         s = Session.objects.get(pk=request.session.session_key)
@@ -689,11 +717,12 @@ def customerdisplayticketBystatus(request):
     tkobj = Ticket()
     ticketdata = tkobj.getticketbystatusandcust(status,customer.id)
     tpl = tpl_lookup.get_template("displayticketstatuswise.html")
-    status = TicketStatus.objects.all()  
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()  
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketdata,status=status,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
-def customerdisplayTicket(request):
+def customerdisplayticket(request):
     s = None
     try:
         s = Session.objects.get(pk=request.session.session_key)
@@ -709,7 +738,8 @@ def customerdisplayTicket(request):
 #        tkDict[ticketId]=TicketActivity.getTicketActivityByTicketId(ticketId)
 #    except:
 #        tkDict[ticketId]=()
-    status = TicketStatus.objects.all()  
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()  
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketobj,statusList=status,status=status,userName=s.get_decoded()['myname']))
             
 def employeeallticket(request):
@@ -725,7 +755,8 @@ def employeeallticket(request):
     tkobj = Ticket()
     allTicket = tkobj.getallticketbydept(employee.department.id)
     allTicket.reverse()
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     tpl = tpl_lookup.get_template("employee_alltickets.html")
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,allTicket=allTicket,status=status,tkStatus=status,userName=s.get_decoded()['myname']))
 
@@ -736,7 +767,8 @@ def employeeticketdetails(request):
         s = Session.objects.get(pk=request.session.session_key)
     except:
         return HttpResponseRedirect('/')
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     c = request.COOKIES.get('csrftoken','')
     username = s.get_decoded()['myname']
     ticketId = request.GET.get("id")
@@ -752,7 +784,7 @@ def employeeticketdetails(request):
             
             
 @csrf_exempt
-def teamdisplayticketBystatus(request):
+def teamdisplayticketbystatus(request):
     s = None
     try:
         s = Session.objects.get(pk=request.session.session_key)
@@ -764,11 +796,12 @@ def teamdisplayticketBystatus(request):
     team = Team.objects.filter(username=username)[0]
     tkobj = Ticket()
     try:
-        ticketdata = tkobj.getAllTicketByStatusAndDept(status,team.department.id)
+        ticketdata = tkobj.getallticketbystatusanddept(status,team.department.id)
     except:
         ticketdata = []
     tpl = tpl_lookup.get_template("undeobs_ticket.html")
-    status = TicketStatus.objects.all()  
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()  
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketdata,status=status,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
@@ -785,11 +818,30 @@ def teamadmindashboard(request):
     tpl = tpl_lookup.get_template("admin_ticket_assign.html")
     ticketData = []
     tkobj = Ticket()
-    ticketData = tkobj.getAllTicketByDept(team.department.department)        
+    ticketData = tkobj.getallticketbydept(team.department.department)        
     ticketData.reverse()
-    status = TicketStatus.objects.all()  
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketData,status=status,assign=Team.objects.all(),userName=s.get_decoded()['myname']))
-#        
+    statusobj = TicketStatus()
+    teamobj = Team()    
+    assign = teamobj.getallteam()    
+    status = statusobj.getallticketstatus()  
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketData,status=status,assign=assign,userName=s.get_decoded()['myname']))
+
+
+@csrf_exempt
+def departmentadmincreateticket(request):
+    s = None
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+#        custobj = Customer.getAllCustomer()
+    tpl = tpl_lookup.get_template("dept_create_ticket.html")
+    statusList = TicketStatus.getallticketstatus()
+    deptobj =Department()
+    makeobj = Make()
+    data = {"customerdata":custobj,"status":statusList,"statusList":statusList,"issue":deptobj.getalldept(),"make":makeobj.getallmake(),"userName":urllib.unquote(cookieuserName),"usertype":urllib.unquote(cookieuserType),"tkStatus":TicketStatus.getAllTicketStatus()}
+    self.write(tpl.render(**data))
 
 def customeradd(request):
     try:
@@ -800,7 +852,8 @@ def customeradd(request):
     tpl = tpl_lookup.get_template("createcustomer.html")
     user = Alfreduser.objects.all()
     custpackage = CustomerPackage()
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,allCustPackage=custpackage.getallcustomerpackage(),status=status,User=user,userName=s.get_decoded()['myname']))
 
 
@@ -846,13 +899,10 @@ def customeraddpost(request):
         custpackage = request.POST.get('custpackage')
     except:
         custpackage = None
-    obj = CustomerPackage()
-    custpkgobj = obj.getcustomerpackagebyid(custpackage) 
-    try:
-        custobj = Customer(username=username,password=password,email=email,name=customer_name,company=company_name,address=location,mobile=mobile,landline=landline,package=custpkgobj)
-        custobj.save()
+    custobj = Customer()
+    if custobj.crcreatecustomer(username,password,email,customer_name,company_name,location,mobile,landline,custpackage):
         return HttpResponse(str(1))
-    except:
+    else:
         return HttpResponse(str(0))
 
 @csrf_exempt
@@ -863,10 +913,12 @@ def customeredit(request):
         return HttpResponseRedirect('/')
     c = request.COOKIES.get('csrftoken','')
     custId = request.GET.get('custId')
-    customer = Customer.objects.filter(id=custId)[0]
+    custobj = Customer.getcustomerid(custId)
+    customer = custobj
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("editcustomer.html")
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     custpackage = CustomerPackage()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,allCustPackage=custpackage.getallcustomerpackage(),userName=s.get_decoded()['myname'])) 
 
@@ -916,10 +968,11 @@ def customermodify(request):
         custpackage = request.POST.get('custpackage')
     except:
         custpackage = None
-    custpkgobj = CustomerPackage()
-    custpakg = custpkgobj.getcustomerpackagebyid(custpackage)
-    obj = Customer.objects.filter(id=custId).update(name=customer_name,company=company_name,email=email,address=location,mobile=mobile,landline=landline,password=password,package=custpakg)
-    return HttpResponse(str(obj))
+    custobj = Customer()
+    if Customer.modifycustomer(custId,customer_name,company_name,email,location,mobile,landline,password,custpackage):
+        return HttpResponse(str(1))
+    else:
+        return HttpResponse(str(0))
 
 @csrf_exempt
 def deletecustomer(request):
@@ -929,8 +982,12 @@ def deletecustomer(request):
         return HttpResponseRedirect('/')
     c = request.COOKIES.get('csrftoken','')
     custId = request.POST.get('custId')
-    obj = Customer.objects.filter(id=custId).delete()
-    return HttpResponse(str(1))
+    custobj = Customer()
+    try:
+        custobj.deletecustomer()
+        return HttpResponse(str(1))
+    except:
+          return HttpResponse(str(0))
 
 @csrf_exempt
 def createcustomerTicketform(request):
@@ -943,12 +1000,13 @@ def createcustomerTicketform(request):
     username = s.get_decoded()['myname']
     customerobj = Customer.objects.filter(username = username)    
     tpl = tpl_lookup.get_template("ticket.html")
-    
-    status = TicketStatus.objects.all()
-    department = Department.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
+    deptobj = Department()
+    dept = deptobj.getalldept()
     make = Make.objects.all()
     #data = {"customer":customerobj,"statusList":statusList,"issue":Issue.getAllIssueType(),"make":Make.getAllmakeType(),"userName":urllib.unquote(cookieuserName)}
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customerobj[0],status=status,department=department,make=make,userName=s.get_decoded()['myname']))
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customerobj[0],status=status,department=dept,make=make,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
 def createcustomerTicket(request):
@@ -977,12 +1035,15 @@ def createcustomerTicket(request):
         attachment = request.POST.get("files")
     except:
         attachment = None
-    ticketid ="PSSPL/"+strftime("%y/%m/%d/%H/%M/%S")    
-    customerobj = Customer.objects.filter(id=custId)[0]
-    deptobj = Department.objects.filter(id=dept)[0] 
-    ticketobj = Ticket.objects.create(ts=date,ticketid=ticketid,customer=customerobj,dept=deptobj,systemid=system_id,summary=problem,attachment=attachment)
-    ticketobj.save()
-    return HttpResponse(str(1))
+    ticketid ="PSSPL/"+strftime("%y/%m/%d/%H/%M/%S")
+    custobj = Customer()
+    customerobj = custobj.getcustomerid(custId)
+    deptobj = Department()    
+    deptobj = deptobj.getdepartmentbyid() 
+    if custobj.createTicket(date,ticketid,custId,dept,system_id,problem,attachment):
+        return HttpResponse(str(1))
+    else:
+        return HttpResponse(str(0))
 
 @csrf_exempt
 def createteamTicketform(request):
@@ -992,13 +1053,16 @@ def createteamTicketform(request):
     except:
         return HttpResponseRedirect('/')
     c = request.COOKIES.get('csrftoken','')
-    status = TicketStatus.objects.all()
-    department = Department.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
+    deptobj = Department()
+    custobj = Customer()
+    dept = deptobj.getalldept()
     make = Make.objects.all()    
-    custdata = Customer.objects.all()
+    custdata = custobj.getallcustomer()
     tpl = tpl_lookup.get_template("dept_create_ticket.html")
     #data = {"customerdata":custobj,"status":TicketStatus.getAllTicketStatus(),"statusList":statusList,"issue":Issue.getAllIssueType(),"make":Make.getAllmakeType(),"userName":urllib.unquote(cookieuserName),"usertype":urllib.unquote(cookieuserType),"tkStatus":TicketStatus.getAllTicketStatus()}
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,customerdata=custdata,status=status,department=department,make=make,userName=s.get_decoded()['myname']))
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,customerdata=custdata,status=status,department=dept,make=make,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
 def createteamTicket(request):
@@ -1029,28 +1093,14 @@ def createteamTicket(request):
     except:
         attachment = None
     ticketid ="PSSPL/"+strftime("%y/%m/%d/%H/%M/%S")    
-    customerobj = Customer.objects.filter(id=custId)[0]
-    deptobj = Department.objects.filter(id=dept)[0] 
-    ticketobj = Ticket.objects.create(ts=date,ticketid=ticketid,customer=customerobj,dept=deptobj,systemid=system_id,summary=problem,attachment=attachment)
-    ticketobj.save()
-    return HttpResponse(str(1))
-
-def createemployeeTicketform(request):
-    s = None
-    try:
-        s = Session.objects.get(pk=request.session.session_key)
-    except:
-        return HttpResponseRedirect('/')
-    c = request.COOKIES.get('csrftoken','')
-    status = TicketStatus.objects.all()
-    department = Department.objects.all()
-    make = Make.objects.all()    
-    custdata = Customer.objects.all()
-    tpl = tpl_lookup.get_template("dept_create_ticket.html")
-    #data = {"customerdata":custobj,"status":TicketStatus.getAllTicketStatus(),"statusList":statusList,"issue":Issue.getAllIssueType(),"make":Make.getAllmakeType(),"userName":urllib.unquote(cookieuserName),"usertype":urllib.unquote(cookieuserType),"tkStatus":TicketStatus.getAllTicketStatus()}
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,customerdata=custdata,status=status,department=department,make=make,userName=s.get_decoded()['myname']))
-
-
+    custobj = Customer()
+    customerobj = custobj.getcustomerid(custId)
+    deptobj = Department()    
+    deptobj = deptobj.getdepartmentbyid() 
+    if custobj.createTicket(date,ticketid,custId,dept,system_id,problem,attachment):
+        return HttpResponse(str(1))
+    else:
+        return HttpResponse(str(0))
 
 def createticketform(request):
     try:
@@ -1060,10 +1110,12 @@ def createticketform(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("sadmin_create_ticket.html")
     customer = Customer.objects.all()
-    department = Department.objects.all()
+    deptobj = Department()
+    dept = deptobj.getalldept()
     user = Alfreduser.objects.all()
-    status = TicketStatus.objects.all()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,department=department,customer=customer,status=status,User=user,userName=s.get_decoded()['myname']))
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,department=dept,customer=customer,status=status,User=user,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
 def createticket(request):
@@ -1093,18 +1145,15 @@ def createticket(request):
     except:
         attachment = None
     ticketid ="PSSPL/"+strftime("%y/%m/%d/%H/%M/%S")    
-    customerobj = Customer.objects.filter(id=custId)[0]
-    deptobj = Department.objects.filter(id=dept)[0] 
-    ticketobj = Ticket.objects.create(ts=date,ticketid=ticketid,customer=customerobj,dept=deptobj,systemid=system_id,summary=problem,attachment=attachment)
-    ticketobj.save()
-    c = request.COOKIES.get('csrftoken','')
-    tpl = tpl_lookup.get_template("sadmin_create_ticket.html")
-    customer = Customer.objects.all()
-    department = Department.objects.all()
-    user = Alfreduser.objects.all()
-    status = TicketStatus.objects.all()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,department=department,customer=customer,status=status,User=user,userName=s.get_decoded()['myname']))
-
+    custobj = Customer()
+    customerobj = custobj.getcustomerid(custId)
+    deptobj = Department()    
+    deptobj = deptobj.getdepartmentbyid() 
+    if custobj.createTicket(date,ticketid,custId,dept,system_id,problem,attachment):
+        return HttpResponse(str(1))
+    else:
+        return HttpResponse(str(0))
+    
 @csrf_exempt
 def dispcustomerdata(request):
     try:
@@ -1119,7 +1168,7 @@ def dispcustomerdata(request):
         listdata.append((i.name,i.company,i.address,i.landline,i.mobile,i.email))
     dict = {"data":listdata[0]}
     return HttpResponse(json.dumps(dict))
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,customer=customer,status=status,User=user,userName=s.get_decoded()['myname']))
+    
 
 def ticketreports(request):
     try:
@@ -1129,7 +1178,8 @@ def ticketreports(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("report.html")
     user = Alfreduser.objects.all()
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName=s.get_decoded()['myname'],date=strftime("%Y/%m/%d")))
 
 def ticketreportscustomer(request):
@@ -1140,7 +1190,8 @@ def ticketreportscustomer(request):
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("customerreport.html")
     user = Alfreduser.objects.all()
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,User=user,userName=s.get_decoded()['myname'],date=strftime("%Y/%m/%d")))
 
 def ticketreportsfeedback(request):
@@ -1160,7 +1211,8 @@ def ticketassign(request):
     for i in Ticket.objects.all():
         ticket.append(i)
     ticket.reverse()
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
 
 @csrf_exempt
@@ -1180,7 +1232,8 @@ def sadminticketstatus(request):
        except:
            pass
     tpl = tpl_lookup.get_template("open_ticket.html")
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     #data = {"userName":urllib.unquote(cookieuserName),"status":TicketStatus.getAllTicketStatus(),"ticket":tklist[0:20],"first":0,"last":20,"count":count}
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,statusticket=statusticket,status=status,userName=s.get_decoded()['myname'],ticket=ticket))
 
@@ -1191,7 +1244,8 @@ def ticketdisplayinfo(request):
     except:
         return HttpResponseRedirect('/')
     c = request.COOKIES.get('csrftoken','')
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     ticketId = request.GET.get('tkId')
     dept = Department()
     teamobj = Team()
@@ -1209,10 +1263,12 @@ def deleteticket(request):
     except:
         return HttpResponseRedirect('/')
     c = request.COOKIES.get('csrftoken','')
-    status = TicketStatus.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
     ticketId = request.GET.get('tkId')
     ticketobj = Ticket()
-    ticketobj.deleteticketbyticketid(ticket)
+    print ticketobj.deleteticketbyticketid(ticketId)
+    return HttpResponseRedirect('/ticket/assign')
 
 
 def assignissuetype(request):
