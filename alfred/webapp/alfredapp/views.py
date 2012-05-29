@@ -1253,6 +1253,8 @@ def ticketdisplayinfo(request):
     slaobj= Sla()
     makeobj = Make()
     tkobj = Ticket()
+    allAssign=teamobj.getallteam()
+    print "gcxgcv=",allAssign
     ticketobject = tkobj.getTicketByTicketId(ticketId)
     tpl = tpl_lookup.get_template("ticket_assign_edit.html")
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketobject,status=status,allDept=dept.getalldept(),allMake=makeobj.getallmake(),allAssign=teamobj.getallteam(),allsla=slaobj.getallsla(),userName=s.get_decoded()['myname']))
@@ -1269,7 +1271,9 @@ def deleteticket(request):
     ticketobj = Ticket()
     return HttpResponseRedirect('/ticket/assign')
 
-def assignissuetype(request):
+@csrf_exempt
+def assignticketdept(request):
+    return HttpResponse(str(1))
     try:
         s = Session.objects.get(pk=request.session.session_key)
     except:
@@ -1280,3 +1284,59 @@ def assignissuetype(request):
     ticketId = request.POST.get('ticketId')
     dept = request.POST.get('issueType')
     ticketobj = Ticket()
+    if ticketobj.assignticket(ticketId,dept):
+        return HttpResponse(str(1))
+    else:
+        return HttpResponse(str(0))
+
+@csrf_exempt  
+def assignticketdepartment(request):
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    statusobj = TicketStatus()
+    status = statusobj.getallticketstatus()
+    ticketId = request.POST.get('ticketId')
+    dept = request.POST.get('issueType')
+    ticketobj = Ticket()
+    if ticketobj.assignticketdept(ticketId,dept):
+         return HttpResponse(str(1))
+    else:
+        return HttpResponse(str(0))
+    
+@csrf_exempt
+def assignticketmember(request):
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    statusobj = TicketStatus()
+    status = statusobj.getallticketstatus()
+    ticketId = request.POST.get('id')
+    member = request.POST.get('asssigneTo')
+    ticketobj = Ticket()
+    if ticketobj.assignticketemployee(ticketId,member):
+         return HttpResponse(str(1))
+    else:
+        return HttpResponse(str(0))
+
+
+@csrf_exempt
+def assignticketsla(request):
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    statusobj = TicketStatus()
+    status = statusobj.getallticketstatus()
+    ticketId = request.POST.get('id')
+    sla = request.POST.get('sla')
+    ticketobj = Ticket()
+    if ticketobj.assignticketsla(ticketId,sla):
+         return HttpResponse(str(1))
+    else:
+        return HttpResponse(str(0))

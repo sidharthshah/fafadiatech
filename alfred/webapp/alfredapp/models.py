@@ -123,7 +123,10 @@ class Sla(models.Model):
     
     def getallsla(self):
         return Sla.objects.all()
-
+    
+    def getslabyid(self,id):
+        return Sla.objects.filter(id=id)
+    
 class Dsk(models.Model):
     dsktype = models.CharField(max_length=50)
 
@@ -224,10 +227,32 @@ class Ticket(models.Model):
                 pass
         return datalist
     
-    def assignticket(self,ticketId,dept):
+    def assignticketdept(self,id,dept):
         obj = Department()
         deptobj = obj.getdepartmentbyid(dept)
-        Ticket.objects.filter()
+        try:
+            Ticket.objects.filter(id=id).update(dept=deptobj)
+            return 1
+        except:
+            return 0
+        
+    def assignticketemployee(self,id,member):
+        obj = Team()
+        teamobj = obj.getteammemberbyid(member)[0]
+        try:
+            Ticket.objects.filter(id=id).update(assignedto=teamobj)
+            return 1
+        except:
+            return 0
+
+    def assignticketsla(self,id,sla):
+        obj = Team()
+        slaobj = obj.getslabyid(sla)[0]
+        try:
+            Ticket.objects.filter(id=id).update(assignedto=slaobj)
+            return 1
+        except:
+            return 0
     
     def createTicket(self,date,ticketid,custId,dept,system_id,problem,attachment):
         custobj = Customer()
