@@ -38,7 +38,7 @@
 	function exportCustFile(filetype){
 		var startdate = $("#startdate").val();
 		var enddate = $("#enddate").val();
-	    var custName = $("#customer_name").val();
+	    	var custName = $("#customer_name").val();
 		var addForm = document.getElementById("cust_report");
 		addForm.action="/exportCustomerTicketReport?startdate="+startdate+"&enddate="+enddate+"&customer_name="+custName+"&filetype="+filetype;
 		addForm.method="post";

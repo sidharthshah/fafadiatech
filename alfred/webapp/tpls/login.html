@@ -35,18 +35,14 @@ function loginpage()
 		}
 		else if(data == "3"){
 		window.location.href="/customer/dashboard";
-		
 		}
 		else if(data == "4"){
 		window.location.href="/departmentadmin/dashboard";
 		}
-		
 		else if(data=="5")
-			{
-							
-			}
+		{				
+		}
 	});
-
 }
 </script>
 <div id="body" style="margin:0 auto; width:50%;"><br/><br/>
@@ -70,7 +66,7 @@ function loginpage()
 			%else:
 				<input type="password" name="password" size="12" id="password" value="${password}"><br/>
 			%endif
-			<label style="display: block; padding-left: 15px; text-indent: -15px; font-weight:normal; color:#0069D6;"><input type="checkbox" name="remember" id="remember" style="vertical-align: bottom;position: relative;top: 1px;"> Remember Me</label>
+			<label style="display: block; padding-left: 15px; text-indent: -15px; font-weight:normal; color:#0069D6;"><input type="checkbox" name="remember" id="remember" style="vertical-align: bottom;position: relative;top: 1px;">Remember Me</label>
 			%if pmsg != "":
 				<h6>${pmsg}</h6>
 			 %endif
@@ -82,4 +78,8 @@ function loginpage()
 			| <a href="#" id="forgotpswd" onClick="window.location='/password/recovery';">Forgot Password</a>
 		</form>
 	</div><br/><br/>
+</div>
+<div id="loading">
+	Loading, please wait..
+	<img src="/static/images/loading.gif" alt="loading.." />
 </div>

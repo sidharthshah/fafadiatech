@@ -30,7 +30,7 @@
 		}
 	</script>
 	<script type="text/javascript">
-	function displayreportdata(id)
+	function displayticketbystatus(id)
 	{
 			var addForm = document.getElementById("frmstatus");
 			addForm.action="/team/displayticketstatuswise?status="+id;
@@ -98,14 +98,14 @@
 	<div class="topbar-inner"> 
 		<div class="container"> 
 			<ul class="nav">
-				<li><a href="/teamadmin/dashboard">Dashboard</a></li>
+				<li><a href="/departmentadmin/dashboard">Dashboard</a></li>
 				<li class="dropdown"> 
 					<a href="#" class="dropdown-toggle">Tickets</a> 
 					<ul class="dropdown-menu">
-						<li><a href="/ticket/create">Create Ticket</a></li>
+						<li><a href="/team/ticketcreateform">Create Ticket</a></li>
 						<form name="frmstatus" id="frmstatus" style="float:none;margin:0px;">
 						%for i in status:
-							<li><a href="#" id="${i.id}" onclick="javascript:displayreportdata(id)">${i.statustype}</a></li>
+							<li><a href="#" id="${i.id}" onclick="javascript:displayticketbystatus(id)">${i.statustype}</a></li>
 						%endfor
 						</form>
 					</ul>
