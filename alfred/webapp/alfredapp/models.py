@@ -54,6 +54,7 @@ class Team(User):
         return Team.objects.all()
     
     def getteammemberbyid(self,teamid):
+        print Team.objects.filter(id=teamid)
         return Team.objects.filter(id=teamid)
 
 class CustomerPackage(models.Model):
@@ -226,10 +227,24 @@ class Ticket(models.Model):
                 pass
         return datalist
     
-    def assignticket(self,ticketId,dept):
+    def assignticketdept(self,id,dept):
         obj = Department()
         deptobj = obj.getdepartmentbyid(dept)
-        Ticket.objects.filter()
+        try:
+            Ticket.objects.filter(id=id).update(dept=deptobj)
+            return 1
+        except:
+            return 0
+        
+    def assignticketemployee(self,id,member):
+        obj = Team()
+        teamobj = obj.getteammemberbyid(id)[0]
+        print Ticket.objects.filter(id=id)
+        try:
+            Ticket.objects.filter(id=id).update(assignedto=teamobj)
+            return 1
+        except:
+            return 0
     
     def createTicket(self,date,ticketid,custId,dept,system_id,problem,attachment):
         custobj = Customer()
