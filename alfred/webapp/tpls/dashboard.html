@@ -3,6 +3,11 @@
 <script type="text/javascript" src="/static/js/highcharts.js"></script>
 <script type="text/javascript" src="/static/js/exporting.js"></script>
 <script type="text/javascript">
+	$(window).load(function(){
+		$("#loading").hide();		
+	})
+</script>
+<script type="text/javascript">
 $(function () {
     var chart;
     $(document).ready(function() {
@@ -259,7 +264,10 @@ $(function () {
     });
 });
 </script>
-
+<div id="loading">
+<img src="/static/img/loading.gif" alt="loading.." /><br/>
+Loading, please wait..
+</div>
 <div id="weekly_create_tickets" style="width: 400px; height: 250px;float:left;"></div>
 <div id="weekly_tickets_status_report" style="width: 430px; height: 250px;float:right;"></div>
 <center><div id="all_tickets_status" style="width: 600px; height: 300px;float:left;margin-top:30px;"></div></center>
