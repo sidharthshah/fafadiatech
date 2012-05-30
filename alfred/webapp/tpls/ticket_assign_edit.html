@@ -51,11 +51,12 @@ function assignmemeber(id,obj)
 function assignsla(id,obj)
 {
 	var sla= obj.options[obj.selectedIndex].value;
+	alert(sla);
 	var slaname= obj.options[obj.selectedIndex].text;
 	var retVal2 = confirm("Assign to " + slaname + " Sla Time?");
 		if( retVal2 == true )
 		{
-			$.post("/ticket/assignsla",{ticketId:id, sla:sla},function(data){
+			$.post("/ticket/slaassign",{ticketId:id, sla:sla},function(data){
 			if(data == "1")
 			{
 			}
@@ -157,7 +158,7 @@ Assigned To:
 	%endtry
 	</select></span><br/><br/>
 Sla Time:
-	<span style="padding-left:8.4%;"><select style="width:auto;" name="sla_time" id="${ticket.ticketid}"  onchange="javascript:assignsla(id,this)">
+	<span style="padding-left:8.4%;"><select style="width:auto;" name="sla_time" id="${ticket.id}"  onchange="javascript:assignsla(id,this)">
 	%try:
 		<option value="${ticket.sla.id}">${ticket.sla.slatype}</option>
 		%for sla in allsla:

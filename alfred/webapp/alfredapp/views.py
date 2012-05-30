@@ -349,7 +349,7 @@ def employeedashboard(request):
     except:
         return HttpResponseRedirect('/')
     username = s.get_decoded()['myname']
-    teamobj = Team.objects.filter(username = username)
+    teamobj = Team.objects.filter(username = username)[0]
     tkobj = Ticket()
     tkobjlist = tkobj.getticketbyassigneduser(teamobj)
     tkobjlist.reverse()
@@ -1253,11 +1253,10 @@ def ticketdisplayinfo(request):
     slaobj= Sla()
     makeobj = Make()
     tkobj = Ticket()
-    allAssign=teamobj.getallteam()
-    print "gcxgcv=",allAssign
     ticketobject = tkobj.getTicketByTicketId(ticketId)
+    allAssign=teamobj.getallteambydept(ticketobject.dept.id)
     tpl = tpl_lookup.get_template("ticket_assign_edit.html")
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketobject,status=status,allDept=dept.getalldept(),allMake=makeobj.getallmake(),allAssign=teamobj.getallteam(),allsla=slaobj.getallsla(),userName=s.get_decoded()['myname']))
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketobject,status=status,allDept=dept.getalldept(),allMake=makeobj.getallmake(),allAssign=allAssign,allsla=slaobj.getallsla(),userName=s.get_decoded()['myname']))
 
 def deleteticket(request):
     try:
@@ -1333,7 +1332,7 @@ def assignticketsla(request):
     c = request.COOKIES.get('csrftoken','')
     statusobj = TicketStatus()
     status = statusobj.getallticketstatus()
-    ticketId = request.POST.get('id')
+    ticketId = request.POST.get('ticketId')
     sla = request.POST.get('sla')
     ticketobj = Ticket()
     if ticketobj.assignticketsla(ticketId,sla):
