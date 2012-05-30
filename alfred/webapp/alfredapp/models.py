@@ -1,6 +1,7 @@
 import os
 from django.db import models
 from django.contrib.auth.models import User, UserManager
+from django.db.models import Q
 
 STATIC_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","static","attachments")
 
@@ -53,6 +54,20 @@ class Team(User):
     
     def getteammemberbyid(self,teamid):
         return Team.objects.filter(id=teamid)
+    
+    def getallteambydept(self,dept):
+        listdata = []
+        try:
+            deptobj = Department.objects.filter(id=dept)
+            allteam = Team.objects.filter(department=deptobj)
+            for i in allteam:
+                if i.usertype == 'employee':
+                    listdata.append(i)               
+            return listdata
+        except:
+            return 0
+        
+        
 
 class CustomerPackage(models.Model):
     package_type = models.CharField(max_length=50)
@@ -198,7 +213,7 @@ class Ticket(models.Model):
         tkobj = Ticket.objects.all()
         for i in tkobj:
             try:
-                if i.assignedto is user:
+                if i.assignedto.id == user.id:
                     allteamdata.append(i)
             except:
                 pass
@@ -246,10 +261,11 @@ class Ticket(models.Model):
             return 0
 
     def assignticketsla(self,id,sla):
-        obj = Team()
+        obj = Sla()
         slaobj = obj.getslabyid(sla)[0]
+        print Ticket.objects.filter(id=id)
         try:
-            Ticket.objects.filter(id=id).update(assignedto=slaobj)
+            Ticket.objects.filter(id=id).update(sla=slaobj)
             return 1
         except:
             return 0
