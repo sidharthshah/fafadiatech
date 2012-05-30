@@ -103,10 +103,10 @@ $(document).ready(function()
 
 </style>
 <script type="text/javascript">
-function get_all_ticket_by_customername(id)
+function get_all_ticket_by_customernamer(id)
 {
 	var addForm = document.getElementById("customername");
-	addForm.action="/ticket/by_customername?customername="+id;
+	addForm.action="/ticket/by_customername?customerid="+id;
 	addForm.method="post";
 	addForm.submit();	
 }
@@ -119,10 +119,10 @@ function get_all_ticket_by_companyname(id)
 	addForm.submit();	
 }
 
-function get_all_ticket_by_departmentname(id)
+function get_all_ticket_by_departmentid(id)
 {
 	var addForm = document.getElementById("departmentname");
-	addForm.action="/ticket/by_departmentname?departmentname="+id;
+	addForm.action="/ticket/by_departmentname?departmentid="+id;
 	addForm.method="post";
 	addForm.submit();	
 }
@@ -130,7 +130,7 @@ function get_all_ticket_by_departmentname(id)
 function get_all_ticket_by_assignedname(id)
 {
 	var addForm = document.getElementById("assignedname");
-	addForm.action="/ticket/by_assignedname?assignedname="+id;
+	addForm.action="/ticket/by_assignedname?assignedid="+id;
 	addForm.method="post";
 	addForm.submit();	
 }
@@ -152,15 +152,15 @@ function get_all_ticket_by_status(id)
 			<div class="menu_body">
 				<form name="customername" id="customername" style="float:none;margin:0px;">
 				%for i in customer:
-					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_customername(id)">${i.name}</a>
+					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_customernamer(id)">${i.name}</a>
 				%endfor
 				</form>
 			</div>
 			<p class="menu_head">By Company Name</p>
 			<div class="menu_body">
 				<form name="companyname" id="companyname" style="float:none;margin:0px;">
-				%for i in company:
-					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_companyname(id)">${i.company}</a>
+				%for i in customer:
+					<a href="#" id="${i.company}" onclick="javascript:get_all_ticket_by_companyname(id)">${i.company}</a>
 				%endfor
 				</form>
 			</div>
@@ -168,7 +168,7 @@ function get_all_ticket_by_status(id)
 			<div class="menu_body">
 				<form name="departmentname" id="departmentname" style="float:none;margin:0px;">
 				%for i in department:
-					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_departmentname(id)">${i.department}</a>
+					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_departmentid(id)">${i.department}</a>
 				%endfor
 				</form>
 			</div>
@@ -176,7 +176,7 @@ function get_all_ticket_by_status(id)
 			<div class="menu_body">
 				<form name="assignedname" id="assignedname" style="float:none;margin:0px;">
 				%for i in ticket:
-					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_assignedname(id)">{i.assignedto.name}</a>
+					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_assignedid(id)">${i.assignedto.name}</a>
 				%endfor
 				</form>
 			</div>

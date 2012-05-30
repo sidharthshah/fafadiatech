@@ -187,10 +187,30 @@ class Ticket(models.Model):
         return alldata
 
     def getallticketbycust(self,cust):
+        custobj = Customer.objects.filter(id=cust)[0]
         ticket = []
         allTicket = Ticket.objects.all()
         for i in allTicket:
-            if i.customer.id == cust.id:
+            if i.customer.id == custobj.id:
+                ticket.append(i)
+        ticket.reverse()
+        return ticket
+    
+    def getallticketbycust(self,cust):
+        custobj = Customer.objects.filter(id=cust)[0]
+        ticket = []
+        allTicket = Ticket.objects.all()
+        for i in allTicket:
+            if i.customer.id == custobj.id:
+                ticket.append(i)
+        ticket.reverse()
+        return ticket
+    
+    def getallticketbycompany(self,company):
+        allTicket = Ticket.objects.all()
+        ticket = []
+        for i in allTicket:
+            if i.customer.company == company:
                 ticket.append(i)
         ticket.reverse()
         return ticket
@@ -229,11 +249,12 @@ class Ticket(models.Model):
         return datalist
     
     def getallticketbydept(self,department):
+        print "department",department
         datalist = []
         tkobj = Ticket.objects.all()
         for i in tkobj:
             try:
-                if i.dept.id == department:
+                if i.dept.id == int(department):
                     datalist.append(i)
             except:
                 pass
