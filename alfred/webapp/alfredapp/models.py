@@ -178,16 +178,14 @@ class Ticket(models.Model):
     
     def getTicketByTicketId(self,ticketid):
         return Ticket.objects.filter(id=ticketid)[0]
-    
-    
+
     def getdatewiseticket(self,date):
         alldata = []
         for i in Ticket.objects.all():
             if i.ts.date() == date.date():
                 alldata.append(i)
         return alldata
-            
-        
+
     def getallticketbycust(self,cust):
         ticket = []
         allTicket = Ticket.objects.all()
@@ -196,7 +194,7 @@ class Ticket(models.Model):
                 ticket.append(i)
         ticket.reverse()
         return ticket
-    
+
     def getticketbystatusandcust(self,status,cust):
         datalist = []
         tkobj = Ticket.objects.all()
@@ -207,7 +205,7 @@ class Ticket(models.Model):
             except:
                 pass
         return datalist
-    
+
     def getticketbyassigneduser(self,user):
         allteamdata = []
         tkobj = Ticket.objects.all()
@@ -218,8 +216,7 @@ class Ticket(models.Model):
             except:
                 pass
         return allteamdata
-    
-    
+
     def getallticketbystatusanddept(self,status,dept):
         datalist = []
         tkobj = Ticket.objects.all()
@@ -241,7 +238,18 @@ class Ticket(models.Model):
             except:
                 pass
         return datalist
-    
+
+    def getallticketbycustomername(self,customername):
+        datalist = []
+        tkobj = Ticket.objects.all()
+        for i in tkobj:
+            try:
+                if i.customer.id == customername:
+                    datalist.append(i)
+            except:
+                pass
+        return datalist
+
     def assignticketdept(self,id,dept):
         obj = Department()
         deptobj = obj.getdepartmentbyid(dept)

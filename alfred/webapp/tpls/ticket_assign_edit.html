@@ -1,4 +1,5 @@
 <%inherit file="base_admin.html" />
+<script type="text/javascript" src="/static/js/ticket.js"></script>
 <script language="javascript" type="text/javascript">
 function imposeMaxLength(Object, MaxLen)
 {
@@ -8,63 +9,40 @@ function imposeMaxLength(Object, MaxLen)
 <script type="text/javascript">
 
 
-function assigndepartment(id,obj)
+function assigndepartment(id,obj,form)
 {
 	var issueType= obj.options[obj.selectedIndex].value;
 	var issuename= obj.options[obj.selectedIndex].text;
-	var retVal2 = confirm("Change issue type to " + issuename);
-		if( retVal2 == true )
-		{
-			$.post("/ticket/departmentassign",{ticketId:id,issueType:issueType},function(data){
-			if(data == "1")
-			{
-			alert("department is changed");
-			window.location.href="/ticket/assign/edit?tkId="+id;
-			}
-		});
-		}
-		else{
-			return false;
-		}
+	$.post("/ticket/departmentassign",{ticketId:id,issueType:issueType},function(data){
+	if(data == "1")
+	{
+	inlineMsg(form,'${ticket.id}',"department is changed");
+	}
+	});
 }
 
-function assignmemeber(id,obj)
+function assignmemeber(id,obj,form)
 {
 	var asssigneTo = obj.options[obj.selectedIndex].value;
 	var asssigneToname = obj.options[obj.selectedIndex].text;
-	var retVal = confirm("Ticket Assign to " + asssigneToname + " ?");
-		if( retVal == true )
-		{
-			$.post("/ticket/memberassign",{id:id, asssigneTo:asssigneTo},function(data){
-			if(data == "1")
-			{
-				alert("Ticket assigned successfuly");
-				//window.location.href="/ticket/assign/edit?tkId="+id;
-			}
-		});
-		}
-		else{
-			return false;
-		}
+	$.post("/ticket/memberassign",{id:id, asssigneTo:asssigneTo},function(data){
+	if(data == "1")
+	{
+	inlineMsg(form,'${ticket.id}',"Ticket assigned");
+	}
+	});
 }
 
-function assignsla(id,obj)
+function assignsla(id,obj,form)
 {
 	var sla= obj.options[obj.selectedIndex].value;
-	alert(sla);
 	var slaname= obj.options[obj.selectedIndex].text;
-	var retVal2 = confirm("Assign to " + slaname + " Sla Time?");
-		if( retVal2 == true )
-		{
-			$.post("/ticket/slaassign",{ticketId:id, sla:sla},function(data){
-			if(data == "1")
-			{
-			}
-		});
-		}
-	else{
-		return false;
+	$.post("/ticket/slaassign",{ticketId:id, sla:sla},function(data){
+	if(data == "1")
+	{
+	inlineMsg(form,'${ticket.id}',"Ticket sla changed");
 	}
+	});
 }
 
 function assignCustPackage(id,obj)
@@ -88,14 +66,13 @@ function assignCustPackage(id,obj)
 }
 
 
-
 function modifyassignvalue(id)
 {
 	var ticketId = id;
-	var make = $("#make").val();
+//	var make = $("#make").val();
 	var system_id = $("#system_id").val();
 	var problem = $("#problem").val();
-	$.post("/ticket/assign/modify",{ticketId:ticketId,make:make,system_id:system_id,problem:problem},function(data){
+	$.post("/ticket/assign/modify",{ticketId:ticketId,system_id:system_id,problem:problem},function(data){
 		if(data == "1"){
 			alert("Modified Data");
 			window.location.href="/ticket/assign";
@@ -120,10 +97,10 @@ Land Line No.:<span style="padding-left:5.1%;">${ticket.customer.landline}</span
 Mobile No.:<span style="padding-left:7.3%;">${ticket.customer.mobile}</span><br/><br/><br/>
 <h4><u>Product Information:</u></h4>
 System Id:<span style="padding-left:8%;"><input type="text" name="system_id" id="system_id" value="${ticket.systemid}" maxlength="150"></span><br/><br/>
-Problem Description:<span style="padding-left:1%;"><textarea name="problem" id="problem" value="${ticket.summary}" style="resize:vertical; max-height:60px; min-height:60px;" onkeypress="return imposeMaxLength(this, 139);">${ticket.summary}</textarea></span><br/><br/><br/>
+Problem Description:<span style="padding-left:1%;"><textarea name="problem" id="problem" value="${ticket.summary}" style="resize:vertical; max-height:60px; min-height:60px;">${ticket.summary}</textarea></span><br/><br/><br/>
 <h4><u>Add Information:</u></h4><br/>
 Issue Type
-<span style="padding-left:7.4%;"><select style="width:auto;" id="${ticket.id}" onchange="javascript:assigndepartment(id,this)" >
+	<span style="padding-left:7.4%;"><select style="width:auto;" id="${ticket.id}" onchange="javascript:assigndepartment(id,this,form)" >
         %try:
 		<option value="${ticket.dept.id}">${ticket.dept.department}</option>
 		%for d in allDept:
@@ -141,7 +118,7 @@ Issue Type
 	</select></span><br/><br/>
 
 Assigned To:
-	<span style="padding-left:6%;"><select style="width:auto;" id="${ticket.id}" onchange="javascript:assignmemeber(id,this)">
+	<span style="padding-left:6%;"><select style="width:auto;" id="${ticket.id}" onchange="javascript:assignmemeber(id,this,form)">
 	%try:
 		<option value="${ticket.assignedto.id}">${ticket.assignedto.name}</option>
 		%for emp in allAssign:
@@ -158,7 +135,7 @@ Assigned To:
 	%endtry
 	</select></span><br/><br/>
 Sla Time:
-	<span style="padding-left:8.4%;"><select style="width:auto;" name="sla_time" id="${ticket.id}"  onchange="javascript:assignsla(id,this)">
+	<span style="padding-left:8.4%;"><select style="width:auto;" name="sla_time" id="${ticket.id}"  onchange="javascript:assignsla(id,this,form)">
 	%try:
 		<option value="${ticket.sla.id}">${ticket.sla.slatype}</option>
 		%for sla in allsla:

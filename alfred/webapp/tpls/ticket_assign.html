@@ -103,15 +103,47 @@ $(document).ready(function()
 
 </style>
 <script type="text/javascript">
-	function displayreport(id)
-	{
-			var addForm = document.getElementById("frmstatus");
-			addForm.action="/ticket/sadmin/status?status="+id;
-			addForm.method="post";
-			addForm.submit();
-		
-	}
-	</script>
+function get_all_ticket_by_customername(id)
+{
+	var addForm = document.getElementById("customername");
+	addForm.action="/ticket/by_customername?customername="+id;
+	addForm.method="post";
+	addForm.submit();	
+}
+
+function get_all_ticket_by_companyname(id)
+{
+	var addForm = document.getElementById("companyname");
+	addForm.action="/ticket/by_companyname?companyname="+id;
+	addForm.method="post";
+	addForm.submit();	
+}
+
+function get_all_ticket_by_departmentname(id)
+{
+	var addForm = document.getElementById("departmentname");
+	addForm.action="/ticket/by_departmentname?departmentname="+id;
+	addForm.method="post";
+	addForm.submit();	
+}
+
+function get_all_ticket_by_assignedname(id)
+{
+	var addForm = document.getElementById("assignedname");
+	addForm.action="/ticket/by_assignedname?assignedname="+id;
+	addForm.method="post";
+	addForm.submit();	
+}
+
+
+function get_all_ticket_by_status(id)
+{
+	var addForm = document.getElementById("statusname");
+	addForm.action="/ticket/by_statusname?status="+id;
+	addForm.method="post";
+	addForm.submit();	
+}
+</script>
 <div class="span3" style="background-color:#7CA0C7;margin-left:0px;margin-top:15px;">
 	<h5 style="margin:12px 12px 12px 12px; line-height:0px; color:white;">Filter</h5>
 	<div class="product" style="background:#EFEFEF;"><br>
@@ -120,7 +152,7 @@ $(document).ready(function()
 			<div class="menu_body">
 				<form name="customername" id="customername" style="float:none;margin:0px;">
 				%for i in customer:
-					<a href="#" id="${i.id}" onclick="javascript:displayreport(id)">${i.name}</a>
+					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_customername(id)">${i.name}</a>
 				%endfor
 				</form>
 			</div>
@@ -128,7 +160,7 @@ $(document).ready(function()
 			<div class="menu_body">
 				<form name="companyname" id="companyname" style="float:none;margin:0px;">
 				%for i in company:
-					<a href="#" id="${i.id}" onclick="javascript:displayreport(id)">${i.company}</a>
+					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_companyname(id)">${i.company}</a>
 				%endfor
 				</form>
 			</div>
@@ -136,7 +168,7 @@ $(document).ready(function()
 			<div class="menu_body">
 				<form name="departmentname" id="departmentname" style="float:none;margin:0px;">
 				%for i in department:
-					<a href="#" id="${i.id}" onclick="javascript:displayreport(id)">${i.department}</a>
+					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_departmentname(id)">${i.department}</a>
 				%endfor
 				</form>
 			</div>
@@ -144,13 +176,13 @@ $(document).ready(function()
 			<div class="menu_body">
 				<form name="assignedname" id="assignedname" style="float:none;margin:0px;">
 				%for i in ticket:
-					<a href="#" id="${i.id}" onclick="javascript:displayreport(id)">{i.assignedto.name}</a>
+					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_assignedname(id)">{i.assignedto.name}</a>
 				%endfor
 				</form>
 			</div>
 			<p class="menu_head">By Status</p>
 			<div class="menu_body">
-				<form name="frmstatus" id="frmstatus" style="float:none;margin:0px;">
+				<form name="statusname" id="statusname" style="float:none;margin:0px;">
 				%for i in ticket:
 					<a href="#" id="${i.id}" onclick="javascript:displayreport(id)">{i.status.name}</a>
 				%endfor

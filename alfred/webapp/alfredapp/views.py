@@ -778,8 +778,8 @@ def employeeticketdetails(request):
         tkDict[ticketId]=()
     #data = {"ticket":ticketobj,"make":make, "customer_pkg":customer_pkg, "sla":sla, "dept":dept, "assign":assign,"tkStatus":TicketStatus.getAllTicketStatus(),"status":tkstatus, "userName":urllib.unquote(cookieuserName),"history":tkDict}
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketobj,status=status,tkStatus=status,userName=s.get_decoded()['myname']))
-            
-            
+
+
 @csrf_exempt
 def teamdisplayticketbystatus(request):
     s = None
@@ -815,14 +815,36 @@ def teamadmindashboard(request):
     tpl = tpl_lookup.get_template("admin_ticket_assign.html")
     ticketData = []
     tkobj = Ticket()
-    ticketData = tkobj.getallticketbydept(team.department.department)        
+    ticketData = tkobj.getallticketbydept(team.department.department)
     ticketData.reverse()
     statusobj = TicketStatus()
-    teamobj = Team()    
-    assign = teamobj.getallteam()    
-    status = statusobj.getallticketstatus()  
+    teamobj = Team()
+    assign = teamobj.getallteam()
+    status = statusobj.getallticketstatus()
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketData,status=status,assign=assign,userName=s.get_decoded()['myname']))
 
+@csrf_exempt
+def get_all_ticket_by_customername(request):
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    statusobj = TicketStatus()
+    status = statusobj.getallticketstatus()
+    ticket = Ticket()
+
+@csrf_exempt
+def get_all_ticket_by_companyname(request):
+
+@csrf_exempt
+def get_all_ticket_by_departmentname(request):
+
+@csrf_exempt
+def get_all_ticket_by_assignedname(request):
+
+@csrf_exempt
+def get_all_ticket_by_statusname(request):
 
 @csrf_exempt
 def departmentadmincreateticket(request):
@@ -1339,3 +1361,19 @@ def assignticketsla(request):
          return HttpResponse(str(1))
     else:
         return HttpResponse(str(0))
+
+#@csrf_exempt
+#def ticketassignmodify(request):
+#    try:
+#        s = Session.objects.get(pk=request.session.session_key)
+#    except:
+#        return HttpResponseRedirect('/')
+#    c = request.COOKIES.get('csrftoken','')
+#    statusobj = TicketStatus()
+#    status = statusobj.getallticketstatus()
+#    ticketId = request.POST.get('ticketId')
+#    system_id = request.POST.get('system_id')
+#    problem = request.POST.get('problem')
+
+
+    
