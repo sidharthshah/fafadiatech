@@ -1,5 +1,5 @@
 <%inherit file="employee_admin.html" />
-<% import datetime %>
+
 <script type="text/javascript">
     function initMenu() {
     $('#menu ul').hide();
@@ -24,48 +24,36 @@
 function assignStatus(id)
 {
 var status = $("#status").val();//obj.options[obj.selectedIndex].value;
-$.post("/ticket/assignstatus",{ticketId:id,status:status},function(data){
-
-alert("Status is changed");
-window.location.href="/team/admin"
-
+$.post("/ticket/statusassign",{id:id,status:status},function(data){
+if(data==1){
+		alert("Status is changed");
+		//window.location.href="/team/admin"
+	}
 });
 }
 </script>
 <form name="report" id="report" action="" method="post">
+<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 <h3>Ticket Id: ${ticket.ticketid}</h3><br/>
 
 <h4><u>General Information:</u></h4>
 Customer Name:<span style="padding-left:3.7%;">${ticket.customer.name}</span><br/><br/>
-Company Name:<span style="padding-left:3.8%;">${ticketcustomer.company}</span><br/><br/>
-Email Id:<span style="padding-left:9.4%;">${ticketcustomer.email}</span><br/><br/>
+Company Name:<span style="padding-left:3.8%;">${ticket.customer.company}</span><br/><br/>
+Email Id:<span style="padding-left:9.4%;">${ticket.customer.email}</span><br/><br/>
 Location:<span style="padding-left:9.1%;">${ticket.customer.address}</span><br/><br/>
 Land Line No.:<span style="padding-left:5.4%;">${ticket.customer.landline}</span><br/><br/>
 Mobile No.:<span style="padding-left:7.5%;">${ticket.customer.mobile}</span><br/><br/><br/>
-
-<h4><u>Product Information:</u></h4>
-<!--Make / Model:<span style="padding-left:5.6%;">${make}</span><br/><br/-->
-System Id:<span style="padding-left:7.8%;">${ticket.systemid}</span><br/><br/>
-Problem Description:<span style="padding-left:1%;">${ticket.summary}</span><br/><br/><br/>
-
+Customer Package:<span style="padding-left:1.8%;">${ticket.customer.package}</span><br/><br/>
 <h4><u>Ticket Information:</u></h4><br/>
 Ticket Id:<span style="padding-left:9%;">${ticket.ticketid}</span><br/><br/>
 Department:<span style="padding-left:6.6%;">${ticket.dept.department}</span><br/><br/>
-Customer Package:<span style="padding-left:1.8%;">${ticket.package.package_type}</span><br/><br/>
 Assign To:<span style="padding-left:8%;">${ticket.assignedto.name}</span><br/><br/>
-Sla Time:<span style="padding-left:8.5%;">${ticket.sla.slatype}</span><br/><br/>
 Status :<span style="padding-left:10%;">
-<select id="status">
-%if status == 0:
-	%try:
-		<option value="${i.id}">${i.status.statustype}</option>
-	%except:
-		%for i in tkStatus:
-			<option value="${i.id}">${i.status.statustype}</option>
-		%endfor
-	%endtry
-%endif
+<select id="status" name="${ticket.id}" onchange="javascript:assignStatus(name)">
+%for i in status:
+	<option value="${i.id}">${i.statustype}</option>
+%endfor
+
 </select></span><br/><br/>
-<input type="button" value="Save" id="${ticket[1]}" onclick="javascript:assignStatus(id)">
-<input type="button" value="Back" onclick="window.location.href='/team/admin'">
 </form>
+

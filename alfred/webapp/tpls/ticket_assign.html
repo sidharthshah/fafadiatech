@@ -127,7 +127,7 @@ function get_all_ticket_by_departmentid(id)
 	addForm.submit();	
 }
 
-function get_all_ticket_by_assignedname(id)
+function get_all_ticket_by_assignedid(id)
 {
 	var addForm = document.getElementById("assignedname");
 	addForm.action="/ticket/by_assignedname?assignedid="+id;
@@ -175,8 +175,8 @@ function get_all_ticket_by_status(id)
 			<p class="menu_head">By Assigned Name</p>
 			<div class="menu_body">
 				<form name="assignedname" id="assignedname" style="float:none;margin:0px;">
-				%for i in ticket:
-					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_assignedid(id)">${i.assignedto.name}</a>
+				%for i in team:
+					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_assignedid(id)">${i.name}</a>
 				%endfor
 				</form>
 			</div>
