@@ -1257,7 +1257,7 @@ def sadminticketstatus(request):
     tpl = tpl_lookup.get_template("open_ticket.html")
     statusobj = TicketStatus()
     status = statusobj.getallticketstatus()
-    #data = {"userName":urllib.unquote(cookieuserName),"status":TicketStatus.getAllTicketStatus(),"ticket":tklist[0:20],"first":0,"last":20,"count":count}
+    data = {"userName":urllib.unquote(cookieuserName),"status":TicketStatus.getAllTicketStatus(),"ticket":tklist[0:20],"first":0,"last":20,"count":count}
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,statusticket=statusticket,status=status,userName=s.get_decoded()['myname'],ticket=ticket))
 
 @csrf_exempt
