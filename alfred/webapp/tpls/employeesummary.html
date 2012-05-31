@@ -3,7 +3,7 @@
 function addTicketDetails(id,type){
 	var addForm = document.getElementById("employeedashboard");
 	if(type=="user"){
-		addForm.action="/team/getallticketbyassign?id="+id;
+		addForm.action="/ticket/getdetailsbyticketid?id="+id;
 	}
 	addForm.method="POST";
 	addForm.submit();	

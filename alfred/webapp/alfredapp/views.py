@@ -348,10 +348,9 @@ def employeedashboard(request):
         s = Session.objects.get(pk=request.session.session_key)
     except:
         return HttpResponseRedirect('/')
-    username = s.get_decoded()['myname']
-    teamobj = Team.objects.filter(username = username)[0]
+    username = s.get_decoded()['userid']
     tkobj = Ticket()
-    tkobjlist = tkobj.getticketbyassigneduser(teamobj)
+    tkobjlist = tkobj.getticketbyassigneduser(username)
     tkobjlist.reverse()
     tpl = tpl_lookup.get_template("employeesummary.html")
     statusobj = TicketStatus()    
@@ -843,7 +842,9 @@ def get_all_ticket_by_customername(request):
     department = Department.objects.all()
     statusobj = TicketStatus()    
     status = statusobj.getallticketstatus()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,customer=customer,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
+    teamobj = Team()
+    teamdata = teamobj.getteamusertype("employee")
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,customer=customer,team=teamdata,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
 
     
 
@@ -866,7 +867,9 @@ def get_all_ticket_by_companyname(request):
     department = Department.objects.all()
     statusobj = TicketStatus()    
     status = statusobj.getallticketstatus()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,customer=customer,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
+    teamobj = Team()
+    teamdata = teamobj.getteamusertype("employee")
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,customer=customer,team=teamdata,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
 
 
 @csrf_exempt
@@ -889,12 +892,35 @@ def get_all_ticket_by_departmentname(request):
     department = Department.objects.all()
     statusobj = TicketStatus()    
     status = statusobj.getallticketstatus()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,customer=customer,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
+    teamobj = Team()
+    teamdata = teamobj.getteamusertype("employee")
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,customer=customer,team=teamdata,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
 
 
 @csrf_exempt
 def get_all_ticket_by_assignedname(request):
-    pass
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    assignedid =request.GET.get('assignedid')
+    print assignedid
+    c = request.COOKIES.get('csrftoken','')
+    statusobj = TicketStatus()
+    status = statusobj.getallticketstatus()
+    ticketobj = Ticket()
+    ticket = ticketobj.getticketbyassigneduser(assignedid)
+    ticket.reverse()
+    tpl = tpl_lookup.get_template("ticket_assign.html")
+    custobj = Customer()    
+    customer = custobj.getallcustomer()
+    department = Department.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
+    teamobj = Team()
+    teamdata = teamobj.getteamusertype("employee")
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,customer=customer,team=teamdata,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
+
 
 @csrf_exempt
 def get_all_ticket_by_statusname(request):
@@ -1291,7 +1317,9 @@ def ticketassign(request):
     department = Department.objects.all()
     statusobj = TicketStatus()    
     status = statusobj.getallticketstatus()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,customer=customer,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
+    teamobj = Team()
+    teamdata = teamobj.getteamusertype("employee")
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,team=teamdata,customer=customer,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
 
 @csrf_exempt
 def sadminticketstatus(request):
@@ -1417,7 +1445,39 @@ def assignticketsla(request):
     else:
         return HttpResponse(str(0))
 
-#@csrf_exempt
+@csrf_exempt    
+def getdetailsbyticketid(request):
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    statusobj = TicketStatus()
+    status = statusobj.getallticketstatus()
+    id = request.GET.get('id')
+    obj = Ticket()
+    ticketobj = obj.getTicketByTicketId(id)
+    tpl = tpl_lookup.get_template("teamdetails.html")
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketobj,status=status,userName=s.get_decoded()['myname']))
+
+@csrf_exempt
+def ticketstatusassign(request):
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    statusobj = TicketStatus()
+    status = statusobj.getallticketstatus()
+    id = request.POST.get('id')
+    status = request.POST.get('status')
+    obj = Ticket()
+    if obj.assignticketstatus(id,status):
+        return HttpResponse(str(1))
+    else:
+        return HttpResponse(str(0))
+    
+    
 #def ticketassignmodify(request):
 #    try:
 #        s = Session.objects.get(pk=request.session.session_key)

@@ -67,6 +67,9 @@ class Team(User):
         except:
             return 0
         
+    def getteamusertype(self,usertype):
+        return Team.objects.filter(usertype=usertype)
+        
         
 
 class CustomerPackage(models.Model):
@@ -228,10 +231,11 @@ class Ticket(models.Model):
 
     def getticketbyassigneduser(self,user):
         allteamdata = []
+        teamobj = Team.objects.filter(id = user)[0]
         tkobj = Ticket.objects.all()
         for i in tkobj:
             try:
-                if i.assignedto.id == user.id:
+                if i.assignedto.id == teamobj.id:
                     allteamdata.append(i)
             except:
                 pass
@@ -249,7 +253,6 @@ class Ticket(models.Model):
         return datalist
     
     def getallticketbydept(self,department):
-        print "department",department
         datalist = []
         tkobj = Ticket.objects.all()
         for i in tkobj:
@@ -292,7 +295,6 @@ class Ticket(models.Model):
     def assignticketsla(self,id,sla):
         obj = Sla()
         slaobj = obj.getslabyid(sla)[0]
-        print Ticket.objects.filter(id=id)
         try:
             Ticket.objects.filter(id=id).update(sla=slaobj)
             return 1
@@ -315,6 +317,14 @@ class Ticket(models.Model):
     def deleteticketbyticketid(self,ticketid):
         return Ticket.objects.filter(id=ticketid).delete()
     
+    def assignticketstatus(self,id,status):
+        statusobj = TicketStatus.objects.filter(id=status)[0]
+        Ticket.objects.filter(id=id).update(status=statusobj)
+        try:
+            Ticket.objects.filter(id=id).update(status=statusobj)
+            return 1
+        except:
+            return 0
     
 def getUserDetails(request,uname,passwd):
     allteamuser = Team.objects.all()
