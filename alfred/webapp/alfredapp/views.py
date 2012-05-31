@@ -769,7 +769,7 @@ def employeeticketdetails(request):
     c = request.COOKIES.get('csrftoken','')
     username = s.get_decoded()['myname']
     ticketId = request.GET.get("id")
-    ticketobj = Ticket.objects.filter(ticketid=ticketId)[0]
+    ticketobj = Ticket.objects.filter(id=ticketId)[0]
     tpl = tpl_lookup.get_template("teamdetails.html")
     tkDict = {}
     try:

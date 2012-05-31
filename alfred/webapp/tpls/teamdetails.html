@@ -49,7 +49,7 @@ Ticket Id:<span style="padding-left:9%;">${ticket.ticketid}</span><br/><br/>
 Department:<span style="padding-left:6.6%;">${ticket.dept.department}</span><br/><br/>
 Assign To:<span style="padding-left:8%;">${ticket.assignedto.name}</span><br/><br/>
 Status :<span style="padding-left:10%;">
-<select id="status" name="${ticket.id}" onclick="javascript:assignStatus(name)">
+<select id="status" name="${ticket.id}" onchange="javascript:assignStatus(name)">
 %for i in status:
 	<option value="${i.id}">${i.statustype}</option>
 %endfor
