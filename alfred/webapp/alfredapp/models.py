@@ -186,6 +186,7 @@ class Ticket(models.Model):
     def getdatewiseticket(self,date):
         alldata = []
         for i in Ticket.objects.all():
+            print type(i.ts.date()),type(date.date())
             if i.ts.date() == date.date():
                 alldata.append(i)
         return alldata
@@ -229,7 +230,16 @@ class Ticket(models.Model):
             except:
                 pass
         return datalist
-
+    
+    def getticketbystatus(self,status):
+        datalist = []
+        tkobj = Ticket.objects.all()
+        for i in tkobj:
+            if i.status:
+                if i.status.id == int(status):
+                    datalist.append(i)
+        return datalist
+        
     def getticketbyassigneduser(self,user):
         allteamdata = []
         teamobj = Team.objects.filter(id = user)[0]

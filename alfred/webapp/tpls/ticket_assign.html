@@ -183,8 +183,8 @@ function get_all_ticket_by_status(id)
 			<p class="menu_head">By Status</p>
 			<div class="menu_body">
 				<form name="statusname" id="statusname" style="float:none;margin:0px;">
-				%for i in ticket:
-					<a href="#" id="${i.id}" onclick="javascript:displayreport(id)">{i.status.name}</a>
+				%for i in datastatus:
+					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_status(id)">${i.statustype}</a>
 				%endfor
 				</form>
 			</div>
