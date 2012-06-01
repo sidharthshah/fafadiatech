@@ -149,6 +149,7 @@ function get_all_ticket_by_status(id)
 			<p class="menu_head">By Customer Name</p>
 			<div class="menu_body">
 				<form name="customername" id="customername" style="float:none;margin:0px;">
+				<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 				%for i in customer:
 					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_customernamer(id)">${i.name}</a>
 				%endfor

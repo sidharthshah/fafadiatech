@@ -224,7 +224,7 @@ class Ticket(models.Model):
         tkobj = Ticket.objects.all()
         for i in tkobj:
             try:
-                if i.status.id == status and i.customer.id==cust :
+                if i.status.id == status and i.customer.id==cust:
                         datalist.append(i)
             except:
                 pass
@@ -246,6 +246,18 @@ class Ticket(models.Model):
         for i in tkobj:
             try:
                 if i.assignedto.id == teamobj.id:
+                    allteamdata.append(i)
+            except:
+                pass
+        return allteamdata
+    
+    def getticketbyassigneduserdept(self,user,dept):
+        allteamdata = []
+        teamobj = Team.objects.filter(id = user)[0]
+        tkobj = Ticket.objects.all()
+        for i in tkobj:
+            try:
+                if i.assignedto.id == teamobj.id and i.dept.id == dept:
                     allteamdata.append(i)
             except:
                 pass
@@ -283,6 +295,34 @@ class Ticket(models.Model):
             except:
                 pass
         return datalist
+    
+    def getallticketbycompanydept(self,customername,dept):
+        datalist = []
+        obj = Department()
+        deptobj = obj.getdepartmentbyid(dept)
+        tkobj = Ticket.objects.all()
+        for i in tkobj:
+            try:
+                if i.customer.id == customername and i.dept.id == deptobj.id:
+                    datalist.append(i)
+            except:
+                pass
+        return datalist
+    
+    
+    def getallticketbycustdept(self,cust,dept):
+        datalist = []
+        tkobj = Ticket.objects.all()
+        obj = Department()
+        dept = obj.getdepartmentbyid(dept)
+        for i in tkobj:
+            try:
+                if i.customer.id == cust and i.dept.id == dept.id:
+                    datalist.append(i)
+            except:
+                pass
+        return datalist
+    
 
     def assignticketdept(self,id,dept):
         obj = Department()
