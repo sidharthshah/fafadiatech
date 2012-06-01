@@ -166,45 +166,62 @@ def dashboard(request):
     tkobj = Ticket()
     for i in lastweekdates:
             allday.append(len(tkobj.getdatewiseticket(i)))
+    allday = allday[1:]
     
     statusobj = TicketStatus()    
-    status = statusobj.getallticketstatus()  
-#    weeklyTicket = []
-#    dict = {}
-#    for j in lastweekdates:
-#        data = {}
-#        tkobj = Ticket()
-#        for k in tkobj.getdatewiseticket(j):
-#            count = 0
-#            for l in status:
-#                try:
-#                    if k.status.statustype == l.statustype:
-#                        count = count+1
-#                except:
-#                    pass
-#            if data.has_key(l.statustype):
-#                data[l.statustype] = data[l.statustype] + count
-#            else:
-#                data[l.statustype] = count
-#        weeklyTicket.append(data)
-#    print weeklyTicket[0:7]
+    status = statusobj.getallticketstatus()
+      
+    weeklyTicket = []
+    dict = {}
+    for j in lastweekdates:
+        data = {}
+        tkobj = Ticket()
+        for k in tkobj.getdatewiseticket(j):
+            for l in status:
+                count = 0
+                try:
+                    if k.status.statustype == l.statustype:
+                        count = count+1
+                except:
+                    pass
+                if data.has_key(l.statustype):
+                    data[l.statustype] = data[l.statustype] + count
+                else:
+                    data[l.statustype] = count
+        weeklyTicket.append(data)
     
+    datatolist = []
+    for key in status:
+        info = []
+        for dict in weeklyTicket[1:8]: 
+           try:
+               info.append(dict[key.statustype])
+           except:
+              info.append(0)
+        datatolist.append({"name":str(key.statustype),"data":info})
+        
+        
     dictdata = {}
     
     
-#    for sts in status:
-#        tkobj = Ticket()
-#        for ticket in tkobj.getallticket():
-#            statuscount = 0
-#            try:
-#                if ticket.status.statustype == sts.statustype:
-#                    statuscount = statuscount + 1
-#            except:
-#                pass
-#            dictdata[sts.statustype]= statuscount
-#    
-#    print "dictdata",dictdata
-#    
+    for sts in status:
+        tkobj = Ticket()
+        statuscount = 0
+        for ticket in tkobj.getallticket():
+            try:
+                if ticket.status.statustype == sts.statustype:
+                    statuscount = statuscount + 1
+            except:
+                pass
+            dictdata[sts.statustype]= statuscount
+            
+    newdata = []
+    for key, value in dictdata.items():
+        newdata.append([str(key),value])
+        
+    
+    print "dictdata",newdata
+    
                     
             
         
@@ -215,7 +232,7 @@ def dashboard(request):
     tpl = tpl_lookup.get_template("dashboard.html")
     teamobj = Team()    
     team = teamobj.getallteam()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,team=team,userName=s.get_decoded()['myname'],allday=allday))
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,team=team,userName=s.get_decoded()['myname'],allday=allday,weklydata=weeklyTicket[0:7],datatolist=datatolist,newdata=newdata))
 
 def addteamform(request):
     try:
@@ -821,7 +838,7 @@ def teamadmindashboard(request):
     teamobj = Team()
     assign = teamobj.getallteam()
     status = statusobj.getallticketstatus()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketData,status=status,assign=assign,userName=s.get_decoded()['myname']))
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketData,status=status,datastatus=status,assign=assign,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
 def get_all_ticket_by_customername(request):
@@ -844,7 +861,7 @@ def get_all_ticket_by_customername(request):
     status = statusobj.getallticketstatus()
     teamobj = Team()
     teamdata = teamobj.getteamusertype("employee")
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,customer=customer,team=teamdata,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,datastatus=status,customer=customer,team=teamdata,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
 
     
 
@@ -869,7 +886,7 @@ def get_all_ticket_by_companyname(request):
     status = statusobj.getallticketstatus()
     teamobj = Team()
     teamdata = teamobj.getteamusertype("employee")
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,customer=customer,team=teamdata,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,datastatus=status,customer=customer,team=teamdata,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
 
 
 @csrf_exempt
@@ -894,7 +911,7 @@ def get_all_ticket_by_departmentname(request):
     status = statusobj.getallticketstatus()
     teamobj = Team()
     teamdata = teamobj.getteamusertype("employee")
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,customer=customer,team=teamdata,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,datastatus=status,customer=customer,team=teamdata,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
 
 
 @csrf_exempt
@@ -904,7 +921,6 @@ def get_all_ticket_by_assignedname(request):
     except:
         return HttpResponseRedirect('/')
     assignedid =request.GET.get('assignedid')
-    print assignedid
     c = request.COOKIES.get('csrftoken','')
     statusobj = TicketStatus()
     status = statusobj.getallticketstatus()
@@ -919,12 +935,32 @@ def get_all_ticket_by_assignedname(request):
     status = statusobj.getallticketstatus()
     teamobj = Team()
     teamdata = teamobj.getteamusertype("employee")
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,customer=customer,team=teamdata,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,datastatus=status,customer=customer,team=teamdata,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
 
 
 @csrf_exempt
 def get_all_ticket_by_statusname(request):
-    pass
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    ticketstatus =request.GET.get('status')
+    c = request.COOKIES.get('csrftoken','')
+    statusobj = TicketStatus()
+    status = statusobj.getallticketstatus()
+    ticketobj = Ticket()
+    ticket = ticketobj.getticketbystatus(ticketstatus)
+    ticket.reverse()
+    tpl = tpl_lookup.get_template("ticket_assign.html")
+    custobj = Customer()    
+    customer = custobj.getallcustomer()
+    department = Department.objects.all()
+    statusobj = TicketStatus()    
+    status = statusobj.getallticketstatus()
+    teamobj = Team()
+    teamdata = teamobj.getteamusertype("employee")
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,datastatus=status,customer=customer,team=teamdata,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
+
 
 @csrf_exempt
 def departmentadmincreateticket(request):
@@ -1319,7 +1355,7 @@ def ticketassign(request):
     status = statusobj.getallticketstatus()
     teamobj = Team()
     teamdata = teamobj.getteamusertype("employee")
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status,team=teamdata,customer=customer,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,datastatus=status,status=status,team=teamdata,customer=customer,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
 
 @csrf_exempt
 def sadminticketstatus(request):
@@ -1341,7 +1377,7 @@ def sadminticketstatus(request):
     statusobj = TicketStatus()
     status = statusobj.getallticketstatus()
     #data = {"userName":urllib.unquote(cookieuserName),"status":TicketStatus.getAllTicketStatus(),"ticket":tklist[0:20],"first":0,"last":20,"count":count}
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,statusticket=statusticket,status=status,userName=s.get_decoded()['myname'],ticket=ticket))
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,datastatus=status,statusticket=statusticket,status=status,userName=s.get_decoded()['myname'],ticket=ticket))
 
 @csrf_exempt
 def ticketdisplayinfo(request):
@@ -1478,17 +1514,16 @@ def ticketstatusassign(request):
         return HttpResponse(str(0))
     
     
-#def ticketassignmodify(request):
-#    try:
-#        s = Session.objects.get(pk=request.session.session_key)
-#    except:
-#        return HttpResponseRedirect('/')
-#    c = request.COOKIES.get('csrftoken','')
-#    statusobj = TicketStatus()
-#    status = statusobj.getallticketstatus()
-#    ticketId = request.POST.get('ticketId')
-#    system_id = request.POST.get('system_id')
-#    problem = request.POST.get('problem')
-
+def ticketassignmodify(request):
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    statusobj = TicketStatus()
+    status = statusobj.getallticketstatus()
+    ticketId = request.POST.get('ticketId')
+    system_id = request.POST.get('system_id')
+    problem = request.POST.get('problem')
 
     
