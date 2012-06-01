@@ -1569,19 +1569,3 @@ def admin_feedback_report(request):
     dept = deptobj.getalldept()
     tpl = tpl_lookup.get_template("feedbackreport.html")
     return HttpResponse(tpl.render(on_home=True,status=status,department=dept,userName=s.get_decoded()['myname'],date=datetime.datetime.now().date()))
-    
-            
-   
-def ticketassignmodify(request):
-    try:
-        s = Session.objects.get(pk=request.session.session_key)
-    except:
-        return HttpResponseRedirect('/')
-    c = request.COOKIES.get('csrftoken','')
-    statusobj = TicketStatus()
-    status = statusobj.getallticketstatus()
-    tpl = tpl_lookup.get_template("report.html")
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status))
-    ticketId = request.POST.get('ticketId')
-    system_id = request.POST.get('system_id')
-    problem = request.POST.get('problem')
