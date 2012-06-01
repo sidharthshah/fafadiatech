@@ -296,6 +296,19 @@ class Ticket(models.Model):
                 pass
         return datalist
     
+    def getticketbycustassigneduser(self,cust,dept):
+        datalist = []
+        obj = Department()
+        deptobj = obj.getdepartmentbyid(dept)
+        tkobj = Ticket.objects.all()
+        for i in tkobj:
+            try:
+                if i.customer.id == cust and i.dept.id == deptobj.id:
+                    datalist.append(i)
+            except:
+                pass
+        return datalist
+    
     def getallticketbycompanydept(self,customername,dept):
         datalist = []
         obj = Department()
@@ -311,13 +324,14 @@ class Ticket(models.Model):
     
     
     def getallticketbycustdept(self,cust,dept):
+        print cust,dept
         datalist = []
         tkobj = Ticket.objects.all()
         obj = Department()
         dept = obj.getdepartmentbyid(dept)
         for i in tkobj:
             try:
-                if i.customer.id == cust and i.dept.id == dept.id:
+                if i.customer.id == int(cust) and i.dept.id == dept.id:
                     datalist.append(i)
             except:
                 pass
