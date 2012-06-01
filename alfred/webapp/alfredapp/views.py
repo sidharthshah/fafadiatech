@@ -807,28 +807,6 @@ def teamdisplayticketbystatus(request):
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketdata,status=status,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
-def departmentadmindashboard(request):
-    s = None
-    try:
-        s = Session.objects.get(pk=request.session.session_key)
-    except:
-        return HttpResponseRedirect('/')
-    c = request.COOKIES.get('csrftoken','')
-    department = s.get_decoded()['department']
-    username = s.get_decoded()['myname']
-    #team = Team.objects.filter(username=username)[0]
-    tpl = tpl_lookup.get_template("admin_ticket_assign.html")
-    ticketData = []
-    tkobj = Ticket()
-    ticketData = tkobj.getallticketbydept(department)
-    ticketData.reverse()
-    statusobj = TicketStatus()
-    teamobj = Team()
-    assign = teamobj.getallteam()
-    status = statusobj.getallticketstatus()
-    return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketData,status=status,datastatus=status,assign=assign,userName=s.get_decoded()['myname']))
-
-@csrf_exempt
 def get_all_ticket_by_customername(request):
     try:
         s = Session.objects.get(pk=request.session.session_key)
@@ -1344,6 +1322,30 @@ def ticketassign(request):
     teamobj = Team()
     teamdata = teamobj.getteamusertype("employee")
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,datastatus=status,status=status,team=teamdata,customer=customer,department=department,userName=s.get_decoded()['myname'],ticket=ticket[0:20],first=0,last=20,count=len(ticket)))
+
+@csrf_exempt
+def departmentadmindashboard(request):
+    s = None
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    department = s.get_decoded()['department']
+    username = s.get_decoded()['myname']
+    tpl = tpl_lookup.get_template("admin_ticket_assign.html")
+    ticketData = []
+    tkobj = Ticket()
+    ticketData = tkobj.getallticketbydept(department)
+    ticketData.reverse()
+    statusobj = TicketStatus()
+    custobj = Customer()    
+    customer = custobj.getallcustomer()
+    teamobj = Team()
+    assign = teamobj.getallteam()
+    teamdata = teamobj.getteamusertype("employee")
+    status = statusobj.getallticketstatus()
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketData,team=teamdata,customer=customer,status=status,datastatus=status,assign=assign,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
 def sadminticketstatus(request):

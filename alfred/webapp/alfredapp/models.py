@@ -180,7 +180,6 @@ class Ticket(models.Model):
         return Ticket.objects.all()
     
     def getTicketByTicketId(self,ticketid):
-        print "gfgdfgdfgg"
         return Ticket.objects.filter(id=ticketid)[0]
 
     def getdatewiseticket(self,date):
