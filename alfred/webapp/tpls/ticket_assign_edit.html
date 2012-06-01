@@ -33,18 +33,6 @@ function assignmemeber(id,obj,form)
 	});
 }
 
-function assignsla(id,obj,form)
-{
-	var sla= obj.options[obj.selectedIndex].value;
-	var slaname= obj.options[obj.selectedIndex].text;
-	$.post("/ticket/slaassign",{ticketId:id, sla:sla},function(data){
-	if(data == "1")
-	{
-	inlineMsg(form,'${ticket.id}',"Ticket sla changed");
-	}
-	});
-}
-
 function assignCustPackage(id,obj)
 {
 	var custPkg = obj.options[obj.selectedIndex].value;
@@ -65,6 +53,17 @@ function assignCustPackage(id,obj)
 	}
 }
 
+function assignsla(id,obj,form)
+{
+	var sla= obj.options[obj.selectedIndex].value;
+	var slaname= obj.options[obj.selectedIndex].text;
+	$.post("/ticket/slaassign",{ticketId:id, sla:sla},function(data){
+	if(data == "1")
+	{
+	inlineMsg(form,'${ticket.id}',"Ticket sla changed");
+	}
+	});
+}
 
 function modifyassignvalue(id)
 {
@@ -95,6 +94,7 @@ Email Id:<span style="padding-left:9.2%;">${ticket.customer.email}</span><br/><b
 Location:<span style="padding-left:8.9%;">${ticket.customer.address}</span><br/><br/>
 Land Line No.:<span style="padding-left:5.1%;">${ticket.customer.landline}</span><br/><br/>
 Mobile No.:<span style="padding-left:7.3%;">${ticket.customer.mobile}</span><br/><br/><br/>
+
 <h4><u>Product Information:</u></h4>
 System Id:<span style="padding-left:8%;"><input type="text" name="system_id" id="system_id" value="${ticket.systemid}" maxlength="150"></span><br/><br/>
 Problem Description:<span style="padding-left:1%;"><textarea name="problem" id="problem" value="${ticket.summary}" style="resize:vertical; max-height:60px; min-height:60px;">${ticket.summary}</textarea></span><br/><br/><br/>
