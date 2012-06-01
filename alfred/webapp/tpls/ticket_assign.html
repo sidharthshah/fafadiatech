@@ -212,9 +212,6 @@ function get_all_ticket_by_status(id)
 	<th>Ticket Id</th>
 	<th>Name</th>
 	<th>Company</th>
-	<!--th>Email</th>
-	<th>Location</th>
-	<th>System Id</th-->
 	<th>Department</th>
 	<th>Assigned To</th>
 	<th>Status</th>
@@ -237,7 +234,7 @@ function get_all_ticket_by_status(id)
 		%try:
 			<% status = i.status.statustype %>
 		%except:
-			<% status = "Not assigned" %>
+			<% status = "Not define" %>
 		%endtry
 		<td>${status}</td>
 

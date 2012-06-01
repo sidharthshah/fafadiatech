@@ -63,7 +63,7 @@ def login(request):
         request.session['last_login'] = datetime.datetime.now()
         request.session['myname'] = urllib.quote(userobj.username)
         try:
-            request.session['department'] = urllib.quote(str(userobj.department.department))
+            request.session['department'] = urllib.quote(str(userobj.department.id))
         except:
             request.session['department'] = "customer"
         try:
@@ -697,7 +697,6 @@ def customerdashboard(request):
     c = request.COOKIES.get('csrftoken','')
     ticketList = []
     tpl = tpl_lookup.get_template("customer_ticket_summary.html")
-    print s.get_decoded()
     userid = s.get_decoded()['userid']
     tkobj = Ticket()
     allTicket = tkobj.getallticketbycust(userid)    
@@ -808,7 +807,7 @@ def teamdisplayticketbystatus(request):
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketdata,status=status,userName=s.get_decoded()['myname']))
 
 @csrf_exempt
-def teamadmindashboard(request):
+def departmentadmindashboard(request):
     s = None
     try:
         s = Session.objects.get(pk=request.session.session_key)
@@ -817,11 +816,11 @@ def teamadmindashboard(request):
     c = request.COOKIES.get('csrftoken','')
     department = s.get_decoded()['department']
     username = s.get_decoded()['myname']
-    team = Team.objects.filter(username=username)[0]
+    #team = Team.objects.filter(username=username)[0]
     tpl = tpl_lookup.get_template("admin_ticket_assign.html")
     ticketData = []
     tkobj = Ticket()
-    ticketData = tkobj.getallticketbydept(team.department.department)
+    ticketData = tkobj.getallticketbydept(department)
     ticketData.reverse()
     statusobj = TicketStatus()
     teamobj = Team()
@@ -1388,6 +1387,37 @@ def ticketdisplayinfo(request):
     tpl = tpl_lookup.get_template("ticket_assign_edit.html")
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketobject,status=status,allDept=dept.getalldept(),allMake=makeobj.getallmake(),allAssign=allAssign,allsla=slaobj.getallsla(),userName=s.get_decoded()['myname']))
 
+@csrf_exempt
+def departmentticketdisplay(request):
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    department = s.get_decoded()['department']
+    username = s.get_decoded()['myname']
+    statusobj = TicketStatus()
+    status = statusobj.getallticketstatus()
+    print "status==",status
+    ticketId = request.GET.get('tkId')
+    print "ticketId==",ticketId
+    dept = Department()
+    print "dept==",dept
+    teamobj = Team()
+    print "teamobj==",teamobj
+    slaobj= Sla()
+    print "slaobj==",slaobj
+    makeobj = Make()
+    print "makeobj==",makeobj
+    tkobj = Ticket()
+    print "tkobj==",tkobj
+    ticketobject = tkobj.getTicketByTicketId(ticketId)
+    print "ticketobject==",ticketobject
+    allAssign=teamobj.getallteambydept(ticketobject.dept.id)
+    print "allAssign==",allAssign
+    tpl = tpl_lookup.get_template("admin_ticket_assign_edit.html")
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketobject,status=status,allDept=dept.getalldept(),allMake=makeobj.getallmake(),allAssign=allAssign,allsla=slaobj.getallsla(),userName=s.get_decoded()['myname']))
+
 def deleteticket(request):
     try:
         s = Session.objects.get(pk=request.session.session_key)
@@ -1502,6 +1532,7 @@ def ticketstatusassign(request):
     else:
         return HttpResponse(str(0))
 
+
 def admin_get_all_ticket_report(request):
      try:
         s = Session.objects.get(pk=request.session.session_key)
@@ -1547,8 +1578,8 @@ def ticketassignmodify(request):
     c = request.COOKIES.get('csrftoken','')
     statusobj = TicketStatus()
     status = statusobj.getallticketstatus()
+    tpl = tpl_lookup.get_template("report.html")
+    return HttpResponse(tpl.render(csrf_token=c,on_home=True,status=status))
     ticketId = request.POST.get('ticketId')
     system_id = request.POST.get('system_id')
     problem = request.POST.get('problem')
-
-    

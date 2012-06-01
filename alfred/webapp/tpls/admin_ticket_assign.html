@@ -39,7 +39,7 @@ alert("Status Assignd");
 }
 function editTicket(id)
 {
-var addForm = document.getElementById("ticketassign");
+var addForm = document.getElementById("departmentticketassign");
 addForm.action="/admin/ticket/assign/edit?tkId="+id;
 addForm.method="POST";
 addForm.submit();
@@ -68,7 +68,7 @@ else if(type=="next")
 }
 
 </script>
-<form name="ticketassign" class="ticketassign" id="ticketassign" method="post" action="/ticket/assign" style="margin:0 auto; width:99%;" onsubmit='formValidator()' >
+<form name="departmentticketassign" class="ticketassign" id="departmentticketassign" method="post" action="/ticket/assign" style="margin:0 auto; width:99%;" onsubmit='formValidator()' >
 <table>
     
 <tr>
@@ -81,11 +81,11 @@ else if(type=="next")
 %if ticket != []:
 	%for i in ticket:
 	<tr>
-		<td><a href="#" id="${i[0]}" onclick="javascript:displaytickethistory(id)">${i[0]}</a></td>
-		<td>${i[1]}</td>
-		<td>${i[2]}</td>
-		<td>${i[3]}</td>
-		<td><a href="#" id="${i[0]}" onclick="javascript:editTicket(id)"><img src="/images/edit.png" title="Edit"></a></td>
+		<td><a href="#" id="${i.ticketid}" onclick="javascript:displaytickethistory(id)">${i.ticketid}</a></td>
+		<td>${i.customer.name}</td>
+		<td>${i.customer.company}</td>
+		<td>${i.assignedto.name}</td>
+		<td><a href="#" id="${i.ticketid}" onclick="javascript:editTicket(id)"><img src="/static/img/edit.png" title="Edit"></a></td>
 	</tr>
 	%endfor
 %else:
