@@ -213,21 +213,10 @@ def dashboard(request):
                     statuscount = statuscount + 1
             except:
                 pass
-            dictdata[sts.statustype]= statuscount
-            
+            dictdata[sts.statustype]= statuscount            
     newdata = []
     for key, value in dictdata.items():
         newdata.append([str(key),value])
-        
-    
-    print "dictdata",newdata
-    
-                    
-            
-        
-    
-    
-    
     c = request.COOKIES.get('csrftoken','')
     tpl = tpl_lookup.get_template("dashboard.html")
     teamobj = Team()    
@@ -1512,8 +1501,44 @@ def ticketstatusassign(request):
         return HttpResponse(str(1))
     else:
         return HttpResponse(str(0))
+
+def admin_get_all_ticket_report(request):
+     try:
+        s = Session.objects.get(pk=request.session.session_key)
+     except:
+        return HttpResponseRedirect('/')
+     c = request.COOKIES.get('csrftoken','')
+     tpl = tpl_lookup.get_template("report.html")
+     statusobj = TicketStatus()
+     deptobj = Department()
+     dept = deptobj.getalldept()
+     status = statusobj.getallticketstatus()
+     return HttpResponse(tpl.render(on_home=True,status=status,userName=s.get_decoded()['myname'],department=dept,date=datetime.datetime.now().date()))
+ 
+def admin_by_customer_report(request):
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    statusobj = TicketStatus()
+    status = statusobj.getallticketstatus()
+    tpl = tpl_lookup.get_template("customerreport.html")
+    return HttpResponse(tpl.render(on_home=True,status=status,userName=s.get_decoded()['myname'],date=datetime.datetime.now().date()))
+
+def admin_feedback_report(request):
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    statusobj = TicketStatus()
+    status = statusobj.getallticketstatus()
+    deptobj = Department()
+    dept = deptobj.getalldept()
+    tpl = tpl_lookup.get_template("feedbackreport.html")
+    return HttpResponse(tpl.render(on_home=True,status=status,department=dept,userName=s.get_decoded()['myname'],date=datetime.datetime.now().date()))
     
-    
+            
+   
 def ticketassignmodify(request):
     try:
         s = Session.objects.get(pk=request.session.session_key)
