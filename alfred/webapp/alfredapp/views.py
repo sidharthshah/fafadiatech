@@ -1152,6 +1152,22 @@ def deletecustomer(request):
           return HttpResponse(str(0))
 
 @csrf_exempt
+def deleteticket(request):
+    try:
+        s = Session.objects.get(pk=request.session.session_key)
+    except:
+        return HttpResponseRedirect('/')
+    c = request.COOKIES.get('csrftoken','')
+    ticketId = request.POST.get('ticketId')
+    ticketobj = Ticket()
+    try:
+        ticketobj.deleteticketbyticketid(ticketId)
+        return HttpResponse(str(1))
+    except:
+          return HttpResponse(str(0))
+    #return HttpResponseRedirect('/ticket/assign')
+
+@csrf_exempt
 def createcustomerTicketform(request):
     s = None
     try:
@@ -1472,17 +1488,6 @@ def departmentticketdisplay(request):
     tpl = tpl_lookup.get_template("admin_ticket_assign_edit.html")
     return HttpResponse(tpl.render(csrf_token=c,on_home=True,ticket=ticketobject,status=status,allDept=dept.getalldept(),allMake=makeobj.getallmake(),allAssign=allAssign,allsla=slaobj.getallsla(),userName=s.get_decoded()['myname']))
 
-def deleteticket(request):
-    try:
-        s = Session.objects.get(pk=request.session.session_key)
-    except:
-        return HttpResponseRedirect('/')
-    c = request.COOKIES.get('csrftoken','')
-    statusobj = TicketStatus()
-    status = statusobj.getallticketstatus()
-    ticketId = request.GET.get('tkId')
-    ticketobj = Ticket()
-    return HttpResponseRedirect('/ticket/assign')
 
 @csrf_exempt
 def assignticketdept(request):

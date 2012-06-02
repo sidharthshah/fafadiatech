@@ -185,7 +185,6 @@ class Ticket(models.Model):
     def getdatewiseticket(self,date):
         alldata = []
         for i in Ticket.objects.all():
-            print type(i.ts.date()),type(date.date())
             if i.ts.date() == date.date():
                 alldata.append(i)
         return alldata
@@ -199,17 +198,21 @@ class Ticket(models.Model):
                 ticket.append(i)
         ticket.reverse()
         return ticket
-    
-    def getallticketbycust(self,cust):
-        custobj = Customer.objects.filter(id=cust)[0]
+
+    def getallticketbyticket(self,ticketid):
+        print "gfgdfg"
+        tkobj = Ticket.objects.filter(id=ticketid)
+        print "tkobj==",tkobj
         ticket = []
         allTicket = Ticket.objects.all()
+        print "allTicket",allTicket
         for i in allTicket:
-            if i.customer.id == custobj.id:
+            print "i.ticketid.id==",i.ticketid.id
+            if i.ticketid.id == tkobj.id:
                 ticket.append(i)
         ticket.reverse()
         return ticket
-    
+
     def getallticketbycompany(self,company):
         allTicket = Ticket.objects.all()
         ticket = []
@@ -364,8 +367,8 @@ class Ticket(models.Model):
         except:
             return 0
     
-    def deleteticketbyticketid(self,ticketid):
-        return Ticket.objects.filter(id=ticketid).delete()
+    def deleteticketbyticketid(self,ticketId):
+        return Ticket.objects.filter(id=ticketId).delete()
     
     def assignticketstatus(self,id,status):
         statusobj = TicketStatus.objects.filter(id=status)[0]

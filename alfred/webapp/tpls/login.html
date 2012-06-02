@@ -52,28 +52,22 @@ function loginpage()
 		<input type="hidden" name="csrfmiddlewaretoken" value="${csrf_token}" >
 			<label>Username:</label>
 			%if username != "":
-				<input type="text" name="username" id="username" size="15" value="${uname}">&nbsp;
+				<input type="text" name="username" id="username" size="15" value="">&nbsp;
 			%else:
-				<input type="text" name="username" id="username" size="15" value="${uname}">&nbsp;
+				<input type="text" name="username" id="username" size="15" value="">&nbsp;
 			%endif
-			% if unamemsg != "":
-				<h6>${unamemsg}</h6>
-			 %endif
+
 			<br/><br/>
 			<label>Password:</label>
 			%if password != "":
-				<input type="password" name="password" size="12" id="password" value="${password}"><br/>
+				<input type="password" name="password" size="12" id="password" value=""><br/>
 			%else:
-				<input type="password" name="password" size="12" id="password" value="${password}"><br/>
+				<input type="password" name="password" size="12" id="password" value=""><br/>
 			%endif
 			<label style="display: block; padding-left: 15px; text-indent: -15px; font-weight:normal; color:#0069D6;"><input type="checkbox" name="remember" id="remember" style="vertical-align: bottom;position: relative;top: 1px;">Remember Me</label>
-			%if pmsg != "":
-				<h6>${pmsg}</h6>
-			 %endif
+
 			<br/><br/>
-			%if msg !="":
-				<h6>${msg}</h6>
-			%endif
+
 			<input type="button" id="login" name="login" value="Login" onclick="javascript:loginpage()"> 
 			| <a href="#" id="forgotpswd" onClick="window.location='/password/recovery';">Forgot Password</a>
 		</form>
