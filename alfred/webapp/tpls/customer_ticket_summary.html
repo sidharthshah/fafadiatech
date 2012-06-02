@@ -1,5 +1,5 @@
 <%inherit file="customer_base.html" />
-
+<script type="text/javascript" src="/static/js/accordion.js"></script>
 <script  type="text/javascript" language="javascript">
 function displayTicketCustDetails(id)
 {
@@ -33,7 +33,68 @@ else if(type=="next")
 }
 
 </script>
+<script type="text/javascript">
+$(document).ready(function()
+{
+	//slides the element with class "menu_body" when paragraph with class "menu_head" is clicked 
+	$("#firstpane p.menu_head").click(function()
+    {
+		$(this).css({backgroundImage:"url(/static/img/down.png)"}).next("div.menu_body").slideToggle(300).siblings("div.menu_body").slideUp("slow");
+       	$(this).siblings().css({backgroundImage:"url(/static/img/left.png)"});
+	});
+	//slides the element with class "menu_body" when mouse is over the paragraph
+	$("#secondpane p.menu_head").mouseover(function()
+    {
+	     $(this).css({backgroundImage:"url(/static/img/down.png)"}).next("div.menu_body").slideDown(500).siblings("div.menu_body").slideUp("slow");
+         $(this).siblings().css({backgroundImage:"url(/static/img/left.png)"});
+	});
+});
 
+function get_all_ticket_by_departmentid(id)
+{
+	var addForm = document.getElementById("departmentname");
+	addForm.action="/ticket/by_departmentname?departmentid="+id;
+	addForm.method="post";
+	addForm.submit();	
+}
+
+function get_all_ticket_by_status(id)
+{
+	var addForm = document.getElementById("statusname");
+	addForm.action="/ticket/by_statusname?status="+id;
+	addForm.method="post";
+	addForm.submit();	
+}
+</script>
+
+<div class="span3" style="background-color:#7CA0C7;margin-left:0px;margin-top:15px;">
+	<h5 style="margin:12px 12px 12px 12px; line-height:0px; color:white;">Filter</h5>
+	<div class="product" style="background:#EFEFEF;"><br>
+		<div class="menu_list" id="firstpane"> <!--Code for menu starts here-->
+			<p class="menu_head">By Department</p>
+			<div class="menu_body">
+			<form name="departmentname" id="departmentname" style="float:none;margin:0px;">
+			%for i in dept:
+
+					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_departmentid(id)">${i.department}</a>
+			%endfor
+
+				
+				</form>
+			</div>
+			<p class="menu_head">By Status</p>
+			<div class="menu_body">
+				<form name="statusname" id="statusname" style="float:none;margin:0px;">
+					%for i in statusdata:
+					<a href="#" id="${i.id}" onclick="javascript:get_all_ticket_by_status(id)">${i.statustype}</a>
+				%endfor				
+
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="span13">
 <form name="customer_ticket_summary" id="customer_ticket_summary" action="" method="">
 <table>
 
@@ -72,3 +133,4 @@ else if(type=="next")
 %endif
 </table>
 </form>
+</div>
