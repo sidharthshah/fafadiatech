@@ -1222,9 +1222,8 @@ def createcustomerTicket(request):
     ticketid ="PSSPL/"+strftime("%y/%m/%d/%H/%M/%S")
     custobj = Customer()
     customerobj = custobj.getcustomerid(custId)
-    deptobj = Department()    
-    deptobj = deptobj.getdepartmentbyid() 
-    if custobj.createTicket(date,ticketid,custId,dept,system_id,problem,attachment):
+    ticketobj = Ticket()
+    if ticketobj.createTicket(date,ticketid,custId,dept,system_id,problem,attachment):
         return HttpResponse(str(1))
     else:
         return HttpResponse(str(0))
@@ -1506,23 +1505,34 @@ def deleteticket(request):
     ticketobj = Ticket()
     return HttpResponseRedirect('/ticket/assign')
 
-@csrf_exempt
-def assignticketdept(request):
-    return HttpResponse(str(1))
-    try:
-        s = Session.objects.get(pk=request.session.session_key)
-    except:
-        return HttpResponseRedirect('/')
-    c = request.COOKIES.get('csrftoken','')
-    statusobj = TicketStatus()
-    status = statusobj.getallticketstatus()
-    ticketId = request.POST.get('ticketId')
-    dept = request.POST.get('issueType')
-    ticketobj = Ticket()
-    if ticketobj.assignticket(ticketId,dept):
-        return HttpResponse(str(1))
-    else:
-        return HttpResponse(str(0))
+#@csrf_exempt
+#def assignticketdept(request):
+#    return HttpResponse(str(1))
+#    try:
+#        s = Session.objects.get(pk=request.session.session_key)
+#    except:
+#        return HttpResponseRedirect('/')
+#    c = request.COOKIES.get('csrftoken','')
+#    statusobj = TicketStatus()
+#    status = statusobj.getallticketstatus()
+#    ticketId = request.POST.get('ticketId')
+#    dept = request.POST.get('issueType')
+#    ticketobj = Ticket()
+#    ticketobj = ticketobj.getTicketByTicketId(ticketId)
+#    try:
+#        deptold = ticketobj.dept.department 
+#    exceot:
+#        deptold = None
+#    useid = s.get_decoded()['userid']
+#    obj = TicketActivity()
+#    act = "Department of  Ticket id  "+ticketId+"changed from "+str(deptold)+" to "+str(dept)
+#    if ticketobj.assignticket(ticketId,dept)
+#        if obj.addteamaticketactivity(useid,act):
+#            return HttpResponse(str(1))
+#        else:
+#            return HttpResponse('2')
+#    else:
+#        return HttpResponse(str(0))
 
 @csrf_exempt  
 def assignticketdepartment(request):
@@ -1536,8 +1546,20 @@ def assignticketdepartment(request):
     ticketId = request.POST.get('ticketId')
     dept = request.POST.get('issueType')
     ticketobj = Ticket()
+    ticketobject = ticketobj.getTicketByTicketId(ticketId)
+    try:
+        deptold = ticketobject.dept.department
+    except:
+        deptold = None
+    useid = s.get_decoded()['userid']
+    obj = TicketActivity()
+    act = "Department of  Ticket id  "+ticketId+"changed from "+str(deptold)+" to "+str(dept)
     if ticketobj.assignticketdept(ticketId,dept):
-         return HttpResponse(str(1))
+        if obj.addteamaticketactivity(useid,act):
+            return HttpResponse(str(1))
+        else:
+            return HttpResponse('2')
+        return HttpResponse(str(1))
     else:
         return HttpResponse(str(0))
     
@@ -1553,8 +1575,21 @@ def assignticketmember(request):
     ticketId = request.POST.get('id')
     member = request.POST.get('asssigneTo')
     ticketobj = Ticket()
+    ticketobject = ticketobj.getTicketByTicketId(ticketId)
+    try:
+        assignold = ticketobject.assignedto.name
+    except:
+        assignold = None
+    useid = s.get_decoded()['userid']
+    act = "Ticket is assigned from  "+str(assignold)+" to "+member
+    print "act=================",act
+    obj = TicketActivity()   
     if ticketobj.assignticketemployee(ticketId,member):
-         return HttpResponse(str(1))
+        if obj.addteamaticketactivity(useid,act):
+            return HttpResponse(str(1))
+        else:
+            return HttpResponse('2')
+        return HttpResponse(str(1))
     else:
         return HttpResponse(str(0))
 
@@ -1571,8 +1606,20 @@ def assignticketsla(request):
     ticketId = request.POST.get('ticketId')
     sla = request.POST.get('sla')
     ticketobj = Ticket()
+    ticketobject = ticketobj.getTicketByTicketId(ticketId)
+    try:
+       slaold =  ticketobject.sla.slatype
+    except:
+        slaold = None
+    useid = s.get_decoded()['userid']
+    act = "Ticket Sla of  Ticket id  "+ticketId+"changed from "+str(slaold)+" to "+str(sla)
     if ticketobj.assignticketsla(ticketId,sla):
-         return HttpResponse(str(1))
+        useid = s.get_decoded()['userid']
+        if obj.addteamaticketactivity(useid,act):
+            return HttpResponse(str(1))
+        else:
+            return HttpResponse('2')
+        return HttpResponse(str(1))
     else:
         return HttpResponse(str(0))
 
@@ -1603,7 +1650,18 @@ def ticketstatusassign(request):
     id = request.POST.get('id')
     status = request.POST.get('status')
     obj = Ticket()
+    ticketobject = obj.getTicketByTicketId(ticketId)
+    try:
+       status =  obj.status.statustype
+    except:
+       status = None
+    act = "Ticket Sla of  Ticket id  "+tkobj[1]+"changed from "+str(assignslaold)+" to "+str(assignslanew)
+    useid = s.get_decoded()['userid']
     if obj.assignticketstatus(id,status):
+        if obj.addteamaticketactivity(useid,act):
+            return HttpResponse(str(1))
+        else:
+            return HttpResponse('2')
         return HttpResponse(str(1))
     else:
         return HttpResponse(str(0))

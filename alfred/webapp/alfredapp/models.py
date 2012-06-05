@@ -402,6 +402,36 @@ def getUserDetails(request,uname,passwd):
     return None
     
 
+class TicketActivity(models.Model):
+    ts= models.DateTimeField()
+    customer =  models.ForeignKey(Customer,blank=True,null=True)
+    team =  models.ForeignKey(Team,blank=True,null=True)
+    ticketactivity = models.CharField(max_length=200)
+    
+    def addcustomerticketactivity(self,ts,user,ticketactivity):
+        custobj = Customer.objects.filter(id=user)
+        tkactobj = TicketActivity()
+        try:
+            ticketactobj = tkactobj.objects.create(ts=date,customer=custobj,ticketactivity=ticketactivity)
+            ticketactobj.save()
+            return 1
+        except:
+            return 0
+        
+    def addteamaticketactivity(self,user,ticketactivity):
+        teamobj = Team.objects.filter(id=user)
+        tkactobj = TicketActivity()
+        try:
+            ticketactobj = tkactobj.objects.create(ts=date,team=teamobj,ticketactivity=ticketactivity)
+            ticketactobj.save()
+            return 1
+        except:
+            return 0
+        
+    def getticketactivity(self,id):
+        return TicketActivity.objects.filter(id=id)
+        
+    
 class Note(models.Model):
     user = models.ForeignKey(User)
     pub_date = models.DateTimeField()
