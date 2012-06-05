@@ -41,9 +41,9 @@ function inlineMsg(form,target,string,autohide) {
     msgcontent.id = 'msgcontent';
     form.appendChild(msg);
     msg.appendChild(msgcontent);
-    msg.style.filter = 'alpha(opacity=0)';
-    msg.style.opacity = 0;
-    msg.alpha = 0;
+    msg.style.filter = 'alpha(opacity=50)';
+    msg.style.opacity = 50;
+    msg.alpha = 50;
   } else {
     msg = document.getElementById('msg');
     msgcontent = document.getElementById('msgcontent');

@@ -35,7 +35,10 @@ function addProduct(form){
 	
 	$.post("/ticket/add",{customer:customer,customername:customername,company_name:company_name, email:email, alternateemail:alternateemail, mobile:mobile, alternatemobile:alternatemobile, location:location, landline:landline, issue_type:issue_type, system_id:system_id, problem:problem},function(data){
 	if(data == "1"){
-		if(id=="super_admin")
+			inlineMsg(form,'save',"Ticket Create successfully.");
+			$("save").attr("disabled", "disabled");
+			window.location.href="/ticket/assign";
+		/*if(id=="superadmin")
 		{
 			alert("Ticket Create successfully.");
 			$("save").attr("disabled", "disabled");
@@ -50,7 +53,7 @@ function addProduct(form){
 		{
 			alert("Data added but sms and email not send");
 			window.location.href="/ticket/assign";
-		}
+		}*/
 	}
 	});
 	}

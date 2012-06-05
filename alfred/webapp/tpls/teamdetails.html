@@ -1,5 +1,5 @@
 <%inherit file="employee_admin.html" />
-
+<script type="text/javascript" src="/static/js/messages.js"></script>
 <script type="text/javascript">
     function initMenu() {
     $('#menu ul').hide();
@@ -21,13 +21,12 @@
     $(document).ready(function() {initMenu();});
 </script>
 <script  type="text/javascript" language="javascript">
-function assignStatus(id)
+function assignStatus(id,form)
 {
 var status = $("#status").val();//obj.options[obj.selectedIndex].value;
 $.post("/ticket/statusassign",{id:id,status:status},function(data){
 if(data==1){
-		alert("Status is changed");
-		//window.location.href="/team/admin"
+		inlineMsg(form,'status',"Status is changed");
 	}
 });
 }
@@ -44,16 +43,18 @@ Location:<span style="padding-left:9.1%;">${ticket.customer.address}</span><br/>
 Land Line No.:<span style="padding-left:5.4%;">${ticket.customer.landline}</span><br/><br/>
 Mobile No.:<span style="padding-left:7.5%;">${ticket.customer.mobile}</span><br/><br/><br/>
 Customer Package:<span style="padding-left:1.8%;">${ticket.customer.package}</span><br/><br/>
+
 <h4><u>Ticket Information:</u></h4><br/>
 Ticket Id:<span style="padding-left:9%;">${ticket.ticketid}</span><br/><br/>
 Department:<span style="padding-left:6.6%;">${ticket.dept.department}</span><br/><br/>
 Assign To:<span style="padding-left:8%;">${ticket.assignedto.name}</span><br/><br/>
 Status :<span style="padding-left:10%;">
-<select id="status" name="${ticket.id}" onchange="javascript:assignStatus(name)">
+<select id="status" name="${ticket.id}" onchange="javascript:assignStatus(name,form)">
+	<option value="select">Select</option>
 %for i in status:
 	<option value="${i.id}">${i.statustype}</option>
 %endfor
-
 </select></span><br/><br/>
+<input type="button" id="submit" value="Submit" onclick="window.location.href='/employee/dashboard'">
 </form>
 

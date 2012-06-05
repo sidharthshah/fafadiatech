@@ -49,14 +49,17 @@ addForm.submit();
 }
 
 
-function deleteTicket(id)
-{
-var addForm = document.getElementById("ticketassign");
-addForm.action="/ticket/delete?tkId="+id;
-addForm.method="POST";
-addForm.submit();
-}
+function deleteTicket(id){
 
+	$.post("/ticket/delete",{"ticketId":id},function(data){
+		if(data=="1"){
+			window.location.href="/ticket/assign";
+		}
+		else{
+			alert("Invalid Operation");
+		}
+	});
+}
 
 function displaytickethistory(id)
 {
